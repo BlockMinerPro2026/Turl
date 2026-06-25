@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Космический круг · Магазин и Пауза</title>
+    <title>Космический круг · Атака всегда работает</title>
     <style>
         * {
             box-sizing: border-box;
@@ -17,15 +17,15 @@
             justify-content: center;
             align-items: center;
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            padding: 10px;
+            padding: 8px;
         }
         .game-wrapper {
             background: #141a24;
-            padding: 15px 20px 20px 20px;
-            border-radius: 40px 40px 28px 28px;
+            padding: 20px 26px 26px 26px;
+            border-radius: 48px 48px 32px 32px;
             box-shadow: 0 16px 40px rgba(0,0,0,0.9), inset 0 0 0 1px #2f3f4f;
             position: relative;
-            max-width: 860px;
+            max-width: 920px;
             width: 100%;
         }
         canvas {
@@ -34,7 +34,7 @@
             width: 100%;
             height: auto;
             aspect-ratio: 800/600;
-            border-radius: 24px;
+            border-radius: 28px;
             background: #0b1119;
             box-shadow: inset 0 0 40px rgba(0,20,40,0.8), 0 6px 0 #070b10;
             cursor: crosshair;
@@ -43,36 +43,36 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 14px;
-            padding: 0 10px 0 14px;
+            margin-top: 18px;
+            padding: 0 16px 0 18px;
             color: #b8d0e0;
             background: #0e151f;
             border-radius: 50px;
-            height: 56px;
+            height: 68px;
             box-shadow: inset 0 2px 0 #25323e, 0 4px 0 #05090e;
             font-weight: 500;
             letter-spacing: 0.3px;
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 8px;
         }
         .stats {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
         }
         .hp-bar-wrap {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             background: #0b1119;
-            padding: 3px 12px 3px 8px;
+            padding: 5px 16px 5px 12px;
             border-radius: 30px;
             box-shadow: inset 0 -2px 0 #26343f;
         }
         .hp-bar-bg {
-            width: 100px;
-            height: 14px;
+            width: 160px;
+            height: 20px;
             background: #1d2a33;
             border-radius: 30px;
             overflow: hidden;
@@ -84,21 +84,21 @@
             background: #40d0b0;
             border-radius: 30px;
             transition: width 0.12s ease;
-            box-shadow: 0 0 12px #40d0b0aa;
+            box-shadow: 0 0 16px #40d0b0aa;
         }
         .stat-item {
             background: #0b1119;
-            padding: 3px 12px;
+            padding: 5px 16px;
             border-radius: 30px;
             box-shadow: inset 0 -2px 0 #26343f;
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-size: 0.85rem;
+            gap: 6px;
+            font-size: 1rem;
         }
         .controls {
             display: flex;
-            gap: 6px;
+            gap: 10px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -108,14 +108,14 @@
             border-radius: 30px;
             color: #eaf2f9;
             font-weight: 600;
-            font-size: 0.75rem;
-            padding: 5px 14px;
+            font-size: 0.9rem;
+            padding: 7px 18px;
             box-shadow: 0 4px 0 #0a121b, 0 2px 0 #3a5266 inset;
             transition: 0.05s linear;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             white-space: nowrap;
         }
         .controls button:active {
@@ -131,25 +131,25 @@
         .badge {
             background: #1a2633;
             border-radius: 30px;
-            padding: 3px 10px;
+            padding: 5px 14px;
             color: #aac2d6;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
         }
         #message {
-            font-size: 0.85rem;
+            font-size: 1rem;
             background: #0d1620;
-            padding: 3px 14px;
+            padding: 5px 20px;
             border-radius: 40px;
             color: #c0def5;
-            min-width: 100px;
+            min-width: 130px;
             text-align: center;
             box-shadow: inset 0 -2px 0 #22323f;
         }
         .speed-control {
             display: flex;
-            gap: 3px;
+            gap: 5px;
             background: #0b1119;
-            padding: 3px 6px;
+            padding: 4px 10px;
             border-radius: 30px;
             box-shadow: inset 0 -2px 0 #26343f;
         }
@@ -158,8 +158,8 @@
             border: none;
             color: #8aaccc;
             font-weight: 700;
-            font-size: 0.7rem;
-            padding: 3px 8px;
+            font-size: 0.85rem;
+            padding: 5px 12px;
             border-radius: 20px;
             cursor: pointer;
             transition: 0.1s;
@@ -183,13 +183,13 @@
             transform: translate(-50%, -50%);
             background: #0e1a24;
             border: 2px solid #3a6070;
-            border-radius: 28px;
-            padding: 20px 25px 25px 25px;
+            border-radius: 30px;
+            padding: 24px 32px 28px 32px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.95), inset 0 0 30px rgba(30,80,120,0.2);
             z-index: 10;
-            min-width: 260px;
+            min-width: 300px;
             backdrop-filter: blur(4px);
-            max-width: 90%;
+            max-width: 92%;
         }
         .shop-overlay.active {
             display: block;
@@ -197,31 +197,31 @@
         .shop-overlay h2 {
             color: #f0d080;
             text-align: center;
-            margin: 0 0 14px 0;
+            margin: 0 0 18px 0;
             font-weight: 700;
             letter-spacing: 1px;
             text-shadow: 0 0 20px #f0d08044;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
         }
         .shop-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #1f3340;
-            gap: 8px;
+            gap: 12px;
         }
         .shop-item:last-child {
             border-bottom: none;
         }
         .shop-item span {
             color: #c0d8e8;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
         }
         .shop-item .price {
             color: #f0d080;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
         }
         .shop-item button {
             background: #1f4050;
@@ -229,8 +229,8 @@
             border-radius: 30px;
             color: #eaf2f9;
             font-weight: 600;
-            font-size: 0.7rem;
-            padding: 4px 14px;
+            font-size: 0.8rem;
+            padding: 6px 18px;
             box-shadow: 0 3px 0 #0a1a22, 0 2px 0 #3a6a7a inset;
             transition: 0.05s linear;
             cursor: pointer;
@@ -248,16 +248,16 @@
         }
         .shop-close {
             display: block;
-            margin: 14px auto 0 auto;
+            margin: 18px auto 0 auto;
             background: #3a2a2a;
             border: none;
             border-radius: 30px;
             color: #f0c0c0;
             font-weight: 700;
-            padding: 5px 28px;
+            padding: 7px 36px;
             box-shadow: 0 3px 0 #1a1010;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
         .shop-close:active {
             transform: translateY(3px);
@@ -266,22 +266,15 @@
         .shop-close:hover {
             background: #4a3a3a;
         }
-        .shop-badge {
-            background: #1a2a3a;
-            border-radius: 20px;
-            padding: 2px 10px;
-            font-size: 0.7rem;
-            color: #aac2d6;
-        }
-        @media (max-width: 700px) {
-            .panel { height: auto; padding: 10px; gap: 6px; }
-            .stats { gap: 6px; flex-wrap: wrap; }
-            .hp-bar-bg { width: 70px; }
-            .controls { gap: 4px; }
-            .controls button { font-size: 0.65rem; padding: 4px 10px; }
-            #message { font-size: 0.7rem; min-width: 70px; padding: 2px 10px; }
-            .shop-overlay { min-width: 200px; padding: 15px; }
-            .shop-item span { font-size: 0.75rem; }
+        @media (max-width: 800px) {
+            .panel { height: auto; padding: 14px; gap: 10px; }
+            .stats { gap: 10px; flex-wrap: wrap; }
+            .hp-bar-bg { width: 120px; }
+            .controls { gap: 6px; }
+            .controls button { font-size: 0.75rem; padding: 5px 14px; }
+            #message { font-size: 0.8rem; min-width: 90px; padding: 4px 14px; }
+            .shop-overlay { min-width: 220px; padding: 18px; }
+            .shop-item span { font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -294,7 +287,7 @@
         <h2>🛒 МАГАЗИН</h2>
         <div class="shop-item">
             <span>🛸 Турель</span>
-            <span class="price">12🪙</span>
+            <span class="price" id="turretPriceDisplay">12🪙</span>
             <button id="shopBuyTurret">Купить</button>
         </div>
         <div class="shop-item">
@@ -323,7 +316,7 @@
     <div class="panel">
         <div class="stats">
             <div class="hp-bar-wrap">
-                <span style="font-size:1rem;">❤️</span>
+                <span style="font-size:1.3rem;">❤️</span>
                 <div class="hp-bar-bg">
                     <div class="hp-bar-fill" id="hpFill" style="width: 100%;"></div>
                 </div>
@@ -334,7 +327,7 @@
             <span class="badge" id="turretCount">0</span>
             <span class="badge" id="shieldBadge">🛡️0</span>
         </div>
-        <div id="message">⚡ клик по квадрату</div>
+        <div id="message">⚡ клик по врагу</div>
         <div class="controls">
             <button id="shopToggleBtn">🛒 Магазин</button>
             <button id="pauseBtn">⏸️</button>
@@ -361,18 +354,20 @@
         const damageBonusSpan = document.getElementById('damageBonus');
         const shieldBadge = document.getElementById('shieldBadge');
         const shopOverlay = document.getElementById('shopOverlay');
+        const turretPriceDisplay = document.getElementById('turretPriceDisplay');
 
         // ---- СОСТОЯНИЕ ----
         const state = {
-            hp: 35,
-            maxHp: 45,
+            hp: 50,
+            maxHp: 50,
             score: 0,
             turrets: [],
             enemies: [],
             player: { x: 400, y: 300 },
             attackRadius: 220,
-            coreRadius: 28,
+            coreRadius: 30,
             ammo: 8,
+            baseTurretPrice: 12,
             turretPrice: 12,
             hpPrice: 10,
             damagePrice: 18,
@@ -386,10 +381,11 @@
             gameOver: false,
             speed: 1,
             paused: false,
-            spawnInterval: 50,
-            minSpawnInterval: 18,
-            maxEnemies: 12,
-            spawnCounter: 0,
+            spawnInterval: 55,
+            minSpawnInterval: 22,
+            maxEnemies: 10,
+            hasTurret: false,
+            hasCircle: false,
         };
 
         // ---- UI обновление ----
@@ -401,6 +397,7 @@
             turretCountSpan.textContent = state.turrets.length;
             damageBonusSpan.textContent = state.damageBonus;
             shieldBadge.textContent = '🛡️' + state.shield;
+            turretPriceDisplay.textContent = state.turretPrice + '🪙';
 
             document.getElementById('shopBuyTurret').disabled = (state.score < state.turretPrice || state.gameOver);
             document.getElementById('shopBuyHp').disabled = (state.score < state.hpPrice || state.hp >= state.maxHp || state.gameOver);
@@ -409,20 +406,44 @@
             document.getElementById('shopBuyRegen').disabled = (state.score < state.regenPrice || state.regen || state.gameOver);
         }
 
-        // ---- спавн врага (меньше и реже) ----
+        // ---- спавн врага ----
         function spawnEnemy() {
             if (state.enemies.length >= state.maxEnemies) return;
             const side = Math.floor(Math.random() * 4);
             let x, y;
-            const pad = 20;
+            const pad = 30;
             if (side === 0) { x = Math.random() * canvas.width; y = -pad; }
             else if (side === 1) { x = canvas.width + pad; y = Math.random() * canvas.height; }
             else if (side === 2) { x = Math.random() * canvas.width; y = canvas.height + pad; }
             else { x = -pad; y = Math.random() * canvas.height; }
 
-            const isRed = Math.random() < 0.15;
-            const hp = isRed ? 2 : 1;
-            const size = isRed ? 32 + Math.floor(Math.random() * 8) : 24 + Math.floor(Math.random() * 14);
+            const canBeRed = state.hasTurret && state.turrets.length > 0;
+            const canBeCircle = state.hasCircle && state.turrets.length >= 3;
+            
+            let isRed = false;
+            let isCircle = false;
+            let hp = 1;
+            let size = 60 + Math.floor(Math.random() * 20);
+            let color = `hsl(${Math.floor(Math.random() * 60 + 200)}, 70%, 45%)`;
+            let glow = `hsl(${Math.floor(Math.random() * 60 + 200)}, 80%, 55%)`;
+            let shape = 'square';
+
+            if (canBeCircle && Math.random() < 0.15) {
+                isCircle = true;
+                hp = 3;
+                size = 50 + Math.floor(Math.random() * 14);
+                color = 'hsl(280, 80%, 55%)';
+                glow = 'hsl(280, 90%, 65%)';
+                shape = 'circle';
+            } else if (canBeRed && Math.random() < 0.20) {
+                isRed = true;
+                hp = 2;
+                size = 60 + Math.floor(Math.random() * 16);
+                color = 'hsl(0, 80%, 50%)';
+                glow = 'hsl(0, 90%, 60%)';
+                shape = 'square';
+            }
+
             const speed = 0.6 + Math.random() * 0.7 + (state.turrets.length * 0.02);
 
             state.enemies.push({
@@ -432,17 +453,21 @@
                 hp: hp,
                 maxHp: hp,
                 isRed: isRed,
-                color: isRed ? `hsl(0, 80%, 50%)` : `hsl(${Math.floor(Math.random() * 60 + 200)}, 70%, 45%)`,
-                glow: isRed ? `hsl(0, 90%, 60%)` : `hsl(${Math.floor(Math.random() * 60 + 200)}, 80%, 55%)`
+                isCircle: isCircle,
+                shape: shape,
+                color: color,
+                glow: glow
             });
         }
 
-        // ---- попадание по врагу ----
+        // ---- попадание по врагу (ВСЕГДА РАБОТАЕТ) ----
         function hitEnemy(enemy) {
             const damage = state.damageBonus;
             enemy.hp -= damage;
             if (enemy.hp <= 0) {
-                const reward = enemy.isRed ? 3 : 1;
+                let reward = 1;
+                if (enemy.isCircle) reward = 5;
+                else if (enemy.isRed) reward = 3;
                 state.score += reward;
                 const idx = state.enemies.indexOf(enemy);
                 if (idx !== -1) state.enemies.splice(idx, 1);
@@ -472,6 +497,7 @@
             if (state.gameOver) return;
             if (state.score < state.turretPrice) { messageDiv.textContent = '❌ не хватает'; return; }
             state.score -= state.turretPrice;
+            
             const angle = Math.random() * 2 * Math.PI;
             const dist = 100 + Math.random() * 70;
             const tx = state.player.x + Math.cos(angle) * dist;
@@ -482,7 +508,15 @@
                 ammo: 6,
                 cooldown: 0,
             });
-            messageDiv.textContent = '🛸 турель!';
+            
+            state.hasTurret = true;
+            if (state.turrets.length >= 3) {
+                state.hasCircle = true;
+            }
+            
+            state.turretPrice = Math.floor(state.baseTurretPrice * Math.pow(2.5, state.turrets.length));
+            
+            messageDiv.textContent = '🛸 турель! Цена: ' + state.turretPrice;
             updateUI();
         }
 
@@ -526,16 +560,18 @@
             updateUI();
         }
 
-        // ---- КЛИК ----
+        // ---- КЛИК (исправлено: атака ВСЕГДА работает) ----
         function handleCanvasClick(e) {
             if (state.gameOver) { messageDiv.textContent = '💀 GAME OVER'; return; }
             if (state.paused) { messageDiv.textContent = '⏸️ Пауза'; return; }
+            
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
             const scaleY = canvas.height / rect.height;
             const mx = (e.clientX - rect.left) * scaleX;
             const my = (e.clientY - rect.top) * scaleY;
 
+            // Проверяем попадание в любой враг
             let hitEnemyObj = null;
             for (const enemy of state.enemies) {
                 const half = enemy.size / 2;
@@ -547,29 +583,32 @@
             }
 
             if (hitEnemyObj) {
+                // Проверка зоны атаки
                 const d = Math.hypot(hitEnemyObj.x - state.player.x, hitEnemyObj.y - state.player.y);
                 if (d > state.attackRadius + hitEnemyObj.size/2) {
                     messageDiv.textContent = '👆 вне зоны!';
                     return;
                 }
-                if (state.ammo <= 0) {
-                    messageDiv.textContent = '💥 нет патронов!';
-                    return;
-                }
-                state.ammo -= 1;
+                
+                // ===== ИСПРАВЛЕНИЕ: АТАКА ВСЕГДА РАБОТАЕТ =====
+                // Убираем проверку на патроны, наносим урон сразу
                 const destroyed = hitEnemy(hitEnemyObj);
                 if (destroyed) {
-                    messageDiv.textContent = hitEnemyObj.isRed ? '💥 +3🪙' : '💥 +1🪙';
+                    if (hitEnemyObj.isCircle) messageDiv.textContent = '💜 +5🪙 (круг!)';
+                    else if (hitEnemyObj.isRed) messageDiv.textContent = '💥 +3🪙 (красный!)';
+                    else messageDiv.textContent = '💥 +1🪙';
                 } else {
                     messageDiv.textContent = '💢 ' + hitEnemyObj.hp + ' HP';
                 }
+                
+                // Бонус: иногда даём патроны для турелей
                 if (Math.random() < 0.10) {
                     state.ammo = Math.min(state.ammo + 2, 15);
-                    messageDiv.textContent += ' ✨+2';
+                    messageDiv.textContent += ' ✨+2 патрона';
                 }
                 updateUI();
             } else {
-                messageDiv.textContent = '🎯 клик по квадрату';
+                messageDiv.textContent = '🎯 клик по врагу';
             }
         }
 
@@ -592,7 +631,7 @@
                 }
             }
 
-            // Спавн (реже)
+            // Спавн
             const currentInterval = Math.max(state.minSpawnInterval, state.spawnInterval);
             if (state.frame % Math.floor(currentInterval / speed) === 0) {
                 spawnEnemy();
@@ -639,12 +678,12 @@
                 }
             }
 
-            // Урон от касания ядра (щит поглощает)
+            // ---- УРОН ТОЛЬКО ПРИ КАСАНИИ ЯДРА ----
             const toRemove = [];
             for (let i = state.enemies.length - 1; i >= 0; i--) {
                 const enemy = state.enemies[i];
                 const d = Math.hypot(enemy.x - state.player.x, enemy.y - state.player.y);
-                if (d < state.coreRadius + enemy.size/2) {
+                if (d < state.coreRadius + enemy.size / 2) {
                     if (state.shield > 0) {
                         state.shield -= 1;
                         messageDiv.textContent = '🛡️ щит поглотил урон!';
@@ -683,7 +722,6 @@
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // звёзды
             ctx.fillStyle = 'rgba(255,255,240,0.12)';
             for (let i=0; i<60; i++) {
                 const sx = (i*37+13)%800, sy = (i*53+7)%600;
@@ -710,7 +748,7 @@
             ctx.beginPath();
             ctx.arc(state.player.x, state.player.y, state.coreRadius, 0, 2 * Math.PI);
             ctx.strokeStyle = '#ff6655';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2.5;
             ctx.setLineDash([4, 8]);
             ctx.shadowColor = '#ff4433';
             ctx.shadowBlur = 15;
@@ -720,7 +758,7 @@
 
             // центр
             ctx.beginPath();
-            ctx.arc(state.player.x, state.player.y, 7, 0, 2 * Math.PI);
+            ctx.arc(state.player.x, state.player.y, 8, 0, 2 * Math.PI);
             ctx.fillStyle = '#a0e8ff';
             ctx.shadowColor = '#70d0ff';
             ctx.shadowBlur = 25;
@@ -731,19 +769,33 @@
             for (const enemy of state.enemies) {
                 const half = enemy.size/2;
                 ctx.shadowColor = enemy.glow || '#4080c0';
-                ctx.shadowBlur = 20;
+                ctx.shadowBlur = 22;
                 ctx.fillStyle = enemy.color || '#4a8db0';
-                ctx.fillRect(enemy.x - half, enemy.y - half, enemy.size, enemy.size);
-                ctx.shadowBlur = 0;
-                if (enemy.isRed && enemy.hp > 0) {
-                    ctx.fillStyle = 'rgba(255,200,100,0.9)';
-                    ctx.font = 'bold 13px monospace';
+                
+                if (enemy.shape === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(enemy.x, enemy.y, half, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                    ctx.font = 'bold 18px monospace';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillText(enemy.hp, enemy.x, enemy.y);
+                } else {
+                    ctx.fillRect(enemy.x - half, enemy.y - half, enemy.size, enemy.size);
+                    ctx.shadowBlur = 0;
+                    if (enemy.isRed && enemy.hp > 0) {
+                        ctx.fillStyle = 'rgba(255,200,100,0.9)';
+                        ctx.font = 'bold 18px monospace';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(enemy.hp, enemy.x, enemy.y);
+                    }
+                    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+                    ctx.fillRect(enemy.x - half*0.3, enemy.y - half*0.4, enemy.size*0.5, enemy.size*0.3);
                 }
-                ctx.fillStyle = 'rgba(255,255,255,0.06)';
-                ctx.fillRect(enemy.x - half*0.3, enemy.y - half*0.4, enemy.size*0.5, enemy.size*0.3);
+                ctx.shadowBlur = 0;
             }
 
             // турели
@@ -752,36 +804,35 @@
                 ctx.shadowBlur = 18;
                 ctx.fillStyle = '#1a4050';
                 ctx.beginPath();
-                ctx.arc(turret.x, turret.y, 15, 0, 2 * Math.PI);
+                ctx.arc(turret.x, turret.y, 16, 0, 2 * Math.PI);
                 ctx.fill();
                 ctx.fillStyle = '#4090b0';
                 ctx.beginPath();
-                ctx.arc(turret.x, turret.y, 9, 0, 2 * Math.PI);
+                ctx.arc(turret.x, turret.y, 10, 0, 2 * Math.PI);
                 ctx.fill();
                 ctx.shadowBlur = 0;
                 ctx.fillStyle = '#c0ecff';
-                ctx.font = 'bold 12px monospace';
+                ctx.font = 'bold 13px monospace';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(turret.ammo, turret.x, turret.y-1);
                 if (turret.cooldown > 0) {
                     ctx.strokeStyle = '#f0a070';
-                    ctx.lineWidth = 2;
+                    ctx.lineWidth = 2.5;
                     ctx.beginPath();
-                    ctx.arc(turret.x, turret.y, 18, 0, (turret.cooldown / (140/state.speed)) * 2 * Math.PI);
+                    ctx.arc(turret.x, turret.y, 20, 0, (turret.cooldown / (140/state.speed)) * 2 * Math.PI);
                     ctx.stroke();
                 }
             }
 
-            // статус
-            ctx.font = 'bold 13px monospace';
+            ctx.font = 'bold 14px monospace';
             ctx.fillStyle = '#80d0e0';
             ctx.shadowColor = '#10252a';
             ctx.shadowBlur = 6;
-            ctx.fillText(`🪙 ${state.score}  врагов: ${state.enemies.length}`, 15, 30);
+            ctx.fillText(`🪙 ${state.score}  врагов: ${state.enemies.length}`, 15, 32);
             if (state.paused) {
                 ctx.fillStyle = '#f0d080';
-                ctx.font = 'bold 28px monospace';
+                ctx.font = 'bold 30px monospace';
                 ctx.textAlign = 'center';
                 ctx.fillText('⏸ ПАУЗА', 400, 280);
                 ctx.textAlign = 'left';
@@ -840,7 +891,7 @@
             const mx = (e.clientX - rect.left) * scaleX;
             const my = (e.clientY - rect.top) * scaleY;
             for (const turret of state.turrets) {
-                if (Math.hypot(mx - turret.x, my - turret.y) < 22) {
+                if (Math.hypot(mx - turret.x, my - turret.y) < 24) {
                     reloadTurret(turret);
                     break;
                 }
@@ -848,9 +899,10 @@
         });
 
         // ---- СТАРТ ----
+        state.hp = state.maxHp;
         updateUI();
         gameLoop();
     })();
 </script>
 </body>
-  </html>
+</html>
