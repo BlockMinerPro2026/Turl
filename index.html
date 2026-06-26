@@ -1,317 +1,520 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Ночной прицел (без фонарика)</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      font-family: 'Courier New', monospace;
-      overflow: hidden;
-    }
-    .nv-container {
-      position: relative;
-      width: 100%;
-      max-width: 420px;
-      aspect-ratio: 9 / 16;
-      background: #0a0a0a;
-      border-radius: 32px;
-      overflow: hidden;
-      box-shadow: 0 0 60px rgba(0, 255, 80, 0.15), inset 0 0 80px rgba(0, 40, 0, 0.5);
-      border: 2px solid #1a3a1a;
-    }
-    #video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: scaleX(-1);
-      /* ГЛАВНОЕ: усиливаем яркость и контраст, делаем зелёным */
-      filter: brightness(1.8) contrast(1.6) saturate(0) hue-rotate(90deg) sepia(0.8);
-      opacity: 0.9;
-    }
-    /* Дополнительный зелёный слой поверх */
-    .nv-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 40, 0, 0.3);
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: 2;
-    }
-    /* Прицел */
-    .crosshair {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 3;
-    }
-    .crosshair::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 60%;
-      height: 2px;
-      background: rgba(0, 255, 80, 0.25);
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 12px rgba(0, 255, 80, 0.2);
-    }
-    .crosshair::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 2px;
-      height: 60%;
-      background: rgba(0, 255, 80, 0.25);
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 12px rgba(0, 255, 80, 0.2);
-    }
-    .ring {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      border: 1.5px solid rgba(0, 255, 80, 0.12);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-    }
-    .ring.r1 { width: 30%; height: 30%; }
-    .ring.r2 { width: 18%; height: 18%; border-color: rgba(0, 255, 80, 0.18); }
-    .ring.r3 { width: 8%; height: 8%; border-color: rgba(0, 255, 80, 0.25); border-width: 2px; }
-
-    .corner {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      border-color: rgba(0, 255, 80, 0.2);
-      border-style: solid;
-      border-width: 0;
-    }
-    .corner.tl { top: 12%; left: 12%; border-top-width: 2px; border-left-width: 2px; }
-    .corner.tr { top: 12%; right: 12%; border-top-width: 2px; border-right-width: 2px; }
-    .corner.bl { bottom: 12%; left: 12%; border-bottom-width: 2px; border-left-width: 2px; }
-    .corner.br { bottom: 12%; right: 12%; border-bottom-width: 2px; border-right-width: 2px; }
-
-    /* HUD */
-    .hud {
-      position: absolute;
-      bottom: 20px;
-      left: 0;
-      width: 100%;
-      padding: 0 18px;
-      display: flex;
-      justify-content: space-between;
-      color: #2aff6a;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-shadow: 0 0 10px #00aa33, 0 0 30px #003300;
-      z-index: 5;
-      background: linear-gradient(transparent 0%, rgba(0,10,0,0.6) 100%);
-      padding-top: 30px;
-      padding-bottom: 18px;
-      font-weight: bold;
-      backdrop-filter: blur(1px);
-    }
-    .hud-left, .hud-right {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .hud-right { align-items: flex-end; }
-    .hud .label {
-      color: #4caf7a;
-      font-size: 9px;
-      letter-spacing: 1px;
-      opacity: 0.7;
-    }
-    .hud .value {
-      font-size: 14px;
-      color: #8affb0;
-    }
-    .hud .blink {
-      animation: pulse 1.8s infinite;
-    }
-    @keyframes pulse {
-      0% { opacity: 0.3; }
-      50% { opacity: 1; }
-      100% { opacity: 0.3; }
-    }
-
-    .status-bar {
-      position: absolute;
-      bottom: 70px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 6;
-      background: rgba(0, 20, 0, 0.5);
-      backdrop-filter: blur(4px);
-      padding: 8px 24px;
-      border-radius: 60px;
-      border: 1px solid #2a7a3a;
-      box-shadow: 0 0 30px rgba(0, 255, 80, 0.08);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: #8affb0;
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #2aff6a;
-      box-shadow: 0 0 20px #2aff6a;
-      animation: pulse 1.5s infinite;
-    }
-
-    .noise {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 4;
-      opacity: 0.06;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.3 0"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
-      background-repeat: repeat;
-      background-size: 300px 300px;
-      mix-blend-mode: overlay;
-    }
-    ::-webkit-scrollbar { display: none; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Прибор ночного видения · Тепловизор</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0f0f;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 12px;
+        }
+        .device {
+            max-width: 700px;
+            width: 100%;
+            background: #1a1f1f;
+            border-radius: 48px 48px 32px 32px;
+            padding: 20px 20px 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 2px #2f3a3a inset, 0 0 0 4px #0f1414 inset;
+            border-bottom: 6px solid #2d3a3a;
+        }
+        .viewport {
+            position: relative;
+            background: #0b1010;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 0 0 2px #3f4e4e, 0 10px 30px rgba(0,0,0,0.7);
+            aspect-ratio: 4 / 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #thermalCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #0d1212;
+            image-rendering: pixelated; /* для чёткости "прибора" */
+        }
+        .overlay-grid {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, rgba(0,255,65,0.03) 0px, rgba(0,255,65,0.03) 2px, transparent 2px, transparent 8px),
+                        repeating-linear-gradient(90deg, rgba(0,255,65,0.03) 0px, rgba(0,255,65,0.03) 2px, transparent 2px, transparent 8px);
+            border-radius: 28px;
+            z-index: 2;
+        }
+        .crosshair {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .crosshair::before,
+        .crosshair::after {
+            content: '';
+            position: absolute;
+            background: rgba(0, 255, 100, 0.25);
+            box-shadow: 0 0 12px rgba(0, 255, 100, 0.3);
+        }
+        .crosshair::before {
+            width: 2px;
+            height: 30%;
+            top: 35%;
+        }
+        .crosshair::after {
+            width: 30%;
+            height: 2px;
+            left: 35%;
+        }
+        .crosshair-circle {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border: 1.5px solid rgba(0, 255, 100, 0.2);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 255, 100, 0.1);
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 10px 4px;
+            color: #86a8a8;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px #1f3a3a;
+            font-weight: 300;
+            border-top: 1px solid #2a3a3a;
+            padding-top: 14px;
+        }
+        .status-led {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .led {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #2a5a2a;
+            box-shadow: 0 0 6px #1f3f1f;
+            transition: 0.2s;
+        }
+        .led.active {
+            background: #66ff66;
+            box-shadow: 0 0 16px #33ff33;
+        }
+        .badge {
+            background: #1f2c2c;
+            padding: 6px 18px;
+            border-radius: 40px;
+            border: 1px solid #2f4040;
+            font-size: 0.8rem;
+            color: #b0d0d0;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 18px;
+        }
+        .btn {
+            background: #1f2c2c;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 28px;
+            color: #b4d4d4;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid #0f1818;
+            transition: 0.15s;
+            box-shadow: 0 4px 0 #0a1010;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #0a1010;
+        }
+        .btn-primary {
+            background: #1f3d3d;
+            color: #bbf0f0;
+            border-bottom-color: #1f4a4a;
+        }
+        .btn-primary:active {
+            background: #1a3535;
+        }
+        .btn-danger {
+            background: #3d2525;
+            color: #f0baba;
+            border-bottom-color: #4a2a2a;
+        }
+        .btn-danger:active {
+            background: #351f1f;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 14px;
+            color: #6d8f8f;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+        .dot-red { background: #ff3b3b; box-shadow: 0 0 12px #ff3b3b88; }
+        .dot-blue { background: #3b8bff; box-shadow: 0 0 12px #3b8bff88; }
+        .dot-green { background: #44bb44; box-shadow: 0 0 8px #44bb4488; }
+        .hint {
+            color: #4f6a6a;
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 12px;
+            border-top: 1px solid #233030;
+            padding-top: 12px;
+        }
+        @media (max-width: 480px) {
+            .device { padding: 12px; border-radius: 32px; }
+            .btn { padding: 10px 14px; font-size: 0.8rem; }
+            .status-bar { flex-wrap: wrap; gap: 8px; justify-content: center; }
+        }
+    </style>
 </head>
 <body>
-  <div class="nv-container">
-    <video id="video" autoplay playsinline muted></video>
-    <div class="nv-overlay"></div>
 
-    <div class="crosshair"></div>
-    <div class="ring r1"></div>
-    <div class="ring r2"></div>
-    <div class="ring r3"></div>
-    <div class="corner tl"></div>
-    <div class="corner tr"></div>
-    <div class="corner bl"></div>
-    <div class="corner br"></div>
-    <div class="noise"></div>
-
-    <div class="hud">
-      <div class="hud-left">
-        <span class="label">РЕЖИМ</span>
-        <span class="value blink">▪ НОЧНОЙ</span>
-        <span class="label">УСИЛЕНИЕ</span>
-        <span class="value">МАКС.</span>
-      </div>
-      <div class="hud-right">
-        <span class="label">ЗАРЯД</span>
-        <span class="value">98%</span>
-        <span class="label">ISO</span>
-        <span class="value">6400</span>
-      </div>
+<div class="device">
+    <div class="viewport">
+        <canvas id="thermalCanvas" width="640" height="480"></canvas>
+        <div class="overlay-grid"></div>
+        <div class="crosshair">
+            <div class="crosshair-circle"></div>
+        </div>
     </div>
 
     <div class="status-bar">
-      <span class="status-dot"></span>
-      <span>NIGHT VISION • REC</span>
-      <span style="font-size: 9px; opacity:0.5;">⏺</span>
+        <div class="status-led">
+            <span class="led active" id="statusLed"></span>
+            <span id="statusText">НОЧЬ · ТЕПЛО</span>
+        </div>
+        <div class="badge" id="fpsCounter">⚡ 30 FPS</div>
     </div>
-  </div>
 
-  <script>
-    (function() {
-      const video = document.getElementById('video');
+    <div class="btn-group">
+        <button class="btn btn-primary" id="startBtn">▶ ВКЛ</button>
+        <button class="btn btn-danger" id="stopBtn">⏹ ВЫКЛ</button>
+    </div>
 
-      async function initCamera() {
-        try {
-          const constraints = {
-            video: {
-              facingMode: { ideal: 'environment' },
-              width: { ideal: 1280 },
-              height: { ideal: 720 },
-              frameRate: { ideal: 30 }
-            },
-            audio: false
-          };
+    <div class="legend">
+        <span><span class="dot dot-red"></span> ТЕПЛО (красный)</span>
+        <span><span class="dot dot-blue"></span> ХОЛОД (синий)</span>
+        <span><span class="dot dot-green"></span> НЕЙТР. (зелёный)</span>
+    </div>
+    <div class="hint">⚡ Человек / тёплое → красный · Холодное → синий · Тепловой контраст</div>
+</div>
 
-          const stream = await navigator.mediaDevices.getUserMedia(constraints);
-          video.srcObject = stream;
-          await video.play();
-
-        } catch (err) {
-          console.warn('Камера не доступна:', err);
-          showFallback();
-        }
-      }
-
-      function showFallback() {
-        const container = document.querySelector('.nv-container');
-        const canvas = document.createElement('canvas');
-        canvas.width = 420;
-        canvas.height = 720;
-        canvas.style.position = 'absolute';
-        canvas.style.top = '0';
-        canvas.style.left = '0';
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
-        canvas.style.zIndex = '1';
-        container.appendChild(canvas);
-
+<script>
+    (function(){
+        // ---------- ЭЛЕМЕНТЫ ----------
+        const canvas = document.getElementById('thermalCanvas');
         const ctx = canvas.getContext('2d');
-        function drawNoise() {
-          const w = canvas.width, h = canvas.height;
-          const imageData = ctx.createImageData(w, h);
-          const data = imageData.data;
-          for (let i = 0; i < data.length; i += 4) {
-            const val = Math.random() * 255;
-            data[i] = val * 0.2;
-            data[i+1] = val * 0.9;
-            data[i+2] = val * 0.1;
-            data[i+3] = 255;
-          }
-          ctx.putImageData(imageData, 0, 0);
-          requestAnimationFrame(drawNoise);
+        const statusLed = document.getElementById('statusLed');
+        const statusText = document.getElementById('statusText');
+        const fpsCounter = document.getElementById('fpsCounter');
+
+        // ---------- СОСТОЯНИЕ ----------
+        let stream = null;
+        let animationId = null;
+        let isRunning = false;
+        let frameCount = 0;
+        let lastFpsUpdate = performance.now();
+
+        // ---------- НАСТРОЙКИ ОБРАБОТКИ ----------
+        // Диапазоны "тепла" и "холода" в HSV (оттенок)
+        // Красный = 0° (тепло), Синий = 220° (холод), Зелёный = 120° (нейтральный)
+        const HOT_HUE = 0;        // красный
+        const COLD_HUE = 220;     // синий
+        const NEUTRAL_HUE = 120;  // зелёный
+
+        // Пороги для яркости/насыщенности (чтобы не шуметь)
+        const MIN_LUMINANCE = 30;   // минимальная яркость для анализа
+        const MAX_LUMINANCE = 225;  // максимальная (чтобы не слепить)
+
+        // ---------- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ----------
+        function luminanceFromRGB(r, g, b) {
+            // относительная яркость (0-255) для определения "тепла/холода"
+            return 0.299 * r + 0.587 * g + 0.114 * b;
         }
-        drawNoise();
 
-        const msg = document.createElement('div');
-        msg.style.position = 'absolute';
-        msg.style.bottom = '40%';
-        msg.style.left = '0';
-        msg.style.width = '100%';
-        msg.style.textAlign = 'center';
-        msg.style.color = '#2aff6a';
-        msg.style.fontSize = '18px';
-        msg.style.fontWeight = 'bold';
-        msg.style.textShadow = '0 0 30px #00aa33';
-        msg.style.zIndex = '10';
-        msg.innerText = '📷 КАМЕРА НЕДОСТУПНА';
-        container.appendChild(msg);
-      }
+        // Преобразование RGB → HSV (только Hue нам нужен, но считаем полный)
+        function rgbToHsv(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, v = max;
+            const d = max - min;
+            s = max === 0 ? 0 : d / max;
 
-      initCamera();
+            if (max === min) {
+                h = 0; // achromatic
+            } else {
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h: h * 360, s: s * 100, v: v * 100 };
+        }
+
+        // ----- ОСНОВНАЯ ФУНКЦИЯ ОБРАБОТКИ КАДРА (тепловизор) -----
+        function processThermalFrame(imageData) {
+            const data = imageData.data;
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Проходим по пикселям (шаг 2 для производительности, но качество сохраняем)
+            // Для плавности оставляем попиксельно, но можно ускорить, обрабатывая каждый 2-й
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i+1];
+                const b = data[i+2];
+                // альфа-канал оставляем без изменений (data[i+3])
+
+                // 1. Вычисляем яркость (0-255)
+                const lum = luminanceFromRGB(r, g, b);
+
+                // 2. Если яркость слишком мала — считаем фоном (тёмный ночной режим)
+                if (lum < MIN_LUMINANCE) {
+                    // очень тёмный пиксель → делаем почти чёрным с лёгким зелёным отливом (стиль ПНВ)
+                    data[i] = 8; data[i+1] = 18; data[i+2] = 12;
+                    continue;
+                }
+
+                // 3. Если яркость высокая — считаем источником тепла/холода
+                //    Определяем "теплоту" по соотношению R/G/B, ищем дисбаланс
+                //    Используем HSV для более точного определения оттенка
+                const { h, s, v } = rgbToHsv(r, g, b);
+
+                // Порог насыщенности, чтобы серые объекты не окрашивать сильно
+                const saturationThreshold = 12; // %
+
+                let targetHue = NEUTRAL_HUE; // по умолчанию зелёный (нейтральный)
+                let intensity = 1.0;
+
+                // Если насыщенность > порога и яркость > MIN_LUMINANCE
+                if (s > saturationThreshold && v > 20) {
+                    // Определяем, к какому спектру относится: тёплый (красный/оранжевый/жёлтый) или холодный (синий/фиолетовый)
+                    // Оранжевый/жёлтый ~ 20-60°, красный ~ 0-20° и 340-360°
+                    // Синий ~ 180-260°, фиолетовый ~ 260-300°
+                    const hue = h;
+                    // Дополнительно проверяем яркость: очень яркое = скорее тепло
+                    const isWarm = (hue >= 0 && hue < 60) || (hue >= 330 && hue <= 360) || (hue >= 10 && hue < 50);
+                    const isCold = (hue >= 180 && hue < 280);
+
+                    // Также проверяем дисбаланс каналов напрямую (для надёжности)
+                    const redRatio = r / (g + 1);
+                    const blueRatio = b / (g + 1);
+                    const isRedHeavy = redRatio > 1.3 && r > 80;
+                    const isBlueHeavy = blueRatio > 1.3 && b > 80;
+
+                    if (isWarm || isRedHeavy) {
+                        targetHue = HOT_HUE; // красный
+                        // Интенсивность зависит от насыщенности и яркости
+                        intensity = Math.min(1.0, (s / 50) * 0.9 + 0.3);
+                    } else if (isCold || isBlueHeavy) {
+                        targetHue = COLD_HUE; // синий
+                        intensity = Math.min(1.0, (s / 45) * 0.9 + 0.3);
+                    } else {
+                        // Если не тёплый и не холодный, но насыщенный — оставляем нейтральный (зеленоватый)
+                        targetHue = NEUTRAL_HUE;
+                        intensity = 0.5 + (s / 100) * 0.4;
+                    }
+                } else {
+                    // Низкая насыщенность — нейтральный, но с оттенком в зависимости от яркости (стилизация)
+                    targetHue = NEUTRAL_HUE;
+                    intensity = 0.4 + (lum / 255) * 0.3;
+                }
+
+                // ----- ПРИМЕНЯЕМ ЦВЕТ (HSV → RGB) с учётом интенсивности -----
+                // Насыщенность для окрашивания: высокая, чтобы цвет был ярким
+                const sat = 75 + (intensity * 20);
+                const val = Math.min(100, 50 + (lum / 255) * 45); // яркость зависит от исходной
+
+                // Конвертируем HSV в RGB
+                const hRad = targetHue / 360;
+                const c = (val / 100) * (sat / 100);
+                const x = c * (1 - Math.abs((hRad * 6) % 2 - 1));
+                const m = (val / 100) - c;
+
+                let rOut, gOut, bOut;
+                const hPrime = hRad * 6;
+                if (hPrime >= 0 && hPrime < 1) { rOut = c; gOut = x; bOut = 0; }
+                else if (hPrime >= 1 && hPrime < 2) { rOut = x; gOut = c; bOut = 0; }
+                else if (hPrime >= 2 && hPrime < 3) { rOut = 0; gOut = c; bOut = x; }
+                else if (hPrime >= 3 && hPrime < 4) { rOut = 0; gOut = x; bOut = c; }
+                else if (hPrime >= 4 && hPrime < 5) { rOut = x; gOut = 0; bOut = c; }
+                else { rOut = c; gOut = 0; bOut = x; }
+
+                // Добавляем смещение и ограничиваем
+                let finalR = Math.round((rOut + m) * 255);
+                let finalG = Math.round((gOut + m) * 255);
+                let finalB = Math.round((bOut + m) * 255);
+
+                // Дополнительно: если пиксель был очень тёмным, но мы его покрасили — затемняем
+                if (lum < 40) {
+                    finalR = Math.round(finalR * 0.5);
+                    finalG = Math.round(finalG * 0.5);
+                    finalB = Math.round(finalB * 0.5);
+                }
+
+                // Записываем обратно
+                data[i] = Math.min(255, Math.max(0, finalR));
+                data[i+1] = Math.min(255, Math.max(0, finalG));
+                data[i+2] = Math.min(255, Math.max(0, finalB));
+                // альфа не трогаем
+            }
+
+            return imageData;
+        }
+
+        // ---------- ЦИКЛ ОБРАБОТКИ ----------
+        function processFrame() {
+            if (!isRunning) return;
+
+            // Захватываем кадр с видео
+            if (stream && stream.active) {
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.play().catch(() => {});
+
+                // Рисуем видео на canvas (временный)
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Получаем пиксели
+                const imageData = tempCtx.getImageData(0, 0, canvas.width, canvas.height);
+                
+                // Применяем тепловизор
+                const processedData = processThermalFrame(imageData);
+                
+                // Рисуем на основном canvas
+                ctx.putImageData(processedData, 0, 0);
+
+                // FPS счётчик (примерный)
+                frameCount++;
+                const now = performance.now();
+                if (now - lastFpsUpdate >= 1000) {
+                    const fps = Math.round(frameCount * 1000 / (now - lastFpsUpdate));
+                    fpsCounter.textContent = `⚡ ${fps} FPS`;
+                    frameCount = 0;
+                    lastFpsUpdate = now;
+                }
+            }
+
+            animationId = requestAnimationFrame(processFrame);
+        }
+
+        // ---------- ЗАПУСК/ОСТАНОВКА ----------
+        async function startCamera() {
+            if (isRunning) return;
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    } 
+                });
+                // Статус
+                statusLed.classList.add('active');
+                statusText.textContent = 'НОЧЬ · ТЕПЛО';
+                isRunning = true;
+                processFrame();
+            } catch (err) {
+                console.error('Ошибка доступа к камере:', err);
+                statusText.textContent = '❌ НЕТ ДОСТУПА';
+                statusLed.classList.remove('active');
+                alert('Не удалось получить доступ к камере. Проверьте разрешения.');
+            }
+        }
+
+        function stopCamera() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            isRunning = false;
+            statusLed.classList.remove('active');
+            statusText.textContent = '⏸ ВЫКЛ';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Заполним чёрным с зелёным оттенком (стиль)
+            ctx.fillStyle = '#0b1410';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            fpsCounter.textContent = '⚡ 0 FPS';
+        }
+
+        // ---------- ИНИЦИАЛИЗАЦИЯ И КНОПКИ ----------
+        document.getElementById('startBtn').addEventListener('click', startCamera);
+        document.getElementById('stopBtn').addEventListener('click', stopCamera);
+
+        // Начальное состояние: выключен, но с фоном
+        ctx.fillStyle = '#0b1410';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Маленький декоративный шум (прибор)
+        for (let i=0; i<80; i++) {
+            ctx.fillStyle = `rgba(20, 50, 30, ${Math.random()*0.1})`;
+            ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2);
+        }
+        statusText.textContent = '⏸ ВЫКЛ';
+        statusLed.classList.remove('active');
+
+        // Перехват ошибок при уничтожении
+        window.addEventListener('beforeunload', function() {
+            stopCamera();
+        });
+
+        console.log('🔦 Прибор ночного видения / тепловизор загружен');
+        console.log('🟥 Тепло → красный, 🟦 Холод → синий, 🟩 Нейтральный → зелёный');
     })();
-  </script>
+</script>
 </body>
 </html>
