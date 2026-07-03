@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>СТРЫКАЛО · АБСОЛЮТНО ВСЯ ДИСКОГРАФИЯ 4.0 (210+ треков)</title>
+    <title>СТРЫКАЛО · ВСЯ ДИСКОГРАФИЯ · ПЛЕЕР</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
@@ -77,8 +77,11 @@
         .track-actions {
             display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;
         }
-        .track-actions audio {
-            height:26px; max-width:140px; border-radius:40px; background:#111;
+        .track-actions iframe {
+            border-radius:40px;
+            width:200px;
+            height:30px;
+            border: none;
         }
         .btn {
             background:transparent; border:1px solid #5a5a7a; color:#ccc;
@@ -86,8 +89,10 @@
             font-weight:500; cursor:pointer; transition:0.15s; text-decoration:none;
             display:inline-flex; align-items:center; gap:3px; white-space:nowrap;
         }
-        .btn-download { background:#22223a; border-color:#4a4a6a; }
-        .btn-download:hover { background:#3a3a5a; border-color:#8a8aaa; color:#fff; }
+        .btn-youtube {
+            background:#ff0000; border-color:#ff0000; color:#fff;
+        }
+        .btn-youtube:hover { background:#cc0000; }
         .footer {
             text-align:center; color:#444466; font-size:0.75rem;
             margin-top:1.5rem; padding-top:1.2rem; border-top:1px solid #1a1a2e;
@@ -96,7 +101,7 @@
         @media (max-width:700px) {
             .track { flex-direction:column; align-items:stretch; border-radius:18px; padding:0.6rem; }
             .track-actions { justify-content:space-between; }
-            .track-actions audio { max-width:100%; width:100%; }
+            .track-actions iframe { width:100%; }
             .search-box input { width:100px; }
             header { flex-direction:column; align-items:flex-start; gap:0.5rem; }
             h1 { font-size:2rem; }
@@ -108,7 +113,7 @@
     <header>
         <div>
             <h1>🎸 СТРЫКАЛО</h1>
-            <div class="subhead">АБСОЛЮТНО ВСЯ ДИСКОГРАФИЯ 4.0 · 210+ ТРЕКОВ</div>
+            <div class="subhead">ВСЯ ДИСКОГРАФИЯ · ПЛЕЕР (YouTube)</div>
         </div>
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="🔍 Поиск..." oninput="filterTracks()">
@@ -148,16 +153,23 @@
     </div>
 
     <div class="footer">
-        <span>⚡</span> ВСЯ ДИСКОГРАФИЯ · СЛУШАЙ И СКАЧИВАЙ <span>⚡</span>
+        <span>⚡</span> ВСЯ ДИСКОГРАФИЯ · ПРОСЛУШИВАНИЕ ЧЕРЕЗ YOUTUBE <span>⚡</span>
     </div>
 </div>
 
 <script>
 // =================================================================
-// ПОЛНАЯ ВЕРСИЯ 4.0 — 210+ ТРЕКОВ
-// ДОБАВЛЕНЫ: "Лучший город", "Москва", "Питер", "Танцы",
-// акустика "Солнце", полная версия "Провода", live "Космос"
+// ПОЛНАЯ ВЕРСИЯ 5.0 — 210+ ТРЕКОВ С YOUTUBE-ПЛЕЕРАМИ
+// КАЖДЫЙ ТРЕК ПРОИГРЫВАЕТСЯ С ЮТУБА
 // =================================================================
+
+// ФУНКЦИЯ ГЕНЕРАЦИИ YOUTUBE ID (поиск по названию + артисту)
+// Это заглушка — реальные ID нужно вручную добавить для каждого трека
+// Но мы генерируем ссылку на поиск YouTube
+function getYoutubeLink(title, year) {
+    const query = encodeURIComponent(`Стрыкало ${title} ${year}`);
+    return `https://www.youtube.com/embed?listType=search&search_query=${query}`;
+}
 
 // ---------- ОФИЦИАЛЬНЫЕ РЕЛИЗЫ (ВСЕ АЛЬБОМЫ) ----------
 const official = [
@@ -236,7 +248,6 @@ const official = [
     { title: 'Питер', year: '2010' },
     { title: 'Электричество', year: '2009' },
     { title: 'Москва — Владивосток', year: '2010' },
-    // Новые добавленные
     { title: 'Москва', year: '2009' },
     { title: 'Танцы', year: '2013' },
 ];
@@ -404,26 +415,12 @@ const live = [
     { title: 'Live «Лучший город» (Нашествие)', year: '2012' },
 ];
 
-// ========== ГЕНЕРАЦИЯ ССЫЛОК ==========
-function generateFile(title, year) {
-    let slug = title
-        .toLowerCase()
-        .replace(/\([^)]*\)/g, '')
-        .replace(/[^а-яa-z0-9]/g, ' ')
-        .trim()
-        .replace(/\s+/g, '-');
-    if (!slug) slug = 'track-' + year;
-    return `https://www.strykalo.ru/mp3/${slug}.mp3`;
-}
-
 // ========== РЕНДЕРИНГ ==========
 function createTrackElement(track, category) {
     const div = document.createElement('div');
     div.className = 'track';
     div.dataset.title = track.title.toLowerCase();
     div.dataset.category = category;
-
-    const file = generateFile(track.title, track.year);
 
     const nameSpan = document.createElement('span');
     nameSpan.className = 'track-name';
@@ -432,21 +429,21 @@ function createTrackElement(track, category) {
     const actions = document.createElement('div');
     actions.className = 'track-actions';
 
-    const audio = document.createElement('audio');
-    audio.controls = true;
-    audio.preload = 'metadata';
-    audio.src = file;
+    // YouTube iframe плеер
+    const iframe = document.createElement('iframe');
+    iframe.src = getYoutubeLink(track.title, track.year);
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
 
-    const downloadBtn = document.createElement('a');
-    downloadBtn.className = 'btn btn-download';
-    downloadBtn.innerHTML = '⬇';
-    downloadBtn.href = file;
-    downloadBtn.download = `${track.title}.mp3`;
-    downloadBtn.target = '_blank';
-    downloadBtn.title = 'Скачать';
+    const youtubeBtn = document.createElement('a');
+    youtubeBtn.className = 'btn btn-youtube';
+    youtubeBtn.innerHTML = '▶';
+    youtubeBtn.href = `https://www.youtube.com/results?search_query=Стрыкало+${track.title}+${track.year}`;
+    youtubeBtn.target = '_blank';
+    youtubeBtn.title = 'Открыть на YouTube';
 
-    actions.appendChild(audio);
-    actions.appendChild(downloadBtn);
+    actions.appendChild(iframe);
+    actions.appendChild(youtubeBtn);
 
     div.appendChild(nameSpan);
     div.appendChild(actions);
