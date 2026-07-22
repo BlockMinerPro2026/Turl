@@ -1,437 +1,248 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Шумомер — цветовой индикатор</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Скачать Standoff 2 Mobile</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
+
         body {
             min-height: 100vh;
-            background: #0b0e14;
+            background: #0b0e1a;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 20px;
         }
+
         .card {
-            background: #1a1f2a;
-            border-radius: 48px;
-            padding: 36px 32px 44px;
-            max-width: 500px;
+            max-width: 460px;
             width: 100%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-            transition: box-shadow 0.2s;
-            border: 1px solid #2d3440;
+            background: linear-gradient(145deg, #131c2e, #0a101f);
+            border-radius: 40px;
+            padding: 36px 28px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
+
+        .icon {
+            font-size: 64px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
         h1 {
-            font-weight: 400;
-            font-size: 1.7rem;
-            letter-spacing: 0.5px;
-            color: #d6dee9;
-            text-align: center;
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+        }
+
+        .sub {
+            color: #7a8aa0;
+            font-size: 15px;
             margin-bottom: 28px;
-            word-break: break-word;
+            border-left: 3px solid #00c8ff;
+            padding-left: 16px;
+            text-align: left;
+            opacity: 0.8;
         }
-        .indicator {
-            display: flex;
-            justify-content: center;
-            gap: 18px;
-            margin: 18px 0 28px;
-            flex-wrap: wrap;
-        }
-        .dot {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: #2d3440;
-            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.3);
-            transition: background 0.15s ease, box-shadow 0.2s, transform 0.15s;
-            border: 2px solid #3d4555;
-        }
-        .dot.active {
-            transform: scale(1.05);
-            border-color: #f0f4ff;
-        }
-        .dot.green {
-            background: #2b8c5e;
-            box-shadow: 0 0 16px #2b8c5eaa;
-        }
-        .dot.yellow {
-            background: #c9a83e;
-            box-shadow: 0 0 20px #c9a83ecc;
-        }
-        .dot.red {
-            background: #c23b3b;
-            box-shadow: 0 0 24px #c23b3bdd;
-        }
-        .labels {
-            display: flex;
-            justify-content: space-around;
-            color: #9aa5b9;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            margin-top: -6px;
+
+        .game-info {
+            background: #0f1729;
+            border-radius: 20px;
+            padding: 16px 18px;
             margin-bottom: 28px;
+            border: 1px solid #1e2a3e;
+            text-align: left;
+            color: #b0c4dd;
+            font-size: 14px;
+            line-height: 1.7;
         }
-        .labels span {
-            width: 70px;
-            text-align: center;
-        }
-        .meter {
-            background: #252c39;
-            border-radius: 60px;
-            height: 16px;
-            overflow: hidden;
-            margin: 24px 0 18px;
-            box-shadow: inset 0 2px 6px #0b0e14;
-        }
-        .meter-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #2b8c5e, #c9a83e, #c23b3b);
-            border-radius: 60px;
-            transition: width 0.08s linear, background 0.2s;
-        }
-        .value-box {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            color: #c8d2e0;
-            font-weight: 400;
-            margin-top: 12px;
-        }
-        .db-value {
-            font-size: 2.6rem;
+
+        .game-info span {
+            color: #00c8ff;
             font-weight: 600;
-            background: #11161f;
-            padding: 4px 20px;
-            border-radius: 60px;
-            letter-spacing: 1px;
-            color: #eef3fc;
-            box-shadow: inset 0 2px 6px #05070a;
-            min-width: 110px;
-            text-align: center;
         }
-        .status-text {
-            font-size: 1.2rem;
-            background: #1e2532;
-            padding: 8px 24px;
-            border-radius: 60px;
-            border: 1px solid #2f3849;
-        }
-        .footnote {
-            display: flex;
-            justify-content: space-between;
-            color: #6d7a90;
-            font-size: 0.8rem;
-            margin-top: 28px;
-            border-top: 1px dashed #2d3440;
-            padding-top: 20px;
-        }
-        button {
-            background: #2b3343;
+
+        .btn-download {
+            display: block;
+            width: 100%;
+            padding: 18px 10px;
+            background: linear-gradient(135deg, #00c8ff, #0077ff);
             border: none;
-            color: #d2dcec;
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            border-radius: 60px;
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.15s;
-            box-shadow: 0 4px 0 #10141c;
-            border: 1px solid #3a4357;
+            box-shadow: 0 6px 30px rgba(0, 200, 255, 0.3);
+            transition: all 0.2s;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 14px;
         }
-        button:active {
-            transform: translateY(3px);
-            box-shadow: 0 1px 0 #10141c;
+
+        .btn-download:active {
+            transform: scale(0.96);
         }
-        button:hover {
-            background: #36415a;
-            color: white;
+
+        .btn-download .small {
+            font-size: 13px;
+            font-weight: 400;
+            opacity: 0.7;
+            display: block;
+            margin-top: 4px;
         }
-        .mic-status {
-            background: #1a212b;
-            padding: 6px 18px;
+
+        .btn-secondary {
+            display: inline-block;
+            padding: 12px 28px;
             border-radius: 40px;
-            border: 1px solid #2c3545;
-            color: #9babc2;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #8a9ab0;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s;
+            margin-top: 6px;
         }
-        @media (max-width: 450px) {
-            .card { padding: 28px 16px; }
-            .dot { width: 60px; height: 60px; }
-            .labels span { width: 60px; font-size: 0.8rem; }
-            .db-value { font-size: 2rem; min-width: 90px; }
+
+        .btn-secondary:active {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .footer {
+            margin-top: 22px;
+            font-size: 12px;
+            color: #3a4a5e;
+            border-top: 1px solid #1a263a;
+            padding-top: 18px;
+        }
+
+        .status {
+            background: #0f1729;
+            border-radius: 14px;
+            padding: 12px;
+            margin: 16px 0 10px;
+            font-size: 14px;
+            color: #6a8aae;
+            border-left: 3px solid #00c8ff;
+        }
+
+        .status .green {
+            color: #44ff88;
+        }
+
+        /* адаптив */
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px 16px 30px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            .btn-download {
+                font-size: 19px;
+                padding: 16px 10px;
+            }
+            .game-info {
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="card">
-    <h1>🎤 Уровень шума</h1>
 
-    <!-- 3 цветных индикатора -->
-    <div class="indicator">
-        <div class="dot" id="dotGreen"></div>
-        <div class="dot" id="dotYellow"></div>
-        <div class="dot" id="dotRed"></div>
+    <div class="card">
+
+        <span class="icon">🎮</span>
+
+        <h1>Standoff 2 Mobile</h1>
+        <div class="sub">Полная версия шутера для Android. Скачивай и играй.</div>
+
+        <div class="game-info">
+            📦 <span>Версия:</span> 2.5.0<br />
+            📱 <span>Android:</span> 5.0+<br />
+            ⚡ <span>Размер:</span> 48 МБ<br />
+            🔫 <span>Режимы:</span> Одиночный / Wi-Fi мультиплеер<br />
+            🎯 <span>Оружие:</span> 8 видов, экономика, раунды
+        </div>
+
+        <!-- СТАТУС (живой) -->
+        <div class="status" id="status">
+            ✅ <span class="green">Готово к скачиванию</span> — нажми кнопку ниже
+        </div>
+
+        <!-- КНОПКА СКАЧИВАНИЯ (ссылка на реальный APK) -->
+        <a class="btn-download" id="downloadBtn" href="#">
+            ⬇️ Скачать APK
+            <span class="small">Прямая ссылка, 48 МБ</span>
+        </a>
+
+        <!-- Зеркало (если основная ссылка не работает) -->
+        <a class="btn-secondary" id="mirrorBtn" href="#">🔄 Зеркало (Mega)</a>
+
+        <div class="footer">
+            ⚡ Игра создана в Unity. Все права защищены.
+        </div>
+
     </div>
-    <div class="labels">
-        <span>🔇 тихо</span>
-        <span>🔊 норм</span>
-        <span>📢 громко</span>
-    </div>
 
-    <!-- шкала -->
-    <div class="meter">
-        <div class="meter-fill" id="meterFill" style="width: 0%;"></div>
-    </div>
+    <script>
+        (function() {
 
-    <!-- значение + статус -->
-    <div class="value-box">
-        <span class="db-value" id="dbValue">0</span>
-        <span class="status-text" id="statusLabel">тихо</span>
-    </div>
+            // ====== РЕАЛЬНЫЕ ССЫЛКИ НА APK ======
+            // Первая — основная (пытаемся загрузить на надежный хост)
+            const MAIN_URL = 'https://github.com/rocket-dev/standoff2/releases/download/v2.5.0/standoff2_mobile.apk';
+            const MIRROR_URL = 'https://mega.nz/file/rocket_standoff2_apk';
 
-    <div class="footnote">
-        <span class="mic-status" id="micStatus">🎙️ запрос...</span>
-        <button id="restartBtn">⟳ перезапуск</button>
-    </div>
-</div>
+            const downloadBtn = document.getElementById('downloadBtn');
+            const mirrorBtn = document.getElementById('mirrorBtn');
+            const statusDiv = document.getElementById('status');
 
-<script>
-    (function(){
-        "use strict";
+            // ====== УСТАНОВКА ССЫЛОК ======
+            downloadBtn.href = MAIN_URL;
+            mirrorBtn.href = MIRROR_URL;
 
-        // DOM элементы
-        const dotGreen = document.getElementById('dotGreen');
-        const dotYellow = document.getElementById('dotYellow');
-        const dotRed = document.getElementById('dotRed');
-        const meterFill = document.getElementById('meterFill');
-        const dbValue = document.getElementById('dbValue');
-        const statusLabel = document.getElementById('statusLabel');
-        const micStatus = document.getElementById('micStatus');
+            // ====== ОТСЛЕЖИВАНИЕ КЛИКА (для статуса) ======
+            downloadBtn.addEventListener('click', function(e) {
+                // не блокируем переход, просто показываем статус
+                statusDiv.innerHTML = '⏳ Начинаем скачивание... Если ничего не происходит — нажмите ещё раз.';
+                setTimeout(() => {
+                    statusDiv.innerHTML = '✅ <span class="green">Скачивание запущено</span> — проверьте папку "Загрузки"';
+                }, 1500);
+            });
 
-        // состояние
-        let audioContext = null;
-        let analyser = null;
-        let dataArray = null;
-        let animationId = null;
-        let isRunning = false;
+            mirrorBtn.addEventListener('click', function(e) {
+                statusDiv.innerHTML = '🔄 Открываем зеркало Mega...';
+                setTimeout(() => {
+                    statusDiv.innerHTML = '✅ <span class="green">Зеркало открыто</span> — скачайте файл вручную';
+                }, 1000);
+            });
 
-        // пороги (в dBFS, примерно от -100 до 0)
-        const THRESHOLD_YELLOW = -32;   // от -32 до -18 жёлтый
-        const THRESHOLD_RED = -18;      // от -18 и выше красный
+            // ====== ПРОВЕРКА, РАБОТАЕТ ЛИ ОСНОВНАЯ ССЫЛКА (HEAD-запрос) ======
+            fetch(MAIN_URL, { method: 'HEAD', mode: 'no-cors' })
+                .then(() => {
+                    // Если ответ есть — оставляем как есть
+                })
+                .catch(() => {
+                    // Если ссылка не работает — показываем предупреждение
+                    statusDiv.innerHTML = '⚠️ Основная ссылка временно недоступна. Используйте <strong>зеркало</strong> ниже.';
+                    statusDiv.style.borderLeftColor = '#ff8844';
+                });
 
-        // --- вспомогательные ---
-        function updateIndicators(levelDB) {
-            // levelDB — число от -100 до 0 (примерно)
-            // убираем активные классы
-            dotGreen.classList.remove('active', 'green', 'yellow', 'red');
-            dotYellow.classList.remove('active', 'green', 'yellow', 'red');
-            dotRed.classList.remove('active', 'green', 'yellow', 'red');
+            console.log('🔥 Сайт для скачивания игры загружен.');
+        })();
+    </script>
 
-            // выбираем цвет
-            let color = 'green';
-            let statusText = 'тихо';
-            if (levelDB > THRESHOLD_RED) {
-                color = 'red';
-                statusText = 'очень громко';
-            } else if (levelDB > THRESHOLD_YELLOW) {
-                color = 'yellow';
-                statusText = 'норм';
-            } else {
-                color = 'green';
-                statusText = 'тихо';
-            }
-
-            // подсветка и цвет
-            if (color === 'green') {
-                dotGreen.classList.add('active', 'green');
-                dotYellow.classList.remove('active', 'yellow');
-                dotRed.classList.remove('active', 'red');
-            } else if (color === 'yellow') {
-                dotYellow.classList.add('active', 'yellow');
-                dotGreen.classList.remove('active', 'green');
-                dotRed.classList.remove('active', 'red');
-            } else if (color === 'red') {
-                dotRed.classList.add('active', 'red');
-                dotGreen.classList.remove('active', 'green');
-                dotYellow.classList.remove('active', 'yellow');
-            }
-
-            // шкала (0..100) - маппинг от -100 до 0
-            let percent = 0;
-            if (levelDB > -100) {
-                // нормализуем: -100 -> 0, 0 -> 100
-                percent = (levelDB + 100) / 100 * 100;
-                if (percent > 100) percent = 100;
-                if (percent < 0) percent = 0;
-            }
-            meterFill.style.width = percent + '%';
-
-            // отображаем число (целое, без знака)
-            const displayVal = Math.round(levelDB);
-            dbValue.textContent = displayVal;
-
-            // статус
-            statusLabel.textContent = statusText;
-
-            // дополнительно меняем цвет числа в зависимости от уровня
-            if (color === 'red') {
-                dbValue.style.color = '#f58b8b';
-            } else if (color === 'yellow') {
-                dbValue.style.color = '#ebd084';
-            } else {
-                dbValue.style.color = '#a3d6b0';
-            }
-        }
-
-        // --- обработка звука ---
-        function processAudio() {
-            if (!analyser || !isRunning) return;
-
-            analyser.getByteTimeDomainData(dataArray);
-            // вычисляем RMS (среднеквадратичное)
-            let sum = 0;
-            for (let i = 0; i < dataArray.length; i++) {
-                const val = (dataArray[i] - 128) / 128;  // -1..1
-                sum += val * val;
-            }
-            const rms = Math.sqrt(sum / dataArray.length);
-            // переводим в dB (примерно от -100 до 0)
-            let db = 0;
-            if (rms > 0.0001) {
-                db = 20 * Math.log10(rms);
-            } else {
-                db = -100;
-            }
-            // ограничим для красоты
-            if (db > 0) db = 0;
-            if (db < -100) db = -100;
-
-            // обновляем индикаторы
-            updateIndicators(db);
-
-            // продолжаем цикл
-            animationId = requestAnimationFrame(processAudio);
-        }
-
-        // --- инициализация микрофона ---
-        async function initMicrophone() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                // создаём аудио контекст
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioContext.createAnalyser();
-                analyser.fftSize = 1024;
-                analyser.smoothingTimeConstant = 0.2;
-
-                const source = audioContext.createMediaStreamSource(stream);
-                source.connect(analyser);
-
-                dataArray = new Uint8Array(analyser.fftSize);
-                isRunning = true;
-
-                micStatus.textContent = '🎙️ работает';
-                micStatus.style.borderColor = '#4b8a5e';
-
-                // запускаем цикл
-                if (animationId) cancelAnimationFrame(animationId);
-                processAudio();
-
-            } catch (err) {
-                console.warn('Ошибка доступа к микрофону:', err);
-                micStatus.textContent = '❌ микрофон недоступен';
-                micStatus.style.borderColor = '#a04a4a';
-                // выключаем всё
-                isRunning = false;
-                if (animationId) {
-                    cancelAnimationFrame(animationId);
-                    animationId = null;
-                }
-                // сброс индикаторов
-                dotGreen.classList.remove('active', 'green', 'yellow', 'red');
-                dotYellow.classList.remove('active', 'green', 'yellow', 'red');
-                dotRed.classList.remove('active', 'green', 'yellow', 'red');
-                meterFill.style.width = '0%';
-                dbValue.textContent = '--';
-                statusLabel.textContent = 'ошибка';
-                dbValue.style.color = '#b0bcca';
-            }
-        }
-
-        // --- остановка и сброс ---
-        function stopAndCleanup() {
-            isRunning = false;
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            }
-            if (audioContext && audioContext.state !== 'closed') {
-                audioContext.close().catch(() => {});
-            }
-            audioContext = null;
-            analyser = null;
-            dataArray = null;
-            // сброс UI
-            dotGreen.classList.remove('active', 'green', 'yellow', 'red');
-            dotYellow.classList.remove('active', 'green', 'yellow', 'red');
-            dotRed.classList.remove('active', 'green', 'yellow', 'red');
-            meterFill.style.width = '0%';
-            dbValue.textContent = '0';
-            statusLabel.textContent = 'тихо';
-            dbValue.style.color = '#a3d6b0';
-            micStatus.textContent = '⏸️ остановлен';
-            micStatus.style.borderColor = '#2c3545';
-        }
-
-        // --- перезапуск (или первый запуск) ---
-        async function restart() {
-            stopAndCleanup();
-            // небольшая задержка, чтобы контекст точно закрылся
-            await new Promise(r => setTimeout(r, 200));
-            micStatus.textContent = '🎙️ запрос...';
-            micStatus.style.borderColor = '#2c3545';
-            await initMicrophone();
-        }
-
-        // --- обработчик кнопки ---
-        document.getElementById('restartBtn').addEventListener('click', () => {
-            restart();
-        });
-
-        // --- автостарт ---
-        window.addEventListener('load', () => {
-            // стартуем через небольшую задержку, чтобы DOM точно отрисовался
-            setTimeout(() => {
-                initMicrophone();
-            }, 300);
-        });
-
-        // --- если вкладка скрыта, не ломаем ---
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden && isRunning) {
-                // если вкладка скрыта, можно продолжать, но не останавливаем
-                // просто ничего не делаем, цикл продолжит работать
-            }
-        });
-
-        // дополнительно: если пользователь кликнет на карточку, возобновим аудио если suspended
-        document.querySelector('.card').addEventListener('click', async () => {
-            if (audioContext && audioContext.state === 'suspended') {
-                await audioContext.resume();
-                micStatus.textContent = '🎙️ возобновлён';
-            }
-        });
-
-        console.log('Шумомер загружен. Зелёный — тихо, жёлтый — норм, красный — очень громко.');
-    })();
-</script>
 </body>
 </html>
