@@ -1,318 +1,42 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DARK – Kostenlos Deutsch</title>
+    <title>Немецкое ТВ онлайн</title>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            background: #0a0a0a;
-            color: #ddd;
-            font-family: Arial, sans-serif;
-            padding: 12px;
-        }
-        .container { max-width: 1100px; margin: 0 auto; }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #f5c842;
-            padding: 10px 0;
-            flex-wrap: wrap;
-        }
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #f5c842;
-            letter-spacing: 4px;
-        }
-        .season-btns {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 15px 0;
-        }
-        .season-btn {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #ccc;
-            padding: 8px 24px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .season-btn.active {
-            background: #f5c842;
-            border-color: #f5c842;
-            color: #000;
-        }
-        .season-btn:hover { background: #f5c842; color: #000; }
-        .episode-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 18px;
-            margin-top: 15px;
-        }
-        .ep-card {
-            background: #141414;
-            border-radius: 12px;
-            border: 1px solid #2a2a2a;
-            overflow: hidden;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .ep-card:hover { border-color: #f5c842; transform: scale(1.02); }
-        .ep-card .thumb {
-            background: #1f1f1f;
-            padding: 15px;
-            text-align: center;
-            font-size: 2rem;
-            color: #f5c842;
-        }
-        .ep-card .info { padding: 12px; }
-        .ep-card .info h3 { color: #fff; font-size: 1rem; }
-        .ep-card .info .meta { color: #f5c842; font-size: 0.75rem; }
-        .ep-card .info p { color: #999; font-size: 0.85rem; margin-top: 5px; }
-        .player-wrap {
-            margin-top: 25px;
-            background: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid #f5c842;
-            display: none;
-        }
-        .player-wrap.active { display: block; }
-        .player-wrap video {
-            width: 100%;
-            max-height: 75vh;
-            background: #000;
-            display: block;
-        }
-        .close-player {
-            background: #f5c842;
-            color: #000;
-            border: none;
-            padding: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-        }
-        .close-player:hover { background: #ffd95e; }
-        .status {
-            color: #555;
-            font-size: 0.75rem;
-            margin-top: 8px;
-            text-align: center;
-        }
-        .status a { color: #f5c842; }
+        body { margin: 0; background: #111; color: #fff; font-family: Arial, sans-serif; }
+        .header { background: #1a1a1a; padding: 15px; text-align: center; font-size: 22px; font-weight: bold; letter-spacing: 2px; border-bottom: 3px solid #ffcc00; }
+        .channels { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 15px; background: #222; }
+        .channels button { background: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 30px; font-size: 14px; cursor: pointer; transition: 0.2s; }
+        .channels button:hover { background: #ffcc00; color: #000; transform: scale(1.05); }
+        .player { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
+        .player iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .info { text-align: center; padding: 10px; color: #888; font-size: 12px; }
+        .info a { color: #ffcc00; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header>
-        <div class="logo">⚡ DARK</div>
-        <span style="color:#f5c842;">🇩🇪 Deutsch</span>
-    </header>
-
-    <div class="season-btns" id="seasonBtns">
-        <button class="season-btn active" data-season="1">Staffel 1</button>
-        <button class="season-btn" data-season="2">Staffel 2</button>
-        <button class="season-btn" data-season="3">Staffel 3</button>
-    </div>
-
-    <div id="episodeGrid" class="episode-grid"></div>
-
-    <div class="player-wrap" id="playerWrap">
-        <video id="videoPlayer" controls autoplay preload="auto">
-            <source id="videoSource" src="" type="video/mp4">
-        </video>
-        <button class="close-player" id="closePlayer">✕ Schließen</button>
-    </div>
-
-    <div class="status">✔ Alle Episoden mit deutscher Tonspur. <span id="sourceLabel">Quelle: Archive.org</span></div>
+<div class="header">📺 GERMAN TV · LIVE</div>
+<div class="channels">
+    <button onclick="play('https://www.zdf.de/live-tv')">ZDF</button>
+    <button onclick="play('https://www.ardmediathek.de/live')">ARD</button>
+    <button onclick="play('https://www.rtl.de/rtl-live-stream')">RTL</button>
+    <button onclick="play('https://www.prosieben.de/livestream')">ProSieben</button>
+    <button onclick="play('https://www.sat1.de/livestream')">SAT.1</button>
+    <button onclick="play('https://www.kabeleins.de/livestream')">Kabel Eins</button>
+    <button onclick="play('https://www.vox.de/livestream')">VOX</button>
+    <button onclick="play('https://www.joyn.de/watch/live')">Joyn</button>
 </div>
-
+<div class="player" id="player">
+    <iframe id="tv" src="https://www.zdf.de/live-tv" allowfullscreen></iframe>
+</div>
+<div class="info">
+    ⚠️ Легальные врезки с сайтов каналов. Если не грузит — включите <strong>VPN (Германия)</strong> или нажмите «Разрешить» в плеере.
+</div>
 <script>
-// ============================================================
-// РАБОЧИЕ ССЫЛКИ (немецкая озвучка) + РЕЗЕРВ
-// ============================================================
-const EPISODES = {
-    1: [
-        { title: "Geheimnisse", desc: "Jonas sucht nach Antworten.", 
-          video: "https://archive.org/download/dark-s01e01/Dark_S01E01_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e01/Dark_S01E01_1080p_DE.mp4" },
-        { title: "Lügen", desc: "Die Nielsen und Kahnwald.", 
-          video: "https://archive.org/download/dark-s01e02/Dark_S01E02_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e02/Dark_S01E02_1080p_DE.mp4" },
-        { title: "Gestern", desc: "Mikkel verschwindet.", 
-          video: "https://archive.org/download/dark-s01e03/Dark_S01E03_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e03/Dark_S01E03_1080p_DE.mp4" },
-        { title: "Doppelleben", desc: "Claudia enthüllt.", 
-          video: "https://archive.org/download/dark-s01e04/Dark_S01E04_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e04/Dark_S01E04_1080p_DE.mp4" },
-        { title: "Wahrheiten", desc: "Der Atomspeicher.", 
-          video: "https://archive.org/download/dark-s01e05/Dark_S01E05_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e05/Dark_S01E05_1080p_DE.mp4" },
-        { title: "Sizilien", desc: "Vergangenheit holt Gegenwart ein.", 
-          video: "https://archive.org/download/dark-s01e06/Dark_S01E06_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e06/Dark_S01E06_1080p_DE.mp4" },
-        { title: "Kreuzwege", desc: "Alle Wege nach Winden.", 
-          video: "https://archive.org/download/dark-s01e07/Dark_S01E07_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e07/Dark_S01E07_1080p_DE.mp4" },
-        { title: "Was wir wissen", desc: "Die Zeitschleife schließt sich.", 
-          video: "https://archive.org/download/dark-s01e08/Dark_S01E08_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e08/Dark_S01E08_1080p_DE.mp4" },
-        { title: "Alles ist miteinander verbunden", desc: "Der Zyklus beginnt von vorn.", 
-          video: "https://archive.org/download/dark-s01e09/Dark_S01E09_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e09/Dark_S01E09_1080p_DE.mp4" },
-        { title: "Alpha und Omega", desc: "Jonas trifft sein älteres Ich.", 
-          video: "https://archive.org/download/dark-s01e10/Dark_S01E10_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s01e10/Dark_S01E10_1080p_DE.mp4" }
-    ],
-    2: [
-        { title: "Anfang und Ende", desc: "Jonas erwacht 2052.", 
-          video: "https://archive.org/download/dark-s02e01/Dark_S02E01_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s02e01/Dark_S02E01_1080p_DE.mp4" },
-        { title: "Die Reise", desc: "Martha und Jonas.", 
-          video: "https://archive.org/download/dark-s02e02/Dark_S02E02_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s02e02/Dark_S02E02_1080p_DE.mp4" },
-        { title: "Vergessene", desc: "Die Toten kehren zurück.", 
-          video: "https://archive.org/download/dark-s02e03/Dark_S02E03_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s02e03/Dark_S02E03_1080p_DE.mp4" },
-        { title: "Der Knoten", desc: "Adam zeigt sein Gesicht.", 
-          video: "https://archive.org/download/dark-s02e04/Dark_S02E04_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s02e04/Dark_S02E04_1080p_DE.mp4" },
-        { title: "Paradox", desc: "Die Welt ist eine von vielen.", 
-          video: "https://archive.org/download/dark-s02e05/Dark_S02E05_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s02e05/Dark_S02E05_1080p_DE.mp4" },
-        { title: "Zwischen den Welten", desc: "Eva und Adam.", 
-          video: "https://archive.org/download/dark-s02e06/Dark_S02E06_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s02e06/Dark_S02E06_1080p_DE.mp4" },
-        { title: "Der dritte Zyklus", desc: "Die Entscheidung naht.", 
-          video: "https://archive.org/download/dark-s02e07/Dark_S02E07_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s02e07/Dark_S02E07_1080p_DE.mp4" },
-        { title: "Ende und Anfang", desc: "Alles wird neu geschrieben.", 
-          video: "https://archive.org/download/dark-s02e08/Dark_S02E08_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s02e08/Dark_S02E08_1080p_DE.mp4" }
-    ],
-    3: [
-        { title: "Die andere Welt", desc: "Martha lebt anders.", 
-          video: "https://archive.org/download/dark-s03e01/Dark_S03E01_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s03e01/Dark_S03E01_1080p_DE.mp4" },
-        { title: "Spiegelbilder", desc: "Jonas und Martha – zwei Versionen.", 
-          video: "https://archive.org/download/dark-s03e02/Dark_S03E02_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s03e02/Dark_S03E02_1080p_DE.mp4" },
-        { title: "Vergangenheit + Zukunft", desc: "Die Zeitstränge verschmelzen.", 
-          video: "https://archive.org/download/dark-s03e03/Dark_S03E03_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s03e03/Dark_S03E03_1080p_DE.mp4" },
-        { title: "Der Ursprung", desc: "Wer hat alles ausgelöst?", 
-          video: "https://archive.org/download/dark-s03e04/Dark_S03E04_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s03e04/Dark_S03E04_1080p_DE.mp4" },
-        { title: "Die Brücke", desc: "Die Entscheidung zwischen den Welten.", 
-          video: "https://archive.org/download/dark-s03e05/Dark_S03E05_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s03e05/Dark_S03E05_1080p_DE.mp4" },
-        { title: "Das Paradies", desc: "Adam und Eva im Endkampf.", 
-          video: "https://archive.org/download/dark-s03e06/Dark_S03E06_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s03e06/Dark_S03E06_1080p_DE.mp4" },
-        { title: "Ein neuer Kreislauf", desc: "Die Schleife bricht – oder nicht.", 
-          video: "https://archive.org/download/dark-s03e07/Dark_S03E07_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s03e07/Dark_S03E07_1080p_DE.mp4" },
-        { title: "Was bleibt", desc: "Das Finale – Zeit ist keine Linie.", 
-          video: "https://archive.org/download/dark-s03e08/Dark_S03E08_1080p_DE.mp4",
-          backup: "https://ia800500.us.archive.org/33/items/dark-s03e08/Dark_S03E08_1080p_DE.mp4" }
-    ]
-};
-
-let currentSeason = 1;
-const grid = document.getElementById('episodeGrid');
-const playerWrap = document.getElementById('playerWrap');
-const videoPlayer = document.getElementById('videoPlayer');
-const videoSource = document.getElementById('videoSource');
-const closeBtn = document.getElementById('closePlayer');
-const sourceLabel = document.getElementById('sourceLabel');
-
-function renderEpisodes(season) {
-    const list = EPISODES[season];
-    grid.innerHTML = '';
-    list.forEach((ep, index) => {
-        const card = document.createElement('div');
-        card.className = 'ep-card';
-        card.innerHTML = `
-            <div class="thumb">▶ ${index+1}</div>
-            <div class="info">
-                <h3>${ep.title}</h3>
-                <div class="meta">Staffel ${season} · Episode ${index+1}</div>
-                <p>${ep.desc}</p>
-            </div>
-        `;
-        card.addEventListener('click', () => playEpisode(ep, season, index+1));
-        grid.appendChild(card);
-    });
+function play(url) {
+    document.getElementById('tv').src = url;
 }
-
-function playEpisode(ep, season, num) {
-    // Сначала пробуем основную ссылку
-    let url = ep.video;
-    let usedBackup = false;
-
-    // Функция попытки загрузки
-    function tryPlay(src) {
-        videoSource.src = src;
-        videoPlayer.load();
-        playerWrap.classList.add('active');
-        videoPlayer.play().catch(() => {
-            // Если не играет — пробуем бэкап
-            if (!usedBackup && ep.backup) {
-                usedBackup = true;
-                sourceLabel.textContent = 'Quelle: Backup (Archive.org)';
-                tryPlay(ep.backup);
-            } else {
-                // Если бэкап тоже не работает — вставляем прямую ссылку с другого зеркала
-                const fallback = src.replace('archive.org', 'ia800500.us.archive.org');
-                if (src !== fallback) {
-                    sourceLabel.textContent = 'Quelle: Fallback';
-                    tryPlay(fallback);
-                } else {
-                    alert('Keine Quelle verfügbar. Bitte manuell eine MP4-URL einfügen.');
-                }
-            }
-        });
-    }
-
-    sourceLabel.textContent = 'Quelle: Primary (Archive.org)';
-    tryPlay(url);
-}
-
-closeBtn.addEventListener('click', () => {
-    playerWrap.classList.remove('active');
-    videoPlayer.pause();
-    videoSource.src = '';
-    videoPlayer.load();
-});
-
-// Переключение сезонов
-document.querySelectorAll('.season-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentSeason = parseInt(this.dataset.season);
-        renderEpisodes(currentSeason);
-        playerWrap.classList.remove('active');
-        videoPlayer.pause();
-    });
-});
-
-// Инициализация
-renderEpisodes(1);
-
-// Доп. фикс: если видео загрузилось — убираем сообщение о проблеме
-videoPlayer.addEventListener('canplay', () => {
-    sourceLabel.textContent = '✔ Deutsch Tonspur geladen';
-});
 </script>
-
 </body>
 </html>
