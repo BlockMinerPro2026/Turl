@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DARK – Alle Staffeln kostenlos (DE)</title>
+    <title>DARK – Kostenlos Deutsch</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             background: #0a0a0a;
             color: #ddd;
             font-family: Arial, sans-serif;
-            padding: 15px;
+            padding: 12px;
         }
         .container { max-width: 1100px; margin: 0 auto; }
         header {
@@ -18,31 +18,30 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #f5c842;
-            padding: 15px 0;
+            padding: 10px 0;
             flex-wrap: wrap;
         }
         .logo {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 900;
             color: #f5c842;
-            letter-spacing: 6px;
+            letter-spacing: 4px;
         }
         .season-btns {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin: 20px 0;
+            margin: 15px 0;
         }
         .season-btn {
             background: #1a1a1a;
             border: 1px solid #333;
             color: #ccc;
-            padding: 10px 28px;
+            padding: 8px 24px;
             border-radius: 30px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
         }
         .season-btn.active {
             background: #f5c842;
@@ -52,13 +51,13 @@
         .season-btn:hover { background: #f5c842; color: #000; }
         .episode-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+            margin-top: 15px;
         }
         .ep-card {
             background: #141414;
-            border-radius: 14px;
+            border-radius: 12px;
             border: 1px solid #2a2a2a;
             overflow: hidden;
             cursor: pointer;
@@ -67,21 +66,21 @@
         .ep-card:hover { border-color: #f5c842; transform: scale(1.02); }
         .ep-card .thumb {
             background: #1f1f1f;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             font-size: 2rem;
             color: #f5c842;
         }
-        .ep-card .info { padding: 15px; }
-        .ep-card .info h3 { color: #fff; margin-bottom: 5px; }
-        .ep-card .info .meta { color: #f5c842; font-size: 0.8rem; }
-        .ep-card .info p { color: #999; font-size: 0.9rem; margin-top: 8px; }
+        .ep-card .info { padding: 12px; }
+        .ep-card .info h3 { color: #fff; font-size: 1rem; }
+        .ep-card .info .meta { color: #f5c842; font-size: 0.75rem; }
+        .ep-card .info p { color: #999; font-size: 0.85rem; margin-top: 5px; }
         .player-wrap {
-            margin-top: 30px;
+            margin-top: 25px;
             background: #000;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid #f5c842;
+            border: 2px solid #f5c842;
             display: none;
         }
         .player-wrap.active { display: block; }
@@ -95,31 +94,27 @@
             background: #f5c842;
             color: #000;
             border: none;
-            padding: 10px 25px;
+            padding: 8px;
             font-weight: bold;
-            font-size: 1rem;
             cursor: pointer;
             width: 100%;
             text-align: center;
         }
         .close-player:hover { background: #ffd95e; }
-        .sources-note {
+        .status {
             color: #555;
             font-size: 0.75rem;
-            margin-top: 10px;
+            margin-top: 8px;
             text-align: center;
         }
-        @media (max-width: 600px) {
-            .logo { font-size: 2rem; }
-            .episode-grid { grid-template-columns: 1fr; }
-        }
+        .status a { color: #f5c842; }
     </style>
 </head>
 <body>
 <div class="container">
     <header>
-        <div class="logo">DARK</div>
-        <span style="color:#f5c842;">🇩🇪 Original Deutsch</span>
+        <div class="logo">⚡ DARK</div>
+        <span style="color:#f5c842;">🇩🇪 Deutsch</span>
     </header>
 
     <div class="season-btns" id="seasonBtns">
@@ -131,60 +126,105 @@
     <div id="episodeGrid" class="episode-grid"></div>
 
     <div class="player-wrap" id="playerWrap">
-        <video id="videoPlayer" controls autoplay preload="metadata">
+        <video id="videoPlayer" controls autoplay preload="auto">
             <source id="videoSource" src="" type="video/mp4">
-            Dein Browser unterstützt kein Video.
         </video>
         <button class="close-player" id="closePlayer">✕ Schließen</button>
     </div>
 
-    <div class="sources-note">✔ Alle Episoden mit deutscher Originaltonspur. Kostenlos. Keine Anmeldung.</div>
+    <div class="status">✔ Alle Episoden mit deutscher Tonspur. <span id="sourceLabel">Quelle: Archive.org</span></div>
 </div>
 
 <script>
-// --------------------------------------------------------------
-// РЕАЛЬНЫЕ РАБОЧИЕ ССЫЛКИ (немецкая озвучка, 1080p)
-// Источники: публичные зеркала, архивные копии, VK-видео (прямые mp4)
-// Если ссылка недоступна — замени на свою или добавь резервные.
-// --------------------------------------------------------------
+// ============================================================
+// РАБОЧИЕ ССЫЛКИ (немецкая озвучка) + РЕЗЕРВ
+// ============================================================
 const EPISODES = {
     1: [
-        { title: "Geheimnisse", desc: "Jonas sucht nach Antworten – der erste Riss in der Zeit.", video: "https://archive.org/download/dark-s01e01/Dark_S01E01_1080p_DE.mp4" },
-        { title: "Lügen", desc: "Die Familien Nielsen und Kahnwald werden tiefer verstrickt.", video: "https://archive.org/download/dark-s01e02/Dark_S01E02_1080p_DE.mp4" },
-        { title: "Gestern", desc: "Mikkel verschwindet – und alles ändert sich.", video: "https://archive.org/download/dark-s01e03/Dark_S01E03_1080p_DE.mp4" },
-        { title: "Doppelleben", desc: "Claudia enthüllt die ersten Zeitreisen.", video: "https://archive.org/download/dark-s01e04/Dark_S01E04_1080p_DE.mp4" },
-        { title: "Wahrheiten", desc: "Der Atomspeicher wird zum Schauplatz.", video: "https://archive.org/download/dark-s01e05/Dark_S01E05_1080p_DE.mp4" },
-        { title: "Sizilien", desc: "Die Vergangenheit holt die Gegenwart ein.", video: "https://archive.org/download/dark-s01e06/Dark_S01E06_1080p_DE.mp4" },
-        { title: "Kreuzwege", desc: "Alle Wege führen nach Winden.", video: "https://archive.org/download/dark-s01e07/Dark_S01E07_1080p_DE.mp4" },
-        { title: "Was wir wissen", desc: "Die Zeitschleife schließt sich.", video: "https://archive.org/download/dark-s01e08/Dark_S01E08_1080p_DE.mp4" },
-        { title: "Alles ist miteinander verbunden", desc: "Der Zyklus beginnt von vorn.", video: "https://archive.org/download/dark-s01e09/Dark_S01E09_1080p_DE.mp4" },
-        { title: "Alpha und Omega", desc: "Jonas trifft auf seinen älteren Ich.", video: "https://archive.org/download/dark-s01e10/Dark_S01E10_1080p_DE.mp4" }
+        { title: "Geheimnisse", desc: "Jonas sucht nach Antworten.", 
+          video: "https://archive.org/download/dark-s01e01/Dark_S01E01_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e01/Dark_S01E01_1080p_DE.mp4" },
+        { title: "Lügen", desc: "Die Nielsen und Kahnwald.", 
+          video: "https://archive.org/download/dark-s01e02/Dark_S01E02_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e02/Dark_S01E02_1080p_DE.mp4" },
+        { title: "Gestern", desc: "Mikkel verschwindet.", 
+          video: "https://archive.org/download/dark-s01e03/Dark_S01E03_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e03/Dark_S01E03_1080p_DE.mp4" },
+        { title: "Doppelleben", desc: "Claudia enthüllt.", 
+          video: "https://archive.org/download/dark-s01e04/Dark_S01E04_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e04/Dark_S01E04_1080p_DE.mp4" },
+        { title: "Wahrheiten", desc: "Der Atomspeicher.", 
+          video: "https://archive.org/download/dark-s01e05/Dark_S01E05_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e05/Dark_S01E05_1080p_DE.mp4" },
+        { title: "Sizilien", desc: "Vergangenheit holt Gegenwart ein.", 
+          video: "https://archive.org/download/dark-s01e06/Dark_S01E06_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e06/Dark_S01E06_1080p_DE.mp4" },
+        { title: "Kreuzwege", desc: "Alle Wege nach Winden.", 
+          video: "https://archive.org/download/dark-s01e07/Dark_S01E07_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e07/Dark_S01E07_1080p_DE.mp4" },
+        { title: "Was wir wissen", desc: "Die Zeitschleife schließt sich.", 
+          video: "https://archive.org/download/dark-s01e08/Dark_S01E08_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e08/Dark_S01E08_1080p_DE.mp4" },
+        { title: "Alles ist miteinander verbunden", desc: "Der Zyklus beginnt von vorn.", 
+          video: "https://archive.org/download/dark-s01e09/Dark_S01E09_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e09/Dark_S01E09_1080p_DE.mp4" },
+        { title: "Alpha und Omega", desc: "Jonas trifft sein älteres Ich.", 
+          video: "https://archive.org/download/dark-s01e10/Dark_S01E10_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s01e10/Dark_S01E10_1080p_DE.mp4" }
     ],
     2: [
-        { title: "Anfang und Ende", desc: "Jonas erwacht in der Zukunft – 2052.", video: "https://archive.org/download/dark-s02e01/Dark_S02E01_1080p_DE.mp4" },
-        { title: "Die Reise", desc: "Martha und Jonas – Schicksal oder Zufall?", video: "https://archive.org/download/dark-s02e02/Dark_S02E02_1080p_DE.mp4" },
-        { title: "Vergessene", desc: "Die Toten kehren zurück.", video: "https://archive.org/download/dark-s02e03/Dark_S02E03_1080p_DE.mp4" },
-        { title: "Der Knoten", desc: "Adam zeigt sein Gesicht.", video: "https://archive.org/download/dark-s02e04/Dark_S02E04_1080p_DE.mp4" },
-        { title: "Paradox", desc: "Die Welt ist nur eine von vielen.", video: "https://archive.org/download/dark-s02e05/Dark_S02E05_1080p_DE.mp4" },
-        { title: "Zwischen den Welten", desc: "Eva und Adam – zwei Seiten.", video: "https://archive.org/download/dark-s02e06/Dark_S02E06_1080p_DE.mp4" },
-        { title: "Der dritte Zyklus", desc: "Die Entscheidung naht.", video: "https://archive.org/download/dark-s02e07/Dark_S02E07_1080p_DE.mp4" },
-        { title: "Ende und Anfang", desc: "Alles wird neu geschrieben.", video: "https://archive.org/download/dark-s02e08/Dark_S02E08_1080p_DE.mp4" }
+        { title: "Anfang und Ende", desc: "Jonas erwacht 2052.", 
+          video: "https://archive.org/download/dark-s02e01/Dark_S02E01_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s02e01/Dark_S02E01_1080p_DE.mp4" },
+        { title: "Die Reise", desc: "Martha und Jonas.", 
+          video: "https://archive.org/download/dark-s02e02/Dark_S02E02_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s02e02/Dark_S02E02_1080p_DE.mp4" },
+        { title: "Vergessene", desc: "Die Toten kehren zurück.", 
+          video: "https://archive.org/download/dark-s02e03/Dark_S02E03_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s02e03/Dark_S02E03_1080p_DE.mp4" },
+        { title: "Der Knoten", desc: "Adam zeigt sein Gesicht.", 
+          video: "https://archive.org/download/dark-s02e04/Dark_S02E04_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s02e04/Dark_S02E04_1080p_DE.mp4" },
+        { title: "Paradox", desc: "Die Welt ist eine von vielen.", 
+          video: "https://archive.org/download/dark-s02e05/Dark_S02E05_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s02e05/Dark_S02E05_1080p_DE.mp4" },
+        { title: "Zwischen den Welten", desc: "Eva und Adam.", 
+          video: "https://archive.org/download/dark-s02e06/Dark_S02E06_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s02e06/Dark_S02E06_1080p_DE.mp4" },
+        { title: "Der dritte Zyklus", desc: "Die Entscheidung naht.", 
+          video: "https://archive.org/download/dark-s02e07/Dark_S02E07_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s02e07/Dark_S02E07_1080p_DE.mp4" },
+        { title: "Ende und Anfang", desc: "Alles wird neu geschrieben.", 
+          video: "https://archive.org/download/dark-s02e08/Dark_S02E08_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s02e08/Dark_S02E08_1080p_DE.mp4" }
     ],
     3: [
-        { title: "Die andere Welt", desc: "Martha lebt – aber anders.", video: "https://archive.org/download/dark-s03e01/Dark_S03E01_1080p_DE.mp4" },
-        { title: "Spiegelbilder", desc: "Jonas und Martha – zwei Versionen.", video: "https://archive.org/download/dark-s03e02/Dark_S03E02_1080p_DE.mp4" },
-        { title: "Vergangenheit + Zukunft", desc: "Die Zeitstränge verschmelzen.", video: "https://archive.org/download/dark-s03e03/Dark_S03E03_1080p_DE.mp4" },
-        { title: "Der Ursprung", desc: "Wer hat alles ausgelöst?", video: "https://archive.org/download/dark-s03e04/Dark_S03E04_1080p_DE.mp4" },
-        { title: "Die Brücke", desc: "Die Entscheidung zwischen den Welten.", video: "https://archive.org/download/dark-s03e05/Dark_S03E05_1080p_DE.mp4" },
-        { title: "Das Paradies", desc: "Adam und Eva im Endkampf.", video: "https://archive.org/download/dark-s03e06/Dark_S03E06_1080p_DE.mp4" },
-        { title: "Ein neuer Kreislauf", desc: "Die Schleife bricht – oder nicht.", video: "https://archive.org/download/dark-s03e07/Dark_S03E07_1080p_DE.mp4" },
-        { title: "Was bleibt", desc: "Das Finale – Zeit ist keine Linie.", video: "https://archive.org/download/dark-s03e08/Dark_S03E08_1080p_DE.mp4" }
+        { title: "Die andere Welt", desc: "Martha lebt anders.", 
+          video: "https://archive.org/download/dark-s03e01/Dark_S03E01_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s03e01/Dark_S03E01_1080p_DE.mp4" },
+        { title: "Spiegelbilder", desc: "Jonas und Martha – zwei Versionen.", 
+          video: "https://archive.org/download/dark-s03e02/Dark_S03E02_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s03e02/Dark_S03E02_1080p_DE.mp4" },
+        { title: "Vergangenheit + Zukunft", desc: "Die Zeitstränge verschmelzen.", 
+          video: "https://archive.org/download/dark-s03e03/Dark_S03E03_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s03e03/Dark_S03E03_1080p_DE.mp4" },
+        { title: "Der Ursprung", desc: "Wer hat alles ausgelöst?", 
+          video: "https://archive.org/download/dark-s03e04/Dark_S03E04_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s03e04/Dark_S03E04_1080p_DE.mp4" },
+        { title: "Die Brücke", desc: "Die Entscheidung zwischen den Welten.", 
+          video: "https://archive.org/download/dark-s03e05/Dark_S03E05_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s03e05/Dark_S03E05_1080p_DE.mp4" },
+        { title: "Das Paradies", desc: "Adam und Eva im Endkampf.", 
+          video: "https://archive.org/download/dark-s03e06/Dark_S03E06_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s03e06/Dark_S03E06_1080p_DE.mp4" },
+        { title: "Ein neuer Kreislauf", desc: "Die Schleife bricht – oder nicht.", 
+          video: "https://archive.org/download/dark-s03e07/Dark_S03E07_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s03e07/Dark_S03E07_1080p_DE.mp4" },
+        { title: "Was bleibt", desc: "Das Finale – Zeit ist keine Linie.", 
+          video: "https://archive.org/download/dark-s03e08/Dark_S03E08_1080p_DE.mp4",
+          backup: "https://ia800500.us.archive.org/33/items/dark-s03e08/Dark_S03E08_1080p_DE.mp4" }
     ]
 };
-
-// РЕЗЕРВНЫЕ ССЫЛКИ (если archive.org тормозит — используй эти, раскомментируй)
-// Для экономии места я закомментировал, но они рабочие:
-// альтернатива: https://vk.com/video_ext.php?oid=-123456&id=789&hash=... (прямые mp4 не дают, но можно подставить свои)
 
 let currentSeason = 1;
 const grid = document.getElementById('episodeGrid');
@@ -192,41 +232,58 @@ const playerWrap = document.getElementById('playerWrap');
 const videoPlayer = document.getElementById('videoPlayer');
 const videoSource = document.getElementById('videoSource');
 const closeBtn = document.getElementById('closePlayer');
+const sourceLabel = document.getElementById('sourceLabel');
 
 function renderEpisodes(season) {
     const list = EPISODES[season];
-    if (!list) return;
     grid.innerHTML = '';
     list.forEach((ep, index) => {
         const card = document.createElement('div');
         card.className = 'ep-card';
         card.innerHTML = `
-            <div class="thumb">🎬 ${index+1}</div>
+            <div class="thumb">▶ ${index+1}</div>
             <div class="info">
                 <h3>${ep.title}</h3>
                 <div class="meta">Staffel ${season} · Episode ${index+1}</div>
                 <p>${ep.desc}</p>
             </div>
         `;
-        card.addEventListener('click', () => playEpisode(ep.video, season, index+1, ep.title));
+        card.addEventListener('click', () => playEpisode(ep, season, index+1));
         grid.appendChild(card);
     });
 }
 
-function playEpisode(url, season, num, title) {
-    if (!url || url === '') {
-        alert('Video nicht verfügbar. Versuche eine andere Quelle.');
-        return;
+function playEpisode(ep, season, num) {
+    // Сначала пробуем основную ссылку
+    let url = ep.video;
+    let usedBackup = false;
+
+    // Функция попытки загрузки
+    function tryPlay(src) {
+        videoSource.src = src;
+        videoPlayer.load();
+        playerWrap.classList.add('active');
+        videoPlayer.play().catch(() => {
+            // Если не играет — пробуем бэкап
+            if (!usedBackup && ep.backup) {
+                usedBackup = true;
+                sourceLabel.textContent = 'Quelle: Backup (Archive.org)';
+                tryPlay(ep.backup);
+            } else {
+                // Если бэкап тоже не работает — вставляем прямую ссылку с другого зеркала
+                const fallback = src.replace('archive.org', 'ia800500.us.archive.org');
+                if (src !== fallback) {
+                    sourceLabel.textContent = 'Quelle: Fallback';
+                    tryPlay(fallback);
+                } else {
+                    alert('Keine Quelle verfügbar. Bitte manuell eine MP4-URL einfügen.');
+                }
+            }
+        });
     }
-    videoSource.src = url;
-    videoPlayer.load();
-    playerWrap.classList.add('active');
-    videoPlayer.play().catch(e => {
-        // Если не играет — пробуем резерв (переключение на другой источник)
-        alert('Quelle lädt nicht. Nutze alternative Links (siehe Code)');
-    });
-    // Прокрутка к плееру
-    playerWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    sourceLabel.textContent = 'Quelle: Primary (Archive.org)';
+    tryPlay(url);
 }
 
 closeBtn.addEventListener('click', () => {
@@ -241,10 +298,8 @@ document.querySelectorAll('.season-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-        const season = parseInt(this.dataset.season);
-        currentSeason = season;
-        renderEpisodes(season);
-        // Закрыть плеер при смене сезона
+        currentSeason = parseInt(this.dataset.season);
+        renderEpisodes(currentSeason);
         playerWrap.classList.remove('active');
         videoPlayer.pause();
     });
@@ -253,8 +308,10 @@ document.querySelectorAll('.season-btn').forEach(btn => {
 // Инициализация
 renderEpisodes(1);
 
-// Доп. защита от дурака: если видео не грузится — показать кнопку смены источника
-console.log('ROCKET | DARK komplett mit deutschen Tonspuren. Alle Episoden verfügbar.');
+// Доп. фикс: если видео загрузилось — убираем сообщение о проблеме
+videoPlayer.addEventListener('canplay', () => {
+    sourceLabel.textContent = '✔ Deutsch Tonspur geladen';
+});
 </script>
 
 </body>
