@@ -1,248 +1,421 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="de">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>Скачать Standoff 2 Mobile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARK – Die Serie</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-
         body {
-            min-height: 100vh;
-            background: #0b0e1a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: #0a0a0a;
+            color: #d4d4d4;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
             padding: 20px;
         }
-
-        .card {
-            max-width: 460px;
-            width: 100%;
-            background: linear-gradient(145deg, #131c2e, #0a101f);
-            border-radius: 40px;
-            padding: 36px 28px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
-        .icon {
-            font-size: 64px;
-            margin-bottom: 8px;
-            display: block;
+        header {
+            border-bottom: 2px solid #f5c842;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
-
-        h1 {
-            color: #ffffff;
-            font-size: 26px;
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: #f5c842;
+            text-shadow: 0 0 20px rgba(245, 200, 66, 0.3);
+        }
+        .logo span {
+            color: #fff;
+            font-weight: 300;
+        }
+        nav a {
+            color: #aaa;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            border-bottom: 1px solid transparent;
+        }
+        nav a:hover {
+            color: #f5c842;
+            border-bottom-color: #f5c842;
+        }
+        .hero {
+            background: linear-gradient(145deg, #141414, #1f1f1f);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border-left: 6px solid #f5c842;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 300;
+            color: #fff;
+        }
+        .hero h1 strong {
+            color: #f5c842;
             font-weight: 700;
-            letter-spacing: -0.3px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            color: #bbb;
+            max-width: 700px;
+        }
+        .season-tabs {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0 20px;
+            flex-wrap: wrap;
+        }
+        .season-btn {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            color: #ccc;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .season-btn.active {
+            background: #f5c842;
+            border-color: #f5c842;
+            color: #0a0a0a;
+            box-shadow: 0 0 25px rgba(245, 200, 66, 0.3);
+        }
+        .season-btn:hover {
+            background: #f5c842;
+            color: #0a0a0a;
+        }
+        .episode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .episode-card {
+            background: #151515;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .episode-card:hover {
+            transform: translateY(-8px);
+            border-color: #f5c842;
+            box-shadow: 0 12px 30px rgba(245, 200, 66, 0.15);
+        }
+        .episode-thumb {
+            height: 160px;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #f5c842;
+            background-image: radial-gradient(circle at 20% 30%, #2a2a2a, #0d0d0d);
+        }
+        .episode-info {
+            padding: 18px 20px 22px;
+        }
+        .episode-info h3 {
+            color: #fff;
+            font-size: 1.2rem;
             margin-bottom: 6px;
         }
-
-        .sub {
-            color: #7a8aa0;
-            font-size: 15px;
-            margin-bottom: 28px;
-            border-left: 3px solid #00c8ff;
-            padding-left: 16px;
-            text-align: left;
-            opacity: 0.8;
+        .episode-info .meta {
+            color: #f5c842;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
         }
-
-        .game-info {
-            background: #0f1729;
-            border-radius: 20px;
-            padding: 16px 18px;
-            margin-bottom: 28px;
-            border: 1px solid #1e2a3e;
-            text-align: left;
-            color: #b0c4dd;
-            font-size: 14px;
-            line-height: 1.7;
+        .episode-info p {
+            color: #999;
+            font-size: 0.95rem;
         }
-
-        .game-info span {
-            color: #00c8ff;
-            font-weight: 600;
-        }
-
-        .btn-download {
-            display: block;
-            width: 100%;
-            padding: 18px 10px;
-            background: linear-gradient(135deg, #00c8ff, #0077ff);
-            border: none;
-            border-radius: 60px;
-            color: #fff;
-            font-size: 22px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 6px 30px rgba(0, 200, 255, 0.3);
-            transition: all 0.2s;
-            text-decoration: none;
+        .player-placeholder {
+            background: #111;
+            padding: 15px;
+            border-radius: 12px;
             text-align: center;
-            margin-bottom: 14px;
+            margin: 10px 0 5px;
+            border: 1px dashed #444;
+            color: #666;
+            font-size: 0.9rem;
         }
-
-        .btn-download:active {
-            transform: scale(0.96);
-        }
-
-        .btn-download .small {
-            font-size: 13px;
-            font-weight: 400;
-            opacity: 0.7;
-            display: block;
-            margin-top: 4px;
-        }
-
-        .btn-secondary {
-            display: inline-block;
-            padding: 12px 28px;
-            border-radius: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #8a9ab0;
-            font-size: 14px;
+        .player-placeholder a {
+            color: #f5c842;
             text-decoration: none;
-            transition: 0.2s;
-            margin-top: 6px;
+            font-weight: bold;
         }
-
-        .btn-secondary:active {
-            background: rgba(255, 255, 255, 0.12);
+        .player-placeholder a:hover {
+            text-decoration: underline;
         }
-
-        .footer {
-            margin-top: 22px;
-            font-size: 12px;
-            color: #3a4a5e;
-            border-top: 1px solid #1a263a;
-            padding-top: 18px;
+        .characters {
+            margin-top: 50px;
+            background: #111;
+            padding: 30px;
+            border-radius: 20px;
         }
-
-        .status {
-            background: #0f1729;
-            border-radius: 14px;
-            padding: 12px;
-            margin: 16px 0 10px;
-            font-size: 14px;
-            color: #6a8aae;
-            border-left: 3px solid #00c8ff;
+        .characters h2 {
+            color: #f5c842;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            border-left: 5px solid #f5c842;
+            padding-left: 20px;
         }
-
-        .status .green {
-            color: #44ff88;
+        .char-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
         }
-
-        /* адаптив */
-        @media (max-width: 480px) {
-            .card {
-                padding: 24px 16px 30px;
-            }
-            h1 {
-                font-size: 22px;
-            }
-            .btn-download {
-                font-size: 19px;
-                padding: 16px 10px;
-            }
-            .game-info {
-                font-size: 13px;
-            }
+        .char-item {
+            background: #1c1c1c;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #2a2a2a;
+        }
+        .char-item .name {
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .char-item .role {
+            color: #f5c842;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .timeline {
+            margin-top: 40px;
+            background: #0e0e0e;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #2a2a2a;
+        }
+        .timeline h2 {
+            color: #f5c842;
+            margin-bottom: 20px;
+        }
+        .timeline-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .timeline-node {
+            background: #1a1a1a;
+            padding: 12px 25px;
+            border-radius: 40px;
+            border: 1px solid #333;
+            color: #ddd;
+            font-size: 0.95rem;
+        }
+        .timeline-node strong {
+            color: #f5c842;
+        }
+        footer {
+            margin-top: 60px;
+            border-top: 1px solid #222;
+            padding: 30px 0 10px;
+            text-align: center;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 700px) {
+            .logo { font-size: 2rem; }
+            nav a { margin-left: 12px; font-size: 0.9rem; }
+            .hero h1 { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
+<div class="container">
 
-    <div class="card">
+    <header>
+        <div class="logo">DARK<span>.</span></div>
+        <nav>
+            <a href="#">Staffel 1</a>
+            <a href="#">Staffel 2</a>
+            <a href="#">Staffel 3</a>
+            <a href="#">Charaktere</a>
+        </nav>
+    </header>
 
-        <span class="icon">🎮</span>
-
-        <h1>Standoff 2 Mobile</h1>
-        <div class="sub">Полная версия шутера для Android. Скачивай и играй.</div>
-
-        <div class="game-info">
-            📦 <span>Версия:</span> 2.5.0<br />
-            📱 <span>Android:</span> 5.0+<br />
-            ⚡ <span>Размер:</span> 48 МБ<br />
-            🔫 <span>Режимы:</span> Одиночный / Wi-Fi мультиплеер<br />
-            🎯 <span>Оружие:</span> 8 видов, экономика, раунды
+    <section class="hero">
+        <h1><strong>DARK</strong> – Die Zeit ist eine Lüge.</h1>
+        <p>Deutsche Originalserie von Netflix. Drei Staffeln. Zeitreisen, Familiengeheimnisse und der Kampf gegen den Kreislauf.</p>
+        <div style="margin-top:20px; display:flex; gap:15px; flex-wrap:wrap;">
+            <span style="background:#1e1e1e; padding:8px 18px; border-radius:30px; border:1px solid #333;">⭐ 8.8 IMDb</span>
+            <span style="background:#1e1e1e; padding:8px 18px; border-radius:30px; border:1px solid #333;">🎬 26 Episoden</span>
+            <span style="background:#1e1e1e; padding:8px 18px; border-radius:30px; border:1px solid #333;">🇩🇪 Deutsch</span>
         </div>
+    </section>
 
-        <!-- СТАТУС (живой) -->
-        <div class="status" id="status">
-            ✅ <span class="green">Готово к скачиванию</span> — нажми кнопку ниже
-        </div>
-
-        <!-- КНОПКА СКАЧИВАНИЯ (ссылка на реальный APK) -->
-        <a class="btn-download" id="downloadBtn" href="#">
-            ⬇️ Скачать APK
-            <span class="small">Прямая ссылка, 48 МБ</span>
-        </a>
-
-        <!-- Зеркало (если основная ссылка не работает) -->
-        <a class="btn-secondary" id="mirrorBtn" href="#">🔄 Зеркало (Mega)</a>
-
-        <div class="footer">
-            ⚡ Игра создана в Unity. Все права защищены.
-        </div>
-
+    <!-- Staffelauswahl -->
+    <div class="season-tabs">
+        <button class="season-btn active" data-season="1">Staffel 1</button>
+        <button class="season-btn" data-season="2">Staffel 2</button>
+        <button class="season-btn" data-season="3">Staffel 3</button>
     </div>
 
-    <script>
-        (function() {
+    <!-- Episoden-Container -->
+    <div id="episodeContainer" class="episode-grid">
+        <!-- Wird von JS dynamisch befüllt -->
+    </div>
 
-            // ====== РЕАЛЬНЫЕ ССЫЛКИ НА APK ======
-            // Первая — основная (пытаемся загрузить на надежный хост)
-            const MAIN_URL = 'https://github.com/rocket-dev/standoff2/releases/download/v2.5.0/standoff2_mobile.apk';
-            const MIRROR_URL = 'https://mega.nz/file/rocket_standoff2_apk';
+    <!-- Charaktere -->
+    <section class="characters">
+        <h2>Hauptfiguren</h2>
+        <div class="char-grid">
+            <div class="char-item"><div class="name">Jonas Kahnwald</div><div class="role">Protagonist</div></div>
+            <div class="char-item"><div class="name">Martha Nielsen</div><div class="role">Jonas' Liebe</div></div>
+            <div class="char-item"><div class="name">Adam</div><div class="role">Der Antagonist</div></div>
+            <div class="char-item"><div class="name">Eva</div><div class="role">Gegenspielerin</div></div>
+            <div class="char-item"><div class="name">Claudia Tiedemann</div><div class="role">Zeitreisende</div></div>
+            <div class="char-item"><div class="name">Ulrich Nielsen</div><div class="role">Vater, Polizist</div></div>
+        </div>
+    </section>
 
-            const downloadBtn = document.getElementById('downloadBtn');
-            const mirrorBtn = document.getElementById('mirrorBtn');
-            const statusDiv = document.getElementById('status');
+    <!-- Zeitstrahl -->
+    <section class="timeline">
+        <h2>⏳ Zeitlinien – Wann spielt was?</h2>
+        <div class="timeline-grid">
+            <div class="timeline-node"><strong>1921</strong> – Ursprung</div>
+            <div class="timeline-node"><strong>1953</strong> – Winden beginnt</div>
+            <div class="timeline-node"><strong>1986</strong> – Kern der Handlung</div>
+            <div class="timeline-node"><strong>2019</strong> – Gegenwart</div>
+            <div class="timeline-node"><strong>2052</strong> – Zukunft</div>
+            <div class="timeline-node"><strong>∞</strong> – Zyklus</div>
+        </div>
+    </section>
 
-            // ====== УСТАНОВКА ССЫЛОК ======
-            downloadBtn.href = MAIN_URL;
-            mirrorBtn.href = MIRROR_URL;
+    <footer>
+        <p>DARK – Netflix Originalserie | Alle Rechte vorbehalten | Fan-Projekt (nicht offiziell)</p>
+        <p style="margin-top:8px; color:#333;">Alle Episoden auf Deutsch verfügbar – Stream über Netflix</p>
+    </footer>
+</div>
 
-            // ====== ОТСЛЕЖИВАНИЕ КЛИКА (для статуса) ======
-            downloadBtn.addEventListener('click', function(e) {
-                // не блокируем переход, просто показываем статус
-                statusDiv.innerHTML = '⏳ Начинаем скачивание... Если ничего не происходит — нажмите ещё раз.';
-                setTimeout(() => {
-                    statusDiv.innerHTML = '✅ <span class="green">Скачивание запущено</span> — проверьте папку "Загрузки"';
-                }, 1500);
+<script>
+    (function() {
+        // Datenbasis – alle Episoden auf Deutsch
+        const episodes = {
+            1: [
+                { title: "Geheimnisse", desc: "Jonas sucht nach Antworten – der erste Riss in der Zeit." },
+                { title: "Lügen", desc: "Die Familien Nielsen und Kahnwald werden tiefer verstrickt." },
+                { title: "Gestern", desc: "Mikkel verschwindet – und alles ändert sich." },
+                { title: "Doppelleben", desc: "Claudia enthüllt die ersten Zeitreisen." },
+                { title: "Wahrheiten", desc: "Der Atomspeicher wird zum Schauplatz." },
+                { title: "Sizilien", desc: "Die Vergangenheit holt die Gegenwart ein." },
+                { title: "Kreuzwege", desc: "Alle Wege führen nach Winden." },
+                { title: "Was wir wissen", desc: "Die Zeitschleife schließt sich." },
+                { title: "Alles ist miteinander verbunden", desc: "Der Zyklus beginnt von vorn." },
+                { title: "Alpha und Omega", desc: "Jonas trifft auf seinen älteren Ich." }
+            ],
+            2: [
+                { title: "Anfang und Ende", desc: "Jonas erwacht in der Zukunft – 2052." },
+                { title: "Die Reise", desc: "Martha und Jonas – Schicksal oder Zufall?" },
+                { title: "Vergessene", desc: "Die Toten kehren zurück." },
+                { title: "Der Knoten", desc: "Adam zeigt sein Gesicht." },
+                { title: "Paradox", desc: "Die Welt ist nur eine von vielen." },
+                { title: "Zwischen den Welten", desc: "Eva und Adam – zwei Seiten." },
+                { title: "Der dritte Zyklus", desc: "Die Entscheidung naht." },
+                { title: "Ende und Anfang", desc: "Alles wird neu geschrieben." }
+            ],
+            3: [
+                { title: "Die andere Welt", desc: "Martha lebt – aber anders." },
+                { title: "Spiegelbilder", desc: "Jonas und Martha – zwei Versionen." },
+                { title: "Vergangenheit + Zukunft", desc: "Die Zeitstränge verschmelzen." },
+                { title: "Der Ursprung", desc: "Wer hat alles ausgelöst?" },
+                { title: "Die Brücke", desc: "Die Entscheidung zwischen den Welten." },
+                { title: "Das Paradies", desc: "Adam und Eva im Endkampf." },
+                { title: "Ein neuer Kreislauf", desc: "Die Schleife bricht – oder nicht." },
+                { title: "Was bleibt", desc: "Das Finale – Zeit ist keine Linie." }
+            ]
+        };
+
+        // Füge jedem Episodenobjekt eine Nummer hinzu
+        for (let s in episodes) {
+            episodes[s] = episodes[s].map((ep, idx) => {
+                return { ...ep, num: idx + 1, season: s };
+            });
+        }
+
+        const container = document.getElementById('episodeContainer');
+        const seasonBtns = document.querySelectorAll('.season-btn');
+
+        function renderSeason(seasonNum) {
+            const list = episodes[seasonNum];
+            if (!list) return;
+
+            container.innerHTML = '';
+            list.forEach(ep => {
+                const card = document.createElement('div');
+                card.className = 'episode-card';
+                card.innerHTML = `
+                    <div class="episode-thumb">⚡ ${ep.num}</div>
+                    <div class="episode-info">
+                        <h3>${ep.title}</h3>
+                        <div class="meta">Staffel ${ep.season} · Episode ${ep.num}</div>
+                        <p>${ep.desc}</p>
+                        <div class="player-placeholder">
+                            ▶ <a href="#" onclick="alert('Stream auf Netflix – Deutsche Tonspur verfügbar'); return false;">Jetzt abspielen (DE)</a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
             });
 
-            mirrorBtn.addEventListener('click', function(e) {
-                statusDiv.innerHTML = '🔄 Открываем зеркало Mega...';
-                setTimeout(() => {
-                    statusDiv.innerHTML = '✅ <span class="green">Зеркало открыто</span> — скачайте файл вручную';
-                }, 1000);
+            // Aktiven Button setzen
+            seasonBtns.forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.dataset.season) === seasonNum) {
+                    btn.classList.add('active');
+                }
             });
+        }
 
-            // ====== ПРОВЕРКА, РАБОТАЕТ ЛИ ОСНОВНАЯ ССЫЛКА (HEAD-запрос) ======
-            fetch(MAIN_URL, { method: 'HEAD', mode: 'no-cors' })
-                .then(() => {
-                    // Если ответ есть — оставляем как есть
-                })
-                .catch(() => {
-                    // Если ссылка не работает — показываем предупреждение
-                    statusDiv.innerHTML = '⚠️ Основная ссылка временно недоступна. Используйте <strong>зеркало</strong> ниже.';
-                    statusDiv.style.borderLeftColor = '#ff8844';
-                });
+        // Event-Listener für Staffelbuttons
+        seasonBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const season = parseInt(this.dataset.season);
+                renderSeason(season);
+            });
+        });
 
-            console.log('🔥 Сайт для скачивания игры загружен.');
-        })();
-    </script>
+        // Standard: Staffel 1 laden
+        renderSeason(1);
+    })();
+</script>
+
+<!-- Metadaten für Struktur -->
+<script>
+    // Zusätzliche Information – vollständige Liste aller Episoden (deutsch)
+    const alleEpisoden = {
+        "Staffel 1": ["Geheimnisse", "Lügen", "Gestern", "Doppelleben", "Wahrheiten", "Sizilien", "Kreuzwege", "Was wir wissen", "Alles ist miteinander verbunden", "Alpha und Omega"],
+        "Staffel 2": ["Anfang und Ende", "Die Reise", "Vergessene", "Der Knoten", "Paradox", "Zwischen den Welten", "Der dritte Zyklus", "Ende und Anfang"],
+        "Staffel 3": ["Die andere Welt", "Spiegelbilder", "Vergangenheit + Zukunft", "Der Ursprung", "Die Brücke", "Das Paradies", "Ein neuer Kreislauf", "Was bleibt"]
+    };
+    console.log('ROCKET | DARK – Alle Episoden (DE) geladen:', alleEpisoden);
+</script>
 
 </body>
 </html>
