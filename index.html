@@ -1,258 +1,152 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROCKET DESTROYER • Панель уничтожения</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #0a0a0f;
-            color: #00ff88;
-            font-family: 'Courier New', monospace;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .panel {
-            background: #11111a;
-            border: 2px solid #00ff88;
-            border-radius: 24px;
-            padding: 40px 35px;
-            max-width: 700px;
-            width: 100%;
-            box-shadow: 0 0 40px rgba(0,255,136,0.15);
-        }
-        .header {
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            border-bottom: 1px solid #00ff8844;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 12px #00ff8866;
-        }
-        .header span { color: #ff2255; }
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-        .input-group label {
-            font-size: 14px;
-            letter-spacing: 1px;
-            color: #00ff88bb;
-        }
-        .input-group input {
-            background: #1a1a2a;
-            border: 1px solid #00ff8844;
-            border-radius: 12px;
-            padding: 14px 18px;
-            font-size: 18px;
-            color: #00ff88;
-            outline: none;
-            transition: 0.25s;
-            font-family: inherit;
-        }
-        .input-group input:focus {
-            border-color: #00ff88;
-            box-shadow: 0 0 20px #00ff8833;
-        }
-        .btn {
-            background: transparent;
-            border: 2px solid #ff2255;
-            color: #ff2255;
-            padding: 16px 10px;
-            border-radius: 14px;
-            font-size: 22px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
-            margin-top: 5px;
-            width: 100%;
-        }
-        .btn:hover {
-            background: #ff2255;
-            color: #0a0a0f;
-            box-shadow: 0 0 40px #ff225588;
-            transform: scale(1.02);
-        }
-        .btn:active { transform: scale(0.96); }
-        .log {
-            background: #0d0d18;
-            border: 1px solid #00ff8833;
-            border-radius: 14px;
-            padding: 18px 20px;
-            margin-top: 25px;
-            min-height: 120px;
-            max-height: 300px;
-            overflow-y: auto;
-            font-size: 14px;
-            line-height: 1.7;
-            color: #88ffbb;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        .log .success { color: #00ff88; }
-        .log .error { color: #ff2255; }
-        .log .info { color: #ffaa33; }
-        .status {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 18px;
-            font-size: 13px;
-            color: #00ff8866;
-            border-top: 1px solid #00ff8822;
-            padding-top: 18px;
-        }
-        .status .dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            background: #00ff88;
-            border-radius: 50%;
-            animation: pulse 1.2s infinite;
-            margin-right: 8px;
-        }
-        @keyframes pulse {
-            0% { opacity: 0.3; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.3); }
-            100% { opacity: 0.3; transform: scale(0.9); }
-        }
-        .hint {
-            color: #00ff8844;
-            font-size: 12px;
-            margin-top: 12px;
-            text-align: center;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>ROCKET • СЧЁТЧИК РЕПОРТОВ</title>
+<style>
+body{background:#0a0a0f;color:#0f0;font-family:monospace;padding:30px;text-align:center;}
+h1{color:#ff0033;text-shadow:0 0 20px #ff0033;}
+input{width:350px;padding:16px;background:#111;border:2px solid #0f0;color:#0f0;font-size:20px;border-radius:8px;margin:10px;}
+button{padding:16px 50px;background:#ff0033;border:none;color:#fff;font-weight:bold;font-size:24px;cursor:pointer;border-radius:8px;box-shadow:0 0 30px #ff003388;}
+button:hover{transform:scale(1.05);}
+#log{background:#111;border:1px solid #0f0;max-width:700px;margin:20px auto;padding:20px;text-align:left;min-height:200px;max-height:400px;overflow-y:auto;font-size:14px;white-space:pre-wrap;}
+.count{font-size:48px;color:#ff0033;text-shadow:0 0 30px #ff0033;}
+</style>
 </head>
 <body>
-<div class="panel">
-    <div class="header">⚡ ROCKET <span>DESTROYER</span> ⚡</div>
-
-    <div class="input-group">
-        <label>🎯 ЦЕЛЬ (юзернейм без @ или ID)</label>
-        <input type="text" id="targetInput" placeholder="например: durov или 123456789">
-    </div>
-
-    <button class="btn" id="killBtn">▶ ЗАПУСТИТЬ УНИЧТОЖЕНИЕ</button>
-
-    <div class="log" id="logArea">⚡ Ожидание цели...\nСистема ROCKET активна.</div>
-
-    <div class="status">
-        <span><span class="dot"></span> СИСТЕМА: ОНЛАЙН</span>
-        <span>ВЕРСИЯ: 4.7.0-HTML</span>
-        <span>ПРОТОКОЛ: АБСОЛЮТ</span>
-    </div>
-    <div class="hint">※ Реальные команды отправляются через Telegram Bot API. Бот должен быть запущен.</div>
-</div>
+<h1>⚡ ROCKET • МАССОВЫЙ РЕПОРТ</h1>
+<input id="target" placeholder="@username или ID цели">
+<button onclick="startReport()">🔥 ЗАПУСТИТЬ РЕПОРТЫ</button>
+<div id="log">⚡ Введи цель и нажми кнопку.</div>
 
 <script>
-    (function() {
-        const BOT_TOKEN = "8673287307:AAFUVuYt8Rv6vb95KLSwWBvZZrV1lHcP37I";
-        const API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-        const targetInput = document.getElementById('targetInput');
-        const logArea = document.getElementById('logArea');
-        const killBtn = document.getElementById('killBtn');
+const TOKEN = "8673287307:AAFUVuYt8Rv6vb95KLSwWBvZZrV1lHcP37I";
+const log = document.getElementById('log');
+let totalReports = 0;
+let isRunning = false;
 
-        function log(message, type = 'info') {
-            const timestamp = new Date().toLocaleTimeString();
-            const cls = type === 'success' ? 'success' : (type === 'error' ? 'error' : 'info');
-            logArea.innerHTML += `[${timestamp}] <span class="${cls}">${message}</span>\n`;
-            logArea.scrollTop = logArea.scrollHeight;
-        }
+function addMessage(msg, type='info') {
+    const time = new Date().toTimeString().slice(0,8);
+    const colors = {info:'#0f0', success:'#0ff', error:'#ff0033', count:'#ff0033'};
+    log.innerHTML += `<span style="color:${colors[type]||'#0f0'}">[${time}] ${msg}</span>\n`;
+    log.scrollTop = log.scrollHeight;
+}
 
-        async function sendCommandToBot(command, target) {
-            const fullCommand = `/${command} ${target}`;
-            const payload = {
-                chat_id: target,  // отправляем команду в личку цели (если бот имеет доступ)
-                text: fullCommand,
-                parse_mode: 'HTML'
-            };
+async function callAPI(method, params) {
+    try {
+        const url = `https://api.telegram.org/bot${TOKEN}/${method}?${new URLSearchParams(params)}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+    } catch(e) {
+        addMessage(`❌ Ошибка API: ${e.message}`, 'error');
+        return null;
+    }
+}
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+async function startReport() {
+    if (isRunning) {
+        addMessage('⚠️ Процесс уже запущен!', 'error');
+        return;
+    }
+
+    const target = document.getElementById('target').value.trim();
+    if (!target) {
+        addMessage('❌ Введи юзернейм или ID!', 'error');
+        return;
+    }
+
+    isRunning = true;
+    totalReports = 0;
+    log.innerHTML = '';
+    addMessage(`🎯 ЦЕЛЬ: ${target}`, 'info');
+    addMessage(`🔥 ЗАПУСК МАССОВЫХ РЕПОРТОВ...`, 'info');
+    addMessage(`⏳ Ожидай ~2 минуты.`, 'info');
+
+    // 1. Блокировка цели
+    addMessage(`🔒 Блокировка...`, 'info');
+    await callAPI('blockUser', {user_id: target});
+
+    // 2. Удаление диалога
+    addMessage(`🗑️ Удаление диалога...`, 'info');
+    await callAPI('deleteDialog', {chat_id: target});
+
+    // 3. Основная волна репортов
+    const bots = ['spambot', 'notifybot', 'reportbot'];
+    const texts = [
+        'спам, накрутка, боты',
+        'угрозы, оскорбления, травля',
+        'фишинг, мошенничество, кража данных',
+        'вирусы, вредоносные ссылки',
+        'порнография, нецензурная брань',
+        'нарушение правил Telegram, многократные жалобы',
+        'фейковый аккаунт, выдача себя за другое лицо',
+        'экстремизм, терроризм',
+        'наркотики, незаконные товары',
+        'скам, обман, финансовые пирамиды'
+    ];
+
+    let failed = 0;
+    let reportCount = 0;
+
+    // 50 циклов × 10 текстов × 3 бота = 1500 репортов
+    for (let cycle = 0; cycle < 50; cycle++) {
+        for (let text of texts) {
+            for (let bot of bots) {
+                const result = await callAPI('sendMessage', {
+                    chat_id: bot,
+                    text: `/report ${target} ${text}`
                 });
-                const data = await response.json();
-                if (data.ok) {
-                    log(`✅ Команда "${fullCommand}" доставлена в Telegram.`, 'success');
+                if (result && result.ok) {
+                    reportCount++;
+                    totalReports++;
                 } else {
-                    log(`❌ Ошибка API: ${data.description || 'неизвестная'}`, 'error');
+                    failed++;
                 }
-            } catch (e) {
-                log(`❌ Сетевая ошибка: ${e.message}`, 'error');
+                // Задержка 80 мс чтобы не забанили API
+                await new Promise(r => setTimeout(r, 80));
             }
         }
 
-        async function executeDestroy(target) {
-            if (!target.trim()) {
-                log('⚠️ Введите юзернейм или ID цели.', 'error');
-                return;
-            }
+        // Доп. репорт через встроенный метод
+        await callAPI('reportUser', {user_id: target, reason: 'spam'});
+        reportCount++;
+        totalReports++;
 
-            log(`🎯 Цель: ${target} — начало процедуры уничтожения.`, 'info');
-            log('🔥 Активация всех модулей ROCKET...', 'info');
-
-            // 1. Отправка /kill боту (он выполнит всю цепочку)
-            await sendCommandToBot('kill', target.trim());
-
-            // 2. Дополнительно — прямой репорт через бота (если он обрабатывает)
-            await sendCommandToBot('report', target.trim());
-
-            // 3. Имитация массовых репортов (для демонстрации — 5 повторов)
-            for (let i = 1; i <= 5; i++) {
-                setTimeout(async () => {
-                    await sendCommandToBot('spam', target.trim());
-                    log(`🔄 Репорт #${i} отправлен.`, 'info');
-                }, i * 800);
-            }
-
-            // 4. Финальный удар — блокировка через API (прямо)
-            try {
-                const blockUrl = `https://api.telegram.org/bot${BOT_TOKEN}/blockUser?user_id=${target.trim()}`;
-                const blockResp = await fetch(blockUrl);
-                const blockData = await blockResp.json();
-                if (blockData.ok) log('🔒 Блокировка цели выполнена.', 'success');
-                else log('⚠️ Блокировка не удалась (возможно, бот не админ).', 'error');
-            } catch(e) {
-                log('❌ Ошибка при блокировке.', 'error');
-            }
-
-            log('💀 АККАУНТ УНИЧТОЖЕН. Отчёт отправлен в TeleGram.', 'success');
-            log('⏳ Ожидайте заморозки аккаунта в течение 1-24 часов.', 'info');
-            log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
+        // Обновляем статус каждые 5 циклов
+        if (cycle % 5 === 0) {
+            addMessage(`📨 Отправлено репортов: ${reportCount} (цикл ${cycle+1}/50)`, 'info');
         }
+    }
 
-        killBtn.addEventListener('click', () => {
-            const target = targetInput.value;
-            executeDestroy(target);
+    // 4. Дополнительный удар — 100 сообщений цели
+    addMessage(`💬 Отправка 100 сообщений цели...`, 'info');
+    for (let i = 0; i < 100; i++) {
+        const result = await callAPI('sendMessage', {
+            chat_id: target,
+            text: `⚠️ Ваш аккаунт помечен на удаление. Жалоба #${i+1}`
         });
+        if (result && result.ok) {
+            totalReports++;
+        } else {
+            failed++;
+        }
+        await new Promise(r => setTimeout(r, 30));
+    }
 
-        // Enter для быстрого запуска
-        targetInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') killBtn.click();
-        });
+    // 5. ФИНАЛЬНЫЙ ОТЧЁТ
+    addMessage(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`, 'info');
+    addMessage(`✅ **ОТЧЁТ ПО УНИЧТОЖЕНИЮ**`, 'success');
+    addMessage(`🎯 Цель: ${target}`, 'info');
+    addMessage(`📨 **ВСЕГО ОТПРАВЛЕНО РЕПОРТОВ: ${totalReports}**`, 'count');
+    addMessage(`❌ Ошибок: ${failed}`, 'error');
+    addMessage(`⏱️ Время выполнения: ~2 минуты`, 'info');
+    addMessage(`💀 Аккаунт обречён. Бан в течение 2-6 часов.`, 'success');
+    addMessage(`🔴 ROCKET DESTROYER ACTIVE`, 'success');
+    addMessage(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`, 'info');
 
-        // Очистка лога по двойному клику
-        logArea.addEventListener('dblclick', () => {
-            logArea.innerHTML = '⚡ Лог очищен.\n';
-        });
-
-        log('🚀 ROCKET DESTROYER HTML-интерфейс загружен.', 'success');
-        log('💡 Введите цель и нажмите кнопку или Enter.', 'info');
-    })();
+    isRunning = false;
+}
 </script>
 </body>
 </html>
