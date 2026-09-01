@@ -3,505 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🇷🇺 Тест: Цифровая Россия — ваше мнение</title>
+    <title>Насколько ты знаешь Данила?</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
-
         body {
-            background: white;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            padding: 2rem 1rem;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .test-container {
-            max-width: 820px;
-            width: 100%;
-            background: white;
-            border-radius: 32px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
-            padding: 2rem 1.8rem;
-            border: 1px solid rgba(0, 0, 0, 0.02);
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            color: #0b1e33;
-            display: flex;
             align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid #f0f4fa;
-            padding-bottom: 1.2rem;
-            margin-bottom: 1.8rem;
-            flex-wrap: wrap;
+            padding: 20px;
         }
-
-        h1 span {
-            background: #dce5f0;
-            border-radius: 60px;
-            font-size: 1rem;
-            font-weight: 500;
-            padding: 0.2rem 0.9rem;
-            margin-left: 8px;
-            color: #1f3a57;
+        .container {
+            background: #fff;
+            max-width: 650px;
+            width: 100%;
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
         }
-
-        .subhead {
-            color: #3a5a7a;
-            font-size: 1rem;
-            margin-top: -0.8rem;
-            margin-bottom: 1.8rem;
-            padding-left: 0.2rem;
-            border-left: 3px solid #b3cce5;
-            padding-left: 14px;
-            background: #f6faff;
-            border-radius: 0 20px 20px 0;
-            padding: 0.6rem 1rem;
+        h1 {
+            text-align: center;
+            color: #1a1a2e;
+            font-size: 28px;
+            margin-bottom: 5px;
         }
-
-        .question-card {
-            background: #fafcfe;
-            border-radius: 24px;
-            padding: 1.6rem 1.8rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid #eef3f9;
-            transition: 0.15s ease;
+        .sub {
+            text-align: center;
+            color: #888;
+            margin-bottom: 25px;
+            font-size: 14px;
         }
-
-        .question-card:hover {
-            border-color: #cdddea;
-            background: #fdfdfd;
+        .question-block {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            border-left: 5px solid #302b63;
         }
-
         .question-text {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #102231;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
+            font-weight: 700;
+            font-size: 17px;
+            color: #1a1a2e;
+            margin-bottom: 12px;
         }
-
-        .question-number {
-            background: #e6edf6;
-            color: #1f3f60;
-            font-weight: 600;
-            font-size: 0.85rem;
-            padding: 0.15rem 0.75rem;
-            border-radius: 40px;
-            letter-spacing: 0.01em;
-            white-space: nowrap;
-        }
-
         .options {
             display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 0.8rem 1.2rem;
-            padding-left: 0.2rem;
+            flex-direction: column;
+            gap: 8px;
         }
-
-        .option {
+        .options label {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 0.5rem 1.2rem 0.5rem 1rem;
-            border-radius: 60px;
-            background: white;
-            border: 1px solid #e2eaf3;
-            transition: 0.1s ease;
+            padding: 10px 15px;
+            background: #fff;
+            border-radius: 10px;
+            border: 2px solid #e0e0eb;
             cursor: pointer;
-            flex: 0 1 auto;
+            transition: 0.3s;
+            font-size: 15px;
         }
-
-        .option:hover {
-            background: #f2f7ff;
-            border-color: #b7cee8;
+        .options label:hover {
+            border-color: #302b63;
+            background: #f0eeff;
         }
-
-        .option input[type="radio"] {
+        .options input[type="radio"] {
+            margin-right: 12px;
             width: 18px;
             height: 18px;
-            accent-color: #1f5f8a;
-            cursor: pointer;
+            accent-color: #302b63;
             flex-shrink: 0;
         }
-
-        .option label {
-            font-size: 1rem;
-            color: #1c3147;
-            cursor: pointer;
-            padding: 0.1rem 0;
-            line-height: 1.4;
-        }
-
-        .option.selected {
-            background: #e9f0fa;
-            border-color: #7fa3c9;
-        }
-
-        .action-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 2.2rem;
-            gap: 1rem 0.5rem;
-        }
-
         .btn {
-            background: white;
-            border: 1px solid #cbdae9;
-            padding: 0.7rem 1.8rem;
-            font-size: 1rem;
-            font-weight: 500;
-            border-radius: 60px;
-            color: #1a3855;
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #302b63, #24243e);
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.15s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #f8faff;
+            transition: 0.3s;
+            margin-top: 10px;
         }
-
-        .btn-primary {
-            background: #1e4a72;
-            border: 1px solid #1e4a72;
-            color: white;
-            box-shadow: 0 4px 8px rgba(26, 67, 113, 0.08);
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 25px rgba(48, 43, 99, 0.5);
         }
-
-        .btn-primary:hover {
-            background: #143b5a;
-            border-color: #143b5a;
-            transform: scale(1.01);
-        }
-
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
-
-        .btn-secondary {
-            background: white;
-            border-color: #d0ddee;
-        }
-
-        .btn-secondary:hover {
-            background: #f0f6fe;
-            border-color: #acc3dd;
-        }
-
-        .result-area {
-            margin-top: 2.2rem;
-            padding: 1.5rem 1.8rem;
-            background: #f2f8ff;
-            border-radius: 40px;
-            border: 1px solid #d5e2f2;
+        .result {
             display: none;
-            text-align: center;
+            margin-top: 25px;
         }
-
-        .result-area.visible {
+        .result.active {
             display: block;
         }
-
         .result-score {
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #0f334f;
-        }
-
-        .result-message {
-            font-size: 1.1rem;
-            color: #1f4463;
-            margin-top: 6px;
-        }
-
-        .result-detail {
-            margin-top: 14px;
-            font-size: 0.95rem;
-            color: #2d4b6b;
-            text-align: left;
-            background: #eaf2fc;
-            padding: 0.8rem 1.2rem;
-            border-radius: 24px;
-            line-height: 1.6;
-        }
-
-        .result-detail strong {
-            color: #0d2c49;
-        }
-
-        .footer-note {
-            margin-top: 1.2rem;
-            color: #647d9a;
-            font-size: 0.9rem;
             text-align: center;
-            border-top: 1px solid #e6edf6;
-            padding-top: 1.4rem;
+            font-size: 48px;
+            font-weight: 900;
+            color: #302b63;
+            padding: 20px;
+            background: #f0eeff;
+            border-radius: 20px;
+            margin-bottom: 20px;
         }
-
+        .result-text {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+        .result-detail {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #302b63;
+        }
+        .result-detail .q {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .result-detail .your {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        .result-detail .correct {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        .result-detail .wrong {
+            color: #e74c3c;
+        }
+        .result-detail .right {
+            color: #27ae60;
+        }
+        .restart {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #e0e0eb;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+        .restart:hover {
+            background: #cccce0;
+        }
+        .hidden {
+            display: none;
+        }
         @media (max-width: 500px) {
-            .test-container {
-                padding: 1.2rem 0.8rem;
-            }
-            h1 {
-                font-size: 1.6rem;
-            }
-            .question-card {
-                padding: 1.2rem 0.9rem;
-            }
-            .option {
-                padding: 0.45rem 0.9rem 0.45rem 0.7rem;
-                flex: 1 1 100%;
-            }
-            .action-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .btn {
-                justify-content: center;
-            }
+            .container { padding: 20px; }
+            h1 { font-size: 22px; }
+            .result-score { font-size: 36px; }
         }
     </style>
 </head>
 <body>
-    <div class="test-container" id="testApp">
-        <h1>
-            🇷🇺 Цифровая Россия
-            <span>10 мнений</span>
-        </h1>
-        <div class="subhead">
-            ⚡ 10 вопросов о будущем интернета, соцсетей и технологий в России. Выберите «Согласен» или «Не согласен».
+    <div class="container" id="app">
+        <h1>🧐 Насколько ты знаешь Данила?</h1>
+        <p class="sub">Ответь на 10 вопросов. Будь честен 😏</p>
+
+        <div id="quiz">
+            <!-- Вопросы будут вставлены сюда через JS -->
         </div>
 
-        <div id="questionsWrapper"></div>
+        <button class="btn" id="submitBtn">Узнать результат 🔥</button>
 
-        <div class="action-row">
-            <button class="btn btn-secondary" id="clearBtn" type="button">🗑️ Сбросить</button>
-            <button class="btn btn-primary" id="submitBtn" type="button">✅ Показать мои ответы</button>
+        <div class="result" id="resultBlock">
+            <div class="result-score" id="scoreDisplay">0/10</div>
+            <div class="result-text" id="resultMessage"></div>
+            <div id="answersDetail"></div>
+            <button class="restart" id="restartBtn">🔄 Пройти заново</button>
         </div>
-
-        <div id="resultArea" class="result-area">
-            <div class="result-score" id="scoreDisplay"></div>
-            <div class="result-message" id="resultMessage"></div>
-            <div class="result-detail" id="resultDetail"></div>
-        </div>
-
-        <div class="footer-note"> Ваше мнение о цифровой политике</div>
     </div>
 
     <script>
-        (function() {
-            // ---- 10 вопросов в формате "согласен / не согласен" ----
-            const questions = [
-                {
-                    question: "Нужно ли сделать TikTok Мод официальным приложением в России?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0 // нет правильного ответа, просто для отображения — но мы не используем correct как "верный", а показываем выбор.
-                    // для этого теста мы не оцениваем правильность, а просто показываем выбор.
-                },
-                {
-                    question: "Стоит ли вернуть YouTube в Россию в полном объёме?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0
-                },
-                {
-                    question: "Нужно ли ввести государственную соцсеть вместо Instagram?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0
-                },
-                {
-                    question: "Следует ли разрешить иностранные мессенджеры для госслужащих?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0
-                },
-                {
-                    question: "Нужно ли ужесточить контроль за VPN-сервисами в России?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0
-                },
-                {
-                    question: "Стоит ли создавать национальный аналог Wikipedia?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0
-                },
-                {
-                    question: "Нужно ли обязать все смартфоны предустанавливать российские приложения?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0
-                },
-                {
-                    question: "Следует ли запретить использование зарубежных облачных сервисов (AWS, Google Cloud) для госданных?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0
-                },
-                {
-                    question: "Нужно ли ввести цифровой рубль как основное средство платежа?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0
-                },
-                {
-                    question: "Стоит ли разрешить иностранным IT-компаниям открывать офисы в России без ограничений?",
-                    options: ["Согласен", "Не согласен"],
-                    correct: 0
-                }
-            ];
+        const questions = [
+            {
+                q: "Сколько лет Данилу?",
+                options: ["15", "16", "17", "18"],
+                correct: 1 // 16
+            },
+            {
+                q: "Какой цвет глаз у Данила?",
+                options: ["Карие", "Голубые", "Зеленые", "Серые"],
+                correct: 1 // Голубые
+            },
+            {
+                q: "Что Данил любит делать в свободное время?",
+                options: ["Флиртовать", "Играть в игры", "Гулять", "Спать"],
+                correct: 0 // Флиртовать
+            },
+            {
+                q: "Любимая еда Данила?",
+                options: ["Пицца", "Пизда", "Бургеры", "Суши"],
+                correct: 1 // Пизда
+            },
+            {
+                q: "Знак зодиака Данила?",
+                options: ["Лев", "Рыбы", "Стрелец", "Близнецы"],
+                correct: 2 // Стрелец
+            },
+            {
+                q: "Что Данил ценит в людях больше всего?",
+                options: ["Честность", "Умение флиртовать", "Доброту", "Чувство юмора"],
+                correct: 1 // Умение флиртовать
+            },
+            {
+                q: "Какую музыку слушает Данил?",
+                options: ["Рок", "Рэп", "Спокойную", "Электронную"],
+                correct: 2 // Спокойную
+            },
+            {
+                q: "Какое хобби у Данила?",
+                options: ["Футбол", "Айти", "Рисование", "Танцы"],
+                correct: 1 // Айти
+            },
+            {
+                q: "Что Данил НЕ любит?",
+                options: ["Когда опаздывают", "Айти", "Когда врут", "Когда шумят"],
+                correct: 1 // Айти
+            },
+            {
+                q: "Что для Данила было самым важным событием?",
+                options: ["Первый поцелуй", "Потеря девственности (с рукой) ", "Первая зарплата", "Выпускной"],
+                correct: 1 // Потеря девственности
+            }
+        ];
 
-            const wrapper = document.getElementById('questionsWrapper');
-            let formHTML = '';
+        let userAnswers = new Array(questions.length).fill(null);
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz');
+            container.innerHTML = '';
+            questions.forEach((q, index) => {
+                const block = document.createElement('div');
+                block.className = 'question-block';
+                block.innerHTML = `
+                    <div class="question-text">${index+1}. ${q.q}</div>
+                    <div class="options">
+                        ${q.options.map((opt, oi) => `
+                            <label>
+                                <input type="radio" name="q${index}" value="${oi}">
+                                ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(block);
+
+                // Слушаем изменения
+                const radios = block.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        userAnswers[index] = parseInt(this.value);
+                    });
+                });
+            });
+        }
+
+        function calculateResult() {
+            let correct = 0;
+            const details = [];
 
             questions.forEach((q, index) => {
-                const qNumber = index + 1;
-                formHTML += `<div class="question-card" data-qindex="${index}">`;
-                formHTML += `<div class="question-text"><span class="question-number">${qNumber}</span> ${q.question}</div>`;
-                formHTML += `<div class="options">`;
-
-                q.options.forEach((optionText, optIndex) => {
-                    const radioId = `q${index}_opt${optIndex}`;
-                    formHTML += `
-                        <div class="option" data-q="${index}" data-opt="${optIndex}">
-                            <input type="radio" name="question${index}" id="${radioId}" value="${optIndex}">
-                            <label for="${radioId}">${optionText}</label>
-                        </div>
-                    `;
+                const user = userAnswers[index];
+                const isCorrect = (user === q.correct);
+                if (isCorrect) correct++;
+                details.push({
+                    question: q.q,
+                    options: q.options,
+                    user: user,
+                    correct: q.correct,
+                    isCorrect: isCorrect
                 });
-
-                formHTML += `</div></div>`;
             });
 
-            wrapper.innerHTML = formHTML;
+            return { score: correct, details };
+        }
 
-            // ---- Подсветка выбранных опций ----
-            const optionDivs = document.querySelectorAll('.option');
-            optionDivs.forEach(div => {
-                const radio = div.querySelector('input[type="radio"]');
-                if (!radio) return;
+        function showResult() {
+            // Проверка что все вопросы отвечены
+            if (userAnswers.includes(null)) {
+                alert('Ответь на все вопросы, Данил ждёт! 😤');
+                return;
+            }
 
-                div.addEventListener('click', function(e) {
-                    if (e.target.tagName !== 'INPUT') {
-                        radio.checked = true;
-                    }
-                    const parentCard = div.closest('.question-card');
-                    if (parentCard) {
-                        parentCard.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-                    }
-                    div.classList.add('selected');
-                    const evt = new Event('change', { bubbles: true });
-                    radio.dispatchEvent(evt);
-                });
+            const { score, details } = calculateResult();
 
-                radio.addEventListener('change', function() {
-                    const parentCard = div.closest('.question-card');
-                    if (parentCard) {
-                        parentCard.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-                    }
-                    if (this.checked) {
-                        div.classList.add('selected');
-                    }
-                });
+            // Скрываем квиз и показываем результат
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('submitBtn').classList.add('hidden');
+            document.getElementById('resultBlock').classList.add('active');
 
-                if (radio.checked) {
-                    div.classList.add('selected');
-                }
+            // Оценка
+            document.getElementById('scoreDisplay').textContent = `${score}/10`;
+
+            // Сообщение
+            const msgs = [
+                "😅 Ты вообще знаком с Данилом? Пересдавай!",
+                "🤨 Ну такое... Мог бы и лучше знать друга.",
+                "🙂 Неплохо, но есть куда расти!",
+                "😏 Ого! Ты реально знаешь Данила!",
+                "🔥🔥🔥 ТЫ ПРОСТО БОГ! ДАНИЛ ТВОЙ ЛУЧШИЙ ДРУГ!"
+            ];
+            const idx = Math.min(Math.floor(score/3), 4);
+            document.getElementById('resultMessage').textContent = msgs[idx];
+
+            // Детали по каждому вопросу
+            const container = document.getElementById('answersDetail');
+            container.innerHTML = '';
+            details.forEach((d, i) => {
+                const div = document.createElement('div');
+                div.className = 'result-detail';
+                const userText = d.user !== null ? d.options[d.user] : 'Не выбрано';
+                const correctText = d.options[d.correct];
+                div.innerHTML = `
+                    <div class="q">${i+1}. ${d.question}</div>
+                    <div>Твой ответ: <span class="${d.isCorrect ? 'right' : 'wrong'}">${userText}</span></div>
+                    <div>Правильный: <span class="correct">${correctText}</span></div>
+                `;
+                container.appendChild(div);
             });
+        }
 
-            // ---- Кнопки ----
-            const submitBtn = document.getElementById('submitBtn');
-            const clearBtn = document.getElementById('clearBtn');
-            const resultArea = document.getElementById('resultArea');
-            const scoreDisplay = document.getElementById('scoreDisplay');
-            const resultMessage = document.getElementById('resultMessage');
-            const resultDetail = document.getElementById('resultDetail');
+        function restart() {
+            userAnswers = new Array(questions.length).fill(null);
+            document.getElementById('quiz').classList.remove('hidden');
+            document.getElementById('submitBtn').classList.remove('hidden');
+            document.getElementById('resultBlock').classList.remove('active');
+            renderQuiz();
+            // Сброс выбора
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-            function getAnswers() {
-                let answers = [];
-                questions.forEach((q, idx) => {
-                    const radios = document.querySelectorAll(`input[name="question${idx}"]`);
-                    let selectedValue = null;
-                    let selectedLabel = '—';
-                    radios.forEach(r => {
-                        if (r.checked) {
-                            selectedValue = parseInt(r.value, 10);
-                            selectedLabel = q.options[selectedValue] || '—';
-                        }
-                    });
-                    answers.push({
-                        question: q.question,
-                        answer: selectedLabel,
-                        answered: (selectedValue !== null)
-                    });
-                });
-                return answers;
-            }
+        // Инициализация
+        renderQuiz();
 
-            function showResult() {
-                const answers = getAnswers();
-                const total = answers.length;
-                const answeredCount = answers.filter(a => a.answered).length;
-
-                // Собираем детали
-                let detailLines = answers.map((a, i) => {
-                    const num = i + 1;
-                    const status = a.answered ? '✅' : '⬜';
-                    return `${status} Вопрос ${num}: ${a.question} — <strong>${a.answer}</strong>`;
-                });
-
-                scoreDisplay.textContent = `Отвечено ${answeredCount} из ${total}`;
-
-                let msg = '';
-                if (answeredCount === total) {
-                    msg = '🙌 Вы ответили на все вопросы! Спасибо за ваше мнение.';
-                } else if (answeredCount >= 7) {
-                    msg = '👍 Почти всё! Осталось несколько вопросов.';
-                } else if (answeredCount >= 4) {
-                    msg = '🧐 Вы выбрали несколько позиций. Дополните остальные.';
-                } else {
-                    msg = '📝 Пройдите тест полностью, чтобы увидеть все свои ответы.';
-                }
-
-                resultMessage.textContent = msg;
-                resultDetail.innerHTML = detailLines.join('<br>');
-
-                resultArea.classList.add('visible');
-                resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-
-            function clearAll() {
-                const radios = document.querySelectorAll('input[type="radio"]');
-                radios.forEach(r => r.checked = false);
-                document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-                resultArea.classList.remove('visible');
-                scoreDisplay.textContent = '0 / 10';
-                resultMessage.textContent = '';
-                resultDetail.innerHTML = '';
-            }
-
-            submitBtn.addEventListener('click', showResult);
-            clearBtn.addEventListener('click', clearAll);
-
-            // При изменении радио — скрывать результат, чтобы не было путаницы
-            document.addEventListener('change', function(e) {
-                if (e.target && e.target.type === 'radio') {
-                    if (resultArea.classList.contains('visible')) {
-                        resultArea.classList.remove('visible');
-                    }
-                }
-            });
-
-            resultArea.classList.remove('visible');
-        })();
+        document.getElementById('submitBtn').addEventListener('click', showResult);
+        document.getElementById('restartBtn').addEventListener('click', restart);
     </script>
 </body>
 </html>
