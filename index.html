@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⛏️ ROCKET DIG · ДОСТИЖЕНИЯ</title>
+    <title>⛏️ ШАХТА</title>
     <style>
         * {
             margin: 0;
@@ -29,7 +30,7 @@
             max-width: 1100px;
             width: 100%;
             border: 1px solid #3f3028;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.9);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
             position: relative;
         }
 
@@ -46,38 +47,31 @@
             font-size: 64px;
             font-weight: 900;
             color: #ffd700;
-            text-shadow: 0 0 60px rgba(255,215,0,0.2), 0 4px 20px rgba(0,0,0,0.8);
-            margin-bottom: 8px;
-            letter-spacing: 4px;
-        }
-
-        .menu-subtitle {
-            color: #8a7a6a;
-            font-size: 16px;
-            letter-spacing: 8px;
+            text-shadow: 0 0 60px rgba(255, 215, 0, 0.2), 0 4px 20px rgba(0, 0, 0, 0.8);
             margin-bottom: 40px;
+            letter-spacing: 4px;
         }
 
         .menu-buttons {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
             width: 100%;
             max-width: 380px;
         }
 
         .menu-btn {
-            padding: 16px 32px;
-            border-radius: 16px;
+            padding: 14px 28px;
+            border-radius: 14px;
             border: 2px solid #2d1f18;
-            background: rgba(20,15,12,0.6);
+            background: rgba(20, 15, 12, 0.6);
             color: #c0b0a0;
             font-weight: 800;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             transition: 0.15s;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             font-family: inherit;
             text-align: center;
             outline: none;
@@ -85,30 +79,64 @@
         }
 
         .menu-btn:hover {
-            background: rgba(40,30,24,0.7);
+            background: rgba(40, 30, 24, 0.7);
             border-color: #4a3a30;
             color: #f0e0d0;
             transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(255,215,0,0.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
         }
 
-        .menu-btn:active { transform: scale(0.97); }
-        .menu-btn.gold { border-color: #ffd700; color: #ffd700; }
-        .menu-btn.gold:hover { background: rgba(60,45,20,0.3); }
-        .menu-btn.cyan { border-color: #6bcfff; color: #6bcfff; }
-        .menu-btn.cyan:hover { background: rgba(30,60,80,0.3); }
-        .menu-btn.green { border-color: #6bff8a; color: #6bff8a; }
-        .menu-btn.green:hover { background: rgba(30,80,40,0.3); }
-        .menu-btn.purple { border-color: #9b59b6; color: #9b59b6; }
-        .menu-btn.purple:hover { background: rgba(60,30,80,0.3); }
-        .menu-btn.orange { border-color: #e67e22; color: #e67e22; }
-        .menu-btn.orange:hover { background: rgba(60,40,20,0.3); }
-
-        .menu-version {
-            color: #3f3028;
-            font-size: 12px;
-            margin-top: 30px;
-            letter-spacing: 2px;
+        .menu-btn:active {
+            transform: scale(0.97);
+        }
+        .menu-btn.gold {
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+        .menu-btn.gold:hover {
+            background: rgba(60, 45, 20, 0.3);
+        }
+        .menu-btn.cyan {
+            border-color: #6bcfff;
+            color: #6bcfff;
+        }
+        .menu-btn.cyan:hover {
+            background: rgba(30, 60, 80, 0.3);
+        }
+        .menu-btn.green {
+            border-color: #6bff8a;
+            color: #6bff8a;
+        }
+        .menu-btn.green:hover {
+            background: rgba(30, 80, 40, 0.3);
+        }
+        .menu-btn.purple {
+            border-color: #9b59b6;
+            color: #9b59b6;
+        }
+        .menu-btn.purple:hover {
+            background: rgba(60, 30, 80, 0.3);
+        }
+        .menu-btn.orange {
+            border-color: #e67e22;
+            color: #e67e22;
+        }
+        .menu-btn.orange:hover {
+            background: rgba(60, 40, 20, 0.3);
+        }
+        .menu-btn.red {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        .menu-btn.red:hover {
+            background: rgba(60, 20, 20, 0.3);
+        }
+        .menu-btn.teal {
+            border-color: #1abc9c;
+            color: #1abc9c;
+        }
+        .menu-btn.teal:hover {
+            background: rgba(20, 60, 50, 0.3);
         }
 
         .game-screen {
@@ -148,10 +176,24 @@
             font-weight: 800;
             margin-top: 2px;
         }
-        .stat-card .value.gold { color: #ffd700; }
-        .stat-card .value.cyan { color: #6bcfff; }
-        .stat-card .value.green { color: #6bff8a; }
-        .stat-card .value.orange { color: #ff8a4a; }
+        .stat-card .value.gold {
+            color: #ffd700;
+        }
+        .stat-card .value.cyan {
+            color: #6bcfff;
+        }
+        .stat-card .value.green {
+            color: #6bff8a;
+        }
+        .stat-card .value.orange {
+            color: #ff8a4a;
+        }
+        .stat-card .value.pink {
+            color: #ff6bc8;
+        }
+        .stat-card .value.red {
+            color: #ff4444;
+        }
 
         .main-grid {
             display: grid;
@@ -187,6 +229,10 @@
             font-size: 9px;
             color: #c0b0a0;
         }
+        .panel-title .badge.gold {
+            color: #ffd700;
+            border-color: #ffd700;
+        }
 
         .dig-panel {
             background: rgba(12, 9, 7, 0.7);
@@ -197,6 +243,22 @@
             flex-direction: column;
             align-items: center;
             min-height: 320px;
+        }
+
+        .biome-indicator {
+            width: 100%;
+            text-align: center;
+            color: #8a7a6a;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            padding: 4px;
+            border-radius: 40px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .biome-indicator span {
+            font-weight: 700;
+            color: #f0e0d0;
         }
 
         .depth-bar {
@@ -227,11 +289,10 @@
             justify-content: center;
             align-items: center;
             background: linear-gradient(145deg, #3a2a20, #1a1410);
-            box-shadow: 0 10px 0 #0f0b09, 0 16px 40px rgba(0,0,0,0.7);
+            box-shadow: 0 10px 0 #0f0b09, 0 16px 40px rgba(0, 0, 0, 0.7);
             transition: transform 0.06s, box-shadow 0.06s;
             position: relative;
-            background-image: 
-                radial-gradient(circle at 30% 30%, #4a3a30 0%, transparent 60%),
+            background-image: radial-gradient(circle at 30% 30%, #4a3a30 0%, transparent 60%),
                 radial-gradient(circle at 70% 70%, #2a1f18 0%, transparent 50%);
             outline: none;
             -webkit-tap-highlight-color: transparent;
@@ -239,13 +300,13 @@
 
         .mine-block:active {
             transform: translateY(6px);
-            box-shadow: 0 4px 0 #0f0b09, 0 16px 40px rgba(0,0,0,0.7);
+            box-shadow: 0 4px 0 #0f0b09, 0 16px 40px rgba(0, 0, 0, 0.7);
         }
 
         .mine-block .emoji {
             font-size: 80px;
             line-height: 1;
-            filter: drop-shadow(0 4px 20px rgba(255,200,100,0.1));
+            filter: drop-shadow(0 4px 20px rgba(255, 200, 100, 0.1));
             transition: transform 0.1s;
             pointer-events: none;
         }
@@ -256,7 +317,7 @@
             font-size: 18px;
             margin-top: 8px;
             letter-spacing: 4px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             pointer-events: none;
         }
 
@@ -280,7 +341,52 @@
             transition: width 0.08s;
         }
 
-        .progress-wrap { width: 100%; margin-top: 16px; }
+        .mine-block .rarity-glow {
+            position: absolute;
+            inset: -4px;
+            border-radius: 28px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+        }
+        .mine-block .rarity-glow.active {
+            opacity: 1;
+        }
+        .mine-block .rarity-glow.legendary {
+            box-shadow: 0 0 60px rgba(255, 165, 0, 0.8), 0 0 120px rgba(255, 165, 0, 0.4);
+            animation: legendaryPulse 1s ease-in-out infinite;
+        }
+        .mine-block .rarity-glow.mythic {
+            box-shadow: 0 0 80px rgba(255, 0, 0, 0.9), 0 0 160px rgba(255, 0, 0, 0.5);
+            animation: mythicPulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes legendaryPulse {
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        @keyframes mythicPulse {
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.03);
+            }
+        }
+
+        .progress-wrap {
+            width: 100%;
+            margin-top: 16px;
+        }
         .progress-track {
             width: 100%;
             height: 6px;
@@ -297,22 +403,51 @@
             transition: width 0.02s;
         }
 
-        .dig-stats {
-            display: flex;
-            gap: 12px;
-            margin-top: 14px;
-            flex-wrap: wrap;
-            justify-content: center;
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
         }
-        .dig-stats .tag {
-            background: rgba(0,0,0,0.4);
-            padding: 3px 14px;
-            border-radius: 40px;
-            border: 1px solid #1f1612;
-            font-size: 10px;
-            color: #7a6a5a;
+
+        .btn-main {
+            padding: 10px;
+            border-radius: 14px;
+            border: 2px solid #2d1f18;
+            background: rgba(20, 15, 12, 0.6);
+            color: #c0b0a0;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.08s;
+            font-family: inherit;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        .dig-stats .tag span { color: #f0e0d0; font-weight: 700; }
+        .btn-main:hover {
+            background: rgba(40, 30, 24, 0.6);
+            border-color: #4a3a30;
+            color: #f0e0d0;
+        }
+        .btn-main:active {
+            transform: scale(0.97);
+        }
+        .btn-main.gold {
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+        .btn-main.gold:hover {
+            background: rgba(60, 45, 20, 0.4);
+        }
+        .btn-main.cyan {
+            border-color: #6bcfff;
+            color: #6bcfff;
+        }
+        .btn-main.cyan:hover {
+            background: rgba(30, 60, 80, 0.3);
+        }
 
         .inv-slots {
             display: grid;
@@ -321,7 +456,7 @@
             margin-top: 8px;
         }
         .inv-slot {
-            background: rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 8px;
             padding: 4px;
             text-align: center;
@@ -341,15 +476,24 @@
         }
         .inv-slot:hover {
             border-color: #4a3a30;
-            background: rgba(30,22,18,0.6);
+            background: rgba(30, 22, 18, 0.6);
             transform: scale(1.03);
         }
-        .inv-slot .iemoji { font-size: 18px; pointer-events: none; }
+        .inv-slot .iemoji {
+            font-size: 18px;
+            pointer-events: none;
+        }
         .inv-slot .iweight {
             font-size: 8px;
             color: #6bcfff;
             font-weight: 600;
             pointer-events: none;
+        }
+        .inv-slot .irarity {
+            font-size: 7px;
+            font-weight: 700;
+            pointer-events: none;
+            text-transform: uppercase;
         }
         .inv-slot .slot-id {
             position: absolute;
@@ -361,7 +505,7 @@
         }
         .inv-slot.full {
             border-color: #ff6b6b;
-            background: rgba(255,50,50,0.1);
+            background: rgba(255, 50, 50, 0.1);
         }
         .inv-slot.empty {
             color: #2a1f18;
@@ -370,7 +514,7 @@
         }
         .inv-slot.empty:hover {
             transform: none;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .inv-actions {
@@ -383,7 +527,7 @@
             padding: 8px;
             border-radius: 10px;
             border: 1px solid #2d1f18;
-            background: rgba(20,15,12,0.6);
+            background: rgba(20, 15, 12, 0.6);
             color: #c0b0a0;
             font-weight: 700;
             font-size: 10px;
@@ -396,64 +540,46 @@
             -webkit-tap-highlight-color: transparent;
         }
         .inv-actions .btn-sm:hover {
-            background: rgba(40,30,24,0.6);
+            background: rgba(40, 30, 24, 0.6);
             border-color: #4a3a30;
             color: #f0e0d0;
         }
-        .inv-actions .btn-sm:active { transform: scale(0.95); }
-        .inv-actions .btn-sm.gold { border-color: #ffd700; color: #ffd700; }
-        .inv-actions .btn-sm.danger { border-color: #5a2a2a; color: #d08a8a; }
-
-        .btn-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 14px;
+        .inv-actions .btn-sm:active {
+            transform: scale(0.95);
         }
-
-        .btn-main {
-            padding: 10px;
-            border-radius: 14px;
-            border: 2px solid #2d1f18;
-            background: rgba(20,15,12,0.6);
-            color: #c0b0a0;
-            font-weight: 800;
-            font-size: 12px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.08s;
-            font-family: inherit;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
+        .inv-actions .btn-sm.gold {
+            border-color: #ffd700;
+            color: #ffd700;
         }
-        .btn-main:hover {
-            background: rgba(40,30,24,0.6);
-            border-color: #4a3a30;
-            color: #f0e0d0;
+        .inv-actions .btn-sm.danger {
+            border-color: #5a2a2a;
+            color: #d08a8a;
         }
-        .btn-main:active { transform: scale(0.97); }
-        .btn-main.gold { border-color: #ffd700; color: #ffd700; }
-        .btn-main.gold:hover { background: rgba(60,45,20,0.4); }
-        .btn-main.cyan { border-color: #6bcfff; color: #6bcfff; }
-        .btn-main.cyan:hover { background: rgba(30,60,80,0.3); }
 
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             animation: fadeIn 0.2s ease;
         }
-        .modal-overlay.active { display: flex; }
+        .modal-overlay.active {
+            display: flex;
+        }
 
         @keyframes fadeIn {
-            0% { opacity: 0; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .modal {
@@ -465,7 +591,7 @@
             max-height: 80vh;
             overflow-y: auto;
             border: 2px solid #3f3028;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.9);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
         }
 
         .modal .header {
@@ -481,7 +607,7 @@
             font-size: 24px;
             letter-spacing: 2px;
         }
-        .modal .header .ach-count {
+        .modal .header .count-badge {
             color: #6bcfff;
             font-size: 14px;
             font-weight: 600;
@@ -497,7 +623,10 @@
             outline: none;
             -webkit-tap-highlight-color: transparent;
         }
-        .modal .close-btn:hover { color: #ff6b6b; transform: rotate(90deg); }
+        .modal .close-btn:hover {
+            color: #ff6b6b;
+            transform: rotate(90deg);
+        }
 
         .shop-grid {
             display: grid;
@@ -506,7 +635,7 @@
         }
 
         .shop-item {
-            background: rgba(20,15,12,0.5);
+            background: rgba(20, 15, 12, 0.5);
             padding: 12px;
             border-radius: 14px;
             border: 1px solid #2d1f18;
@@ -516,15 +645,32 @@
             -webkit-tap-highlight-color: transparent;
         }
         .shop-item:hover {
-            background: rgba(40,30,24,0.6);
+            background: rgba(40, 30, 24, 0.6);
             border-color: #4a3a30;
             transform: scale(1.02);
         }
-        .shop-item:active { transform: scale(0.97); }
-        .shop-item.locked { opacity: 0.35; cursor: not-allowed; }
-        .shop-item .sname { color: #e0d0c0; font-weight: 700; font-size: 14px; }
-        .shop-item .sdesc { color: #7a6a5a; font-size: 11px; margin: 2px 0; }
-        .shop-item .slvl { color: #6bcfff; font-size: 12px; font-weight: 600; }
+        .shop-item:active {
+            transform: scale(0.97);
+        }
+        .shop-item.locked {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .shop-item .sname {
+            color: #e0d0c0;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .shop-item .sdesc {
+            color: #7a6a5a;
+            font-size: 11px;
+            margin: 2px 0;
+        }
+        .shop-item .slvl {
+            color: #6bcfff;
+            font-size: 12px;
+            font-weight: 600;
+        }
         .shop-item .sprice {
             display: inline-block;
             background: #0a0705;
@@ -537,12 +683,33 @@
             margin-top: 4px;
         }
 
+        .quest-placeholder {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7a6a5a;
+        }
+        .quest-placeholder .big-icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 16px;
+        }
+        .quest-placeholder .title {
+            color: #c0b0a0;
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        .quest-placeholder .desc {
+            color: #7a6a5a;
+            font-size: 14px;
+        }
+
         .settings-grid {
             display: grid;
             gap: 12px;
         }
         .settings-item {
-            background: rgba(20,15,12,0.4);
+            background: rgba(20, 15, 12, 0.4);
             padding: 14px 18px;
             border-radius: 12px;
             border: 1px solid #2d1f18;
@@ -598,6 +765,29 @@
             cursor: pointer;
             outline: none;
         }
+        .settings-item .scontrol .btn-reset {
+            background: #5a2a2a;
+            border: 2px solid #8a3a3a;
+            color: #ff8a8a;
+            padding: 6px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.08s;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .settings-item .scontrol .btn-reset:hover {
+            background: #7a3a3a;
+            border-color: #ff4a4a;
+            color: #ffaaaa;
+            transform: scale(1.02);
+        }
+        .settings-item .scontrol .btn-reset:active {
+            transform: scale(0.95);
+        }
 
         .stats-grid {
             display: grid;
@@ -605,7 +795,7 @@
             gap: 8px;
         }
         .stats-grid .stat-item {
-            background: rgba(20,15,12,0.4);
+            background: rgba(20, 15, 12, 0.4);
             padding: 10px 14px;
             border-radius: 12px;
             border: 1px solid #2d1f18;
@@ -622,70 +812,234 @@
             font-weight: 800;
             margin-top: 2px;
         }
-        .stats-grid .stat-item .svalue.gold { color: #ffd700; }
-        .stats-grid .stat-item .svalue.cyan { color: #6bcfff; }
-        .stats-grid .stat-item .svalue.green { color: #6bff8a; }
-        .stats-grid .stat-item .svalue.pink { color: #ff6bc8; }
-        .stats-grid .stat-item .svalue.orange { color: #ff8a4a; }
-
-        /* ACHIEVEMENTS */
-        .ach-grid {
-            display: grid;
-            gap: 8px;
+        .stats-grid .stat-item .svalue.gold {
+            color: #ffd700;
         }
-        .ach-item {
-            background: rgba(20,15,12,0.4);
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid #2d1f18;
-            display: flex;
-            align-items: center;
+        .stats-grid .stat-item .svalue.cyan {
+            color: #6bcfff;
+        }
+        .stats-grid .stat-item .svalue.green {
+            color: #6bff8a;
+        }
+        .stats-grid .stat-item .svalue.pink {
+            color: #ff6bc8;
+        }
+        .stats-grid .stat-item .svalue.orange {
+            color: #ff8a4a;
+        }
+
+        .collection-grid {
+            display: grid;
             gap: 12px;
+        }
+        .collection-biome {
+            background: rgba(20, 15, 12, 0.4);
+            border-radius: 14px;
+            padding: 12px 16px;
+            border: 1px solid #2d1f18;
+        }
+        .collection-biome .biome-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .collection-biome .biome-header .biome-name {
+            color: #f0e0d0;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .collection-biome .biome-header .biome-count {
+            color: #6bcfff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .collection-biome .biome-header .biome-reward {
+            color: #ffd700;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .collection-biome .biome-progress {
+            width: 100%;
+            height: 6px;
+            background: #0a0705;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+        .collection-biome .biome-progress .biome-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f7971e, #ffd700);
+            border-radius: 20px;
+            transition: width 0.3s;
+        }
+        .collection-biome .biome-blocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 4px;
+            margin-top: 6px;
+        }
+        .collection-biome .biome-blocks .cblock {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            padding: 4px;
+            text-align: center;
+            border: 1px solid #2d1f18;
+            font-size: 10px;
+            cursor: pointer;
             transition: 0.08s;
         }
-        .ach-item.unlocked {
-            border-color: #ffd700;
-            background: rgba(60,45,20,0.2);
+        .collection-biome .biome-blocks .cblock:hover {
+            border-color: #4a3a30;
+            transform: scale(1.05);
         }
-        .ach-item.locked {
-            opacity: 0.5;
+        .collection-biome .biome-blocks .cblock.found {
+            border-color: #6bff8a;
         }
-        .ach-item .ach-icon {
-            font-size: 28px;
-            min-width: 40px;
+        .collection-biome .biome-blocks .cblock .cemoji {
+            font-size: 20px;
+        }
+        .collection-biome .biome-blocks .cblock .cname {
+            color: #7a6a5a;
+            font-size: 7px;
+            display: block;
+        }
+        .collection-biome .biome-blocks .cblock .ccount {
+            color: #ffd700;
+            font-size: 8px;
+            font-weight: 700;
+        }
+        .collection-biome .biome-blocks .cblock .crarity {
+            font-size: 6px;
+            font-weight: 700;
+            display: block;
+            margin-top: 1px;
+        }
+        .collection-biome .biome-blocks .cblock.missing {
+            opacity: 0.4;
+            cursor: default;
+        }
+        .collection-biome .biome-blocks .cblock.missing:hover {
+            transform: none;
+            border-color: #2d1f18;
+        }
+        .collection-biome .biome-complete {
+            color: #6bff8a;
+            font-weight: 700;
+            font-size: 13px;
+            margin-top: 6px;
             text-align: center;
+            padding: 4px;
+            border-radius: 8px;
+            background: rgba(30, 80, 40, 0.2);
+            border: 1px solid #6bff8a;
         }
-        .ach-item .ach-info {
-            flex: 1;
+
+        .biome-select-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
-        .ach-item .ach-info .ach-name {
+        .biome-select-item {
+            background: rgba(20, 15, 12, 0.4);
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid #2d1f18;
+            cursor: pointer;
+            transition: 0.08s;
+            text-align: center;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .biome-select-item:hover {
+            background: rgba(40, 30, 24, 0.6);
+            border-color: #4a3a30;
+            transform: scale(1.02);
+        }
+        .biome-select-item:active {
+            transform: scale(0.97);
+        }
+        .biome-select-item.active {
+            border-color: #ffd700;
+            background: rgba(60, 45, 20, 0.2);
+        }
+        .biome-select-item.locked {
+            opacity: 0.6;
+            cursor: default;
+        }
+        .biome-select-item.locked:hover {
+            transform: none;
+            background: rgba(20, 15, 12, 0.4);
+        }
+        .biome-select-item .bs-icon {
+            font-size: 32px;
+        }
+        .biome-select-item .bs-name {
             color: #f0e0d0;
             font-weight: 700;
             font-size: 14px;
+            margin-top: 4px;
         }
-        .ach-item .ach-info .ach-desc {
+        .biome-select-item .bs-depth {
             color: #7a6a5a;
             font-size: 11px;
         }
-        .ach-item .ach-info .ach-progress {
+        .biome-select-item .bs-status {
             color: #6bcfff;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .biome-select-item .bs-progress {
+            margin-top: 6px;
             font-size: 10px;
+            color: #7a6a5a;
+        }
+        .biome-select-item .bs-progress .bs-bar {
+            width: 100%;
+            height: 6px;
+            background: #0a0705;
+            border-radius: 10px;
+            overflow: hidden;
             margin-top: 2px;
         }
-        .ach-item .ach-status {
-            font-size: 20px;
-            min-width: 30px;
-            text-align: center;
+        .biome-select-item .bs-progress .bs-bar .bs-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.15s ease;
         }
-        .ach-item .ach-status.locked { color: #3f3028; }
-        .ach-item .ach-status.unlocked { color: #ffd700; }
-        .ach-item.secret {
-            border-color: #9b59b6;
-            background: rgba(60,30,80,0.15);
+        .biome-select-item .bs-progress .bs-bar .bs-bar-fill.depth {
+            background: #6bcfff;
         }
-        .ach-item.secret.unlocked {
-            border-color: #ff6bff;
-            background: rgba(60,30,80,0.3);
+        .biome-select-item .bs-progress .bs-bar .bs-bar-fill.coins {
+            background: #ffd700;
+        }
+        .biome-select-item .bs-requirements {
+            font-size: 9px;
+            color: #7a6a5a;
+            margin-top: 4px;
+        }
+        .biome-select-item .bs-requirements .req {
+            display: inline-block;
+            margin: 0 4px;
+        }
+        .biome-select-item .bs-requirements .req.done {
+            color: #6bff8a;
+        }
+        .biome-select-item .bs-requirements .req.pending {
+            color: #ff6b6b;
+        }
+        .biome-select-item .bs-progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            margin-top: 2px;
+        }
+        .biome-select-item .bs-progress-text .depth-text {
+            color: #6bcfff;
+        }
+        .biome-select-item .bs-progress-text .coins-text {
+            color: #ffd700;
         }
 
         .ore-info-grid {
@@ -695,7 +1049,7 @@
             margin-top: 8px;
         }
         .ore-info-item {
-            background: rgba(20,15,12,0.3);
+            background: rgba(20, 15, 12, 0.3);
             padding: 8px 12px;
             border-radius: 10px;
             border: 1px solid #2d1f18;
@@ -704,10 +1058,25 @@
             gap: 10px;
             font-size: 12px;
         }
-        .ore-info-item .oemoji { font-size: 24px; }
-        .ore-info-item .oname { color: #e0d0c0; font-weight: 600; }
-        .ore-info-item .odepth { color: #7a6a5a; font-size: 10px; }
-        .ore-info-item .oweight { color: #6bcfff; font-size: 10px; }
+        .ore-info-item .oemoji {
+            font-size: 24px;
+        }
+        .ore-info-item .oname {
+            color: #e0d0c0;
+            font-weight: 600;
+        }
+        .ore-info-item .odepth {
+            color: #7a6a5a;
+            font-size: 10px;
+        }
+        .ore-info-item .oweight {
+            color: #6bcfff;
+            font-size: 10px;
+        }
+        .ore-info-item .orarity {
+            font-size: 9px;
+            font-weight: 700;
+        }
 
         .info-modal-content {
             text-align: center;
@@ -736,6 +1105,14 @@
             border: 1px solid #2d1f18;
             margin: 16px 0;
         }
+        .info-modal-content .rarity-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 14px;
+            margin-top: 8px;
+        }
 
         .float-msg {
             position: fixed;
@@ -743,12 +1120,18 @@
             font-size: 24px;
             pointer-events: none;
             z-index: 999;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.9);
-            animation: floatUp var(--float-duration, 0.9s) cubic-bezier(0.2,0.9,0.4,1) forwards;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9);
+            animation: floatUp var(--float-duration, 0.9s) cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
         }
         @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(0.7); }
-            100% { opacity: 0; transform: translateY(calc(-140px * var(--float-height-mult, 1))) scale(1.2); }
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.7);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(calc(-140px * var(--float-height-mult, 1))) scale(1.2);
+            }
         }
 
         .mining-float {
@@ -757,1107 +1140,2070 @@
             font-size: 18px;
             pointer-events: none;
             z-index: 998;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.8);
-            animation: miningFloat var(--float-duration, 0.7s) cubic-bezier(0.2,0.9,0.4,1) forwards;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+            animation: miningFloat var(--float-duration, 0.7s) cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
         }
         @keyframes miningFloat {
-            0% { opacity: 1; transform: translateY(0) scale(0.5); }
-            100% { opacity: 0; transform: translateY(calc(-100px * var(--float-height-mult, 1))) scale(1); }
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.5);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(calc(-100px * var(--float-height-mult, 1))) scale(1);
+            }
         }
 
-        .ach-unlock-float {
+        .legendary-float {
             position: fixed;
             font-weight: 900;
-            font-size: 20px;
+            font-size: 28px;
             pointer-events: none;
             z-index: 1000;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.9), 0 0 60px #ffd700;
-            animation: achFloat 2s cubic-bezier(0.2,0.9,0.4,1) forwards;
-            background: rgba(20,15,12,0.8);
+            text-shadow: 0 0 60px rgba(255, 165, 0, 0.9), 0 4px 30px rgba(0, 0, 0, 0.9);
+            animation: legendaryFloat 2s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
+            color: #ffa500;
+            left: 50%;
+            top: 40%;
+            transform: translate(-50%, -50%);
+        }
+        @keyframes legendaryFloat {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -60%) scale(1.3);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -80%) scale(1);
+            }
+        }
+
+        .mythic-float {
+            position: fixed;
+            font-weight: 900;
+            font-size: 32px;
+            pointer-events: none;
+            z-index: 1001;
+            text-shadow: 0 0 80px rgba(255, 0, 0, 0.9), 0 0 160px rgba(255, 0, 0, 0.5), 0 4px 30px rgba(0, 0, 0, 0.9);
+            animation: mythicFloat 2.5s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
+            color: #ff0000;
+            left: 50%;
+            top: 35%;
+            transform: translate(-50%, -50%);
+        }
+        @keyframes mythicFloat {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -60%) scale(1.5);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -80%) scale(1);
+            }
+        }
+
+        .biome-unlock-float {
+            position: fixed;
+            font-weight: 900;
+            font-size: 18px;
+            pointer-events: none;
+            z-index: 1003;
+            animation: biomeUnlockFloat 2.5s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
+            background: rgba(20, 15, 12, 0.8);
+            padding: 12px 24px;
+            border-radius: 16px;
+            border: 2px solid #6bff8a;
+            backdrop-filter: blur(8px);
+            left: 50%;
+            top: 30%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        @keyframes biomeUnlockFloat {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -60%) scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -80%) scale(1);
+            }
+        }
+
+        .collection-reward-float {
+            position: fixed;
+            font-weight: 900;
+            font-size: 18px;
+            pointer-events: none;
+            z-index: 1002;
+            animation: collectionRewardFloat 2.5s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
+            background: rgba(20, 15, 12, 0.8);
             padding: 12px 24px;
             border-radius: 16px;
             border: 2px solid #ffd700;
             backdrop-filter: blur(8px);
             left: 50%;
-            top: 50%;
+            top: 35%;
             transform: translate(-50%, -50%);
+            text-align: center;
         }
-        @keyframes achFloat {
-            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); }
-            50% { opacity: 1; transform: translate(-50%, -60%) scale(1.1); }
-            100% { opacity: 0; transform: translate(-50%, -80%) scale(1); }
+        @keyframes collectionRewardFloat {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -60%) scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -80%) scale(1);
+            }
+        }
+
+        .reset-confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s ease;
+        }
+        .reset-confirm-overlay.active {
+            display: flex;
+        }
+        .reset-confirm-box {
+            background: linear-gradient(160deg, #1a1410, #0d0a08);
+            border-radius: 32px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            border: 2px solid #ff4444;
+            box-shadow: 0 0 80px rgba(255, 0, 0, 0.2);
+            text-align: center;
+        }
+        .reset-confirm-box .icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 16px;
+        }
+        .reset-confirm-box .title {
+            color: #ff4444;
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+        .reset-confirm-box .desc {
+            color: #8a7a6a;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .reset-confirm-box .buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .reset-confirm-box .buttons .btn-confirm {
+            padding: 12px 32px;
+            border-radius: 14px;
+            border: 2px solid #ff4444;
+            background: rgba(60, 20, 20, 0.4);
+            color: #ff4444;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.08s;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .reset-confirm-box .buttons .btn-confirm:hover {
+            background: rgba(60, 20, 20, 0.8);
+            transform: scale(1.02);
+        }
+        .reset-confirm-box .buttons .btn-confirm:active {
+            transform: scale(0.95);
+        }
+        .reset-confirm-box .buttons .btn-cancel {
+            padding: 12px 32px;
+            border-radius: 14px;
+            border: 2px solid #2d1f18;
+            background: rgba(20, 15, 12, 0.6);
+            color: #c0b0a0;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.08s;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .reset-confirm-box .buttons .btn-cancel:hover {
+            background: rgba(40, 30, 24, 0.7);
+            border-color: #4a3a30;
+            color: #f0e0d0;
+        }
+        .reset-confirm-box .buttons .btn-cancel:active {
+            transform: scale(0.95);
         }
 
         @media (max-width: 900px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .top-bar { grid-template-columns: repeat(2, 1fr); }
-            .mine-block { width: 140px; height: 140px; }
-            .mine-block .emoji { font-size: 60px; }
-            .shop-grid { grid-template-columns: 1fr; }
-            .btn-row { grid-template-columns: 1fr; }
-            .menu-title { font-size: 40px; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .ore-info-grid { grid-template-columns: 1fr; }
-            .settings-item { flex-direction: column; gap: 8px; align-items: stretch; }
-            .settings-item .scontrol { justify-content: center; }
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .top-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .mine-block {
+                width: 140px;
+                height: 140px;
+            }
+            .mine-block .emoji {
+                font-size: 60px;
+            }
+            .shop-grid {
+                grid-template-columns: 1fr;
+            }
+            .btn-row {
+                grid-template-columns: 1fr;
+            }
+            .menu-title {
+                font-size: 40px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .ore-info-grid {
+                grid-template-columns: 1fr;
+            }
+            .settings-item {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+            .settings-item .scontrol {
+                justify-content: center;
+            }
+            .biome-select-grid {
+                grid-template-columns: 1fr;
+            }
+            .collection-biome .biome-blocks {
+                grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            }
         }
         @media (max-width: 500px) {
-            .game { padding: 12px; }
-            .top-bar { grid-template-columns: 1fr 1fr; }
-            .stat-card .value { font-size: 16px; }
-            .inv-slots { grid-template-columns: repeat(4, 1fr); }
-            .mine-block { width: 120px; height: 120px; }
-            .mine-block .emoji { font-size: 48px; }
-            .menu-title { font-size: 28px; }
+            .game {
+                padding: 12px;
+            }
+            .top-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+            .stat-card .value {
+                font-size: 16px;
+            }
+            .inv-slots {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .mine-block {
+                width: 120px;
+                height: 120px;
+            }
+            .mine-block .emoji {
+                font-size: 48px;
+            }
+            .menu-title {
+                font-size: 28px;
+            }
+            .modal {
+                padding: 16px;
+            }
+            .collection-biome .biome-blocks {
+                grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+            }
+            .reset-confirm-box {
+                padding: 24px;
+                margin: 16px;
+            }
+            .reset-confirm-box .buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-<div class="game" id="gameContainer">
-    <!-- MENU -->
-    <div class="menu-screen" id="menuScreen">
-        <div class="menu-title">⛏️ ШАХТА</div>
-        <div class="menu-subtitle">ROCKET DIG</div>
-        <div class="menu-buttons">
-            <button class="menu-btn gold" id="playBtn">▶ ИГРАТЬ</button>
-            <button class="menu-btn cyan" id="statsMenuBtn">📊 СТАТИСТИКА</button>
-            <button class="menu-btn orange" id="achievementsBtn">🏆 ДОСТИЖЕНИЯ</button>
-            <button class="menu-btn purple" id="settingsBtn">⚙️ НАСТРОЙКИ</button>
-        </div>
-        <div class="menu-version">v2.4 · ДОСТИЖЕНИЯ</div>
-    </div>
-
-    <!-- GAME -->
-    <div class="game-screen" id="gameScreen">
-        <div class="top-bar">
-            <div class="stat-card"><div class="label">⛏️ ГЛУБИНА</div><div class="value gold" id="depthDisplay">0</div></div>
-            <div class="stat-card"><div class="label">⚡ СИЛА</div><div class="value green" id="powerDisplay">1.0</div></div>
-            <div class="stat-card"><div class="label">📦 ИНВЕНТАРЬ</div><div class="value orange" id="invDisplay">0/3</div></div>
-            <div class="stat-card"><div class="label">💰 МОНЕТ</div><div class="value gold" id="coinDisplay">0</div></div>
+    <div class="game" id="gameContainer">
+        <!-- МЕНЮ -->
+        <div class="menu-screen" id="menuScreen">
+            <div class="menu-title">⛏️ ШАХТА</div>
+            <div class="menu-buttons">
+                <button class="menu-btn gold" id="playBtn">▶ ИГРАТЬ</button>
+                <button class="menu-btn cyan" id="statsMenuBtn">📊 СТАТИСТИКА</button>
+                <button class="menu-btn red" id="questsBtn">📋 КВЕСТЫ</button>
+                <button class="menu-btn teal" id="collectionBtn">📚 КОЛЛЕКЦИЯ</button>
+                <button class="menu-btn green" id="biomeSelectBtn">🌍 БИОМЫ</button>
+                <button class="menu-btn purple" id="settingsBtn">⚙️ НАСТРОЙКИ</button>
+            </div>
         </div>
 
-        <div class="main-grid">
-            <div class="dig-panel">
-                <div class="depth-bar"><div class="depth-fill" id="depthFill"></div></div>
-                <div class="mine-block" id="digArea">
-                    <div class="emoji" id="blockEmoji">⛏️</div>
-                    <div class="bname" id="blockName">ШАХТА</div>
-                    <div class="hp-bar"><div class="hp-fill" id="hpFill"></div></div>
-                </div>
-                <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
-                <div class="dig-stats">
-                    <div class="tag">⚡ <span id="speedStat">1.0x</span></div>
-                    <div class="tag">🍀 <span id="luckStat">1.0x</span></div>
-                    <div class="tag">🤖 <span id="autoStat">ВЫКЛ</span></div>
-                    <div class="tag">💪 <span id="dmgStat">1</span></div>
-                </div>
-                <div class="btn-row">
-                    <button class="btn-main gold" id="shopToggle">🏪 МАГАЗИН</button>
-                    <button class="btn-main cyan" id="backToMenuBtn">🏠 МЕНЮ</button>
-                </div>
+        <!-- ИГРА -->
+        <div class="game-screen" id="gameScreen">
+            <div class="top-bar">
+                <div class="stat-card"><div class="label">⛏️ ГЛУБИНА</div><div class="value gold" id="depthDisplay">0</div></div>
+                <div class="stat-card"><div class="label">⚡ СИЛА</div><div class="value green" id="powerDisplay">1.0</div></div>
+                <div class="stat-card"><div class="label">📦 ИНВЕНТАРЬ</div><div class="value orange" id="invDisplay">0/3</div></div>
+                <div class="stat-card"><div class="label">💰 МОНЕТ</div><div class="value gold" id="coinDisplay">0</div></div>
             </div>
 
-            <div class="panel">
-                <div class="panel-title">📦 ИНВЕНТАРЬ <span class="badge" id="invBadge">0/3</span></div>
-                <div class="inv-slots" id="invSlots"></div>
-                <div class="inv-actions">
-                    <button class="btn-sm gold" id="sellInvBtn">💰 ПРОДАТЬ ВСЁ</button>
-                    <button class="btn-sm danger" id="clearInvBtn">🗑️ ОЧИСТИТЬ</button>
+            <div class="main-grid">
+                <div class="dig-panel">
+                    <div class="biome-indicator">🌍 БИОМ: <span id="biomeDisplay">🌿 Лес</span></div>
+                    <div class="depth-bar"><div class="depth-fill" id="depthFill"></div></div>
+                    <div class="mine-block" id="digArea">
+                        <div class="rarity-glow" id="rarityGlow"></div>
+                        <div class="emoji" id="blockEmoji">⛏️</div>
+                        <div class="bname" id="blockName">ШАХТА</div>
+                        <div class="hp-bar"><div class="hp-fill" id="hpFill"></div></div>
+                    </div>
+                    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+                    <div class="btn-row">
+                        <button class="btn-main gold" id="shopToggle">🏪 МАГАЗИН</button>
+                        <button class="btn-main cyan" id="backToMenuBtn">🏠 МЕНЮ</button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">📦 ИНВЕНТАРЬ <span class="badge" id="invBadge">0/3</span></div>
+                    <div class="inv-slots" id="invSlots"></div>
+                    <div class="inv-actions">
+                        <button class="btn-sm gold" id="sellInvBtn">💰 ПРОДАТЬ ВСЁ</button>
+                        <button class="btn-sm danger" id="clearInvBtn">🗑️ ОЧИСТИТЬ</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- SHOP -->
-<div class="modal-overlay" id="shopOverlay">
-    <div class="modal">
-        <div class="header">
-            <h2>🏪 МАГАЗИН УЛУЧШЕНИЙ</h2>
-            <button class="close-btn" id="shopClose">✕</button>
+    <!-- МАГАЗИН -->
+    <div class="modal-overlay" id="shopOverlay">
+        <div class="modal">
+            <div class="header">
+                <h2>🏪 МАГАЗИН УЛУЧШЕНИЙ</h2>
+                <button class="close-btn" id="shopClose">✕</button>
+            </div>
+            <div class="shop-grid" id="shopGrid"></div>
         </div>
-        <div class="shop-grid" id="shopGrid"></div>
     </div>
-</div>
 
-<!-- STATS -->
-<div class="modal-overlay" id="statsOverlay">
-    <div class="modal">
-        <div class="header">
-            <h2>📊 СТАТИСТИКА</h2>
-            <button class="close-btn" id="statsClose">✕</button>
+    <!-- СТАТИСТИКА -->
+    <div class="modal-overlay" id="statsOverlay">
+        <div class="modal">
+            <div class="header">
+                <h2>📊 СТАТИСТИКА</h2>
+                <button class="close-btn" id="statsClose">✕</button>
+            </div>
+            <div class="stats-grid" id="statsGrid"></div>
         </div>
-        <div class="stats-grid" id="statsGrid"></div>
     </div>
-</div>
 
-<!-- ACHIEVEMENTS -->
-<div class="modal-overlay" id="achievementsOverlay">
-    <div class="modal">
-        <div class="header">
-            <h2>🏆 ДОСТИЖЕНИЯ</h2>
-            <span class="ach-count" id="achCount">0 / 0</span>
-            <button class="close-btn" id="achievementsClose">✕</button>
-        </div>
-        <div class="ach-grid" id="achGrid"></div>
-    </div>
-</div>
-
-<!-- SETTINGS -->
-<div class="modal-overlay" id="settingsOverlay">
-    <div class="modal">
-        <div class="header">
-            <h2>⚙️ НАСТРОЙКИ</h2>
-            <button class="close-btn" id="settingsClose">✕</button>
-        </div>
-        <div class="settings-grid" id="settingsGrid">
-            <div class="settings-item">
-                <div>
-                    <div class="sname">🔊 Звук</div>
-                    <div class="sdesc">Включить/выключить звуковые эффекты</div>
-                </div>
-                <div class="scontrol">
-                    <input type="checkbox" id="soundToggle" checked>
-                    <label for="soundToggle">Вкл</label>
-                </div>
+    <!-- КВЕСТЫ (заглушка) -->
+    <div class="modal-overlay" id="questsOverlay">
+        <div class="modal">
+            <div class="header">
+                <h2>📋 КВЕСТЫ</h2>
+                <button class="close-btn" id="questsClose">✕</button>
             </div>
-            <div class="settings-item">
-                <div>
-                    <div class="sname">📊 FPS</div>
-                    <div class="sdesc">Ограничение кадров в секунду</div>
-                </div>
-                <div class="scontrol">
-                    <input type="range" id="fpsSlider" min="30" max="240" value="144" step="1">
-                    <span class="val" id="fpsVal">144</span>
-                </div>
-            </div>
-            <div class="settings-item">
-                <div>
-                    <div class="sname">💨 Скорость всплывающих сообщений</div>
-                    <div class="sdesc">Медленнее / Быстрее / Выключить</div>
-                </div>
-                <div class="scontrol">
-                    <select id="floatSpeedSelect">
-                        <option value="0.5">Очень медленно</option>
-                        <option value="0.7">Медленно</option>
-                        <option value="1.0" selected>Нормально</option>
-                        <option value="1.3">Быстро</option>
-                        <option value="1.8">Очень быстро</option>
-                        <option value="0">Выключить</option>
-                    </select>
-                </div>
-            </div>
-            <div class="settings-item">
-                <div>
-                    <div class="sname">📏 Высота всплывания</div>
-                    <div class="sdesc">Насколько высоко поднимаются сообщения</div>
-                </div>
-                <div class="scontrol">
-                    <input type="range" id="floatHeightSlider" min="0.5" max="2.0" value="1.0" step="0.1">
-                    <span class="val" id="floatHeightVal">1.0x</span>
-                </div>
-            </div>
-            <div class="settings-item">
-                <div>
-                    <div class="sname">✨ Сглаживание</div>
-                    <div class="sdesc">Включить сглаживание интерфейса</div>
-                </div>
-                <div class="scontrol">
-                    <input type="checkbox" id="antialiasingToggle" checked>
-                    <label for="antialiasingToggle">Вкл</label>
-                </div>
-            </div>
-            <div class="settings-item">
-                <div>
-                    <div class="sname">💾 Авто-сохранение</div>
-                    <div class="sdesc">Автоматически сохранять прогресс</div>
-                </div>
-                <div class="scontrol">
-                    <input type="checkbox" id="autosaveToggle" checked>
-                    <label for="autosaveToggle">Вкл</label>
-                </div>
-            </div>
-            <div class="settings-item">
-                <div>
-                    <div class="sname">🎨 Тема</div>
-                    <div class="sdesc">Цветовая схема интерфейса</div>
-                </div>
-                <div class="scontrol">
-                    <select id="themeSelect">
-                        <option value="dark">Тёмная</option>
-                        <option value="light">Светлая</option>
-                        <option value="amber">Янтарная</option>
-                        <option value="cyber">Кибер</option>
-                    </select>
-                </div>
-            </div>
-            <div class="settings-item" style="flex-direction:column;align-items:stretch;">
-                <div>
-                    <div class="sname">📋 ИНФОРМАЦИЯ О РУДАХ</div>
-                    <div class="sdesc">Глубина появления, вес и цена за кг каждой руды</div>
-                </div>
-                <div class="ore-info-grid" id="oreInfoGrid"></div>
+            <div class="quest-placeholder">
+                <span class="big-icon">🔜</span>
+                <div class="title">СКОРО ПОЯВЯТСЯ</div>
+                <div class="desc">Квесты будут добавлены в следующих обновлениях.<br>Следите за новостями!</div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- INFO MODAL -->
-<div class="modal-overlay" id="infoOverlay">
-    <div class="modal" style="max-width:400px;">
-        <div class="header">
-            <h2>📦 ИНФОРМАЦИЯ</h2>
-            <button class="close-btn" id="infoClose">✕</button>
-        </div>
-        <div class="info-modal-content" id="infoContent"></div>
-    </div>
-</div>
-
-<script>
-(function() {
-    'use strict';
-
-    // ===== БЛОКИ С НОВЫМИ ЦЕНАМИ =====
-    const BLOCKS = [
-        { id: 'earth', emoji: '🟫', name: 'Земля', hp: 3, weightMin: 0.8, weightMax: 2.0, pricePerKg: 1.2, tier: 0, rarity: 1, depthMin: 0, depthMax: 50 },
-        { id: 'stone', emoji: '🪨', name: 'Камень', hp: 5, weightMin: 1.5, weightMax: 4.0, pricePerKg: 1.8, tier: 1, rarity: 2, depthMin: 0, depthMax: 80 },
-        { id: 'coal', emoji: '⚫', name: 'Уголь', hp: 8, weightMin: 1.2, weightMax: 3.2, pricePerKg: 2.8, tier: 2, rarity: 3, depthMin: 5, depthMax: 120 },
-        { id: 'iron', emoji: '🟤', name: 'Железо', hp: 12, weightMin: 5.0, weightMax: 10.0, pricePerKg: 4.5, tier: 3, rarity: 4, depthMin: 10, depthMax: 200 },
-        { id: 'gold', emoji: '🟡', name: 'Золото', hp: 18, weightMin: 10.0, weightMax: 20.0, pricePerKg: 22.0, tier: 4, rarity: 5, depthMin: 20, depthMax: 300 },
-        { id: 'platinum', emoji: '⚪', name: 'Платина', hp: 25, weightMin: 12.0, weightMax: 24.0, pricePerKg: 38.0, tier: 5, rarity: 6, depthMin: 40, depthMax: 400 },
-        { id: 'amethyst', emoji: '🔮', name: 'Аметист', hp: 30, weightMin: 2.0, weightMax: 4.5, pricePerKg: 14.0, tier: 6, rarity: 7, depthMin: 60, depthMax: 500 },
-        { id: 'diamond', emoji: '💎', name: 'Алмаз', hp: 40, weightMin: 2.0, weightMax: 5.0, pricePerKg: 68.0, tier: 7, rarity: 8, depthMin: 80, depthMax: 800 },
-        { id: 'emerald', emoji: '🟩', name: 'Изумруд', hp: 50, weightMin: 2.0, weightMax: 4.5, pricePerKg: 52.0, tier: 8, rarity: 9, depthMin: 100, depthMax: 600 },
-        { id: 'ruby', emoji: '🔴', name: 'Рубин', hp: 60, weightMin: 2.5, weightMax: 5.5, pricePerKg: 58.0, tier: 9, rarity: 10, depthMin: 120, depthMax: 700 },
-        { id: 'mithril', emoji: '🟣', name: 'Мифрил', hp: 75, weightMin: 6.0, weightMax: 13.0, pricePerKg: 42.0, tier: 10, rarity: 11, depthMin: 150, depthMax: 900 },
-        { id: 'obsidian', emoji: '⬛', name: 'Обсидиан', hp: 100, weightMin: 2.5, weightMax: 4.5, pricePerKg: 28.0, tier: 11, rarity: 12, depthMin: 200, depthMax: 1000 },
-        { id: 'netherite', emoji: '🔶', name: 'Незерит', hp: 130, weightMin: 8.0, weightMax: 18.0, pricePerKg: 120.0, tier: 12, rarity: 13, depthMin: 300, depthMax: 1200 },
-        { id: 'endstone', emoji: '🟨', name: 'Энд-камень', hp: 160, weightMin: 3.0, weightMax: 6.0, pricePerKg: 38.0, tier: 13, rarity: 14, depthMin: 500, depthMax: 1500 },
-        { id: 'void', emoji: '🌌', name: 'Воид', hp: 200, weightMin: 0.05, weightMax: 0.4, pricePerKg: 450.0, tier: 14, rarity: 15, depthMin: 800, depthMax: 2000 },
-    ];
-
-    // ===== ДОСТИЖЕНИЯ =====
-    const ACHIEVEMENTS = [
-        // Обычные достижения
-        { id: 'first_dig', name: 'Первый удар', desc: 'Совершить первую копку', icon: '⛏️', secret: false, check: (s) => s.totalBroken >= 1 },
-        { id: 'dig_10', name: 'Начинающий шахтёр', desc: 'Разрушить 10 блоков', icon: '🪨', secret: false, check: (s) => s.totalBroken >= 10 },
-        { id: 'dig_50', name: 'Опытный шахтёр', desc: 'Разрушить 50 блоков', icon: '⛏️', secret: false, check: (s) => s.totalBroken >= 50 },
-        { id: 'dig_100', name: 'Мастер-шахтёр', desc: 'Разрушить 100 блоков', icon: '💎', secret: false, check: (s) => s.totalBroken >= 100 },
-        { id: 'dig_500', name: 'Легенда шахты', desc: 'Разрушить 500 блоков', icon: '👑', secret: false, check: (s) => s.totalBroken >= 500 },
-        { id: 'depth_10', name: 'Глубоко', desc: 'Достичь глубины 10 метров', icon: '⬇️', secret: false, check: (s) => s.depth >= 10 },
-        { id: 'depth_50', name: 'Очень глубоко', desc: 'Достичь глубины 50 метров', icon: '🕳️', secret: false, check: (s) => s.depth >= 50 },
-        { id: 'depth_200', name: 'Бездна', desc: 'Достичь глубины 200 метров', icon: '🌑', secret: false, check: (s) => s.depth >= 200 },
-        { id: 'coins_100', name: 'Богач', desc: 'Накопить 100 монет', icon: '💰', secret: false, check: (s) => s.coins >= 100 },
-        { id: 'coins_1000', name: 'Магнат', desc: 'Накопить 1000 монет', icon: '🤑', secret: false, check: (s) => s.coins >= 1000 },
-        { id: 'coins_10000', name: 'Олигарх', desc: 'Накопить 10000 монет', icon: '💸', secret: false, check: (s) => s.coins >= 10000 },
-        { id: 'inventory_full', name: 'Забитый инвентарь', desc: 'Заполнить весь инвентарь', icon: '📦', secret: false, check: (s) => s.inventory.length >= s.maxSlots && s.maxSlots > 0 },
-        { id: 'slot_5', name: 'Расширение', desc: 'Купить 5 слотов инвентаря', icon: '📐', secret: false, check: (s) => s.slotLevel >= 5 },
-        { id: 'slot_10', name: 'Гигантский инвентарь', desc: 'Купить 10 слотов инвентаря', icon: '🏗️', secret: false, check: (s) => s.slotLevel >= 10 },
-        { id: 'speed_5', name: 'Быстрее ветра', desc: 'Улучшить скорость до 5 уровня', icon: '💨', secret: false, check: (s) => s.speedLevel >= 5 },
-        { id: 'strength_5', name: 'Сила титана', desc: 'Улучшить силу до 5 уровня', icon: '💪', secret: false, check: (s) => s.strengthLevel >= 5 },
-        { id: 'luck_5', name: 'Удача улыбается', desc: 'Улучшить удачу до 5 уровня', icon: '🍀', secret: false, check: (s) => s.luckLevel >= 5 },
-        { id: 'auto_5', name: 'Автоматизация', desc: 'Улучшить авто-копку до 5 уровня', icon: '🤖', secret: false, check: (s) => s.autoLevel >= 5 },
-        // Сложные достижения
-        { id: 'diamond_find', name: 'Алмазная жила', desc: 'Найти первый алмаз', icon: '💎', secret: false, check: (s) => (s.blockStats.diamond || 0) >= 1 },
-        { id: 'gold_find', name: 'Золотая лихорадка', desc: 'Найти 10 золота', icon: '🟡', secret: false, check: (s) => (s.blockStats.gold || 0) >= 10 },
-        { id: 'netherite_find', name: 'Незеритовый король', desc: 'Найти первый незерит', icon: '🔶', secret: false, check: (s) => (s.blockStats.netherite || 0) >= 1 },
-        { id: 'all_ores', name: 'Коллекционер', desc: 'Найти все виды руд', icon: '📚', secret: false, check: (s) => {
-            const types = BLOCKS.filter(b => (s.blockStats[b.id] || 0) > 0);
-            return types.length >= BLOCKS.length;
-        }},
-        { id: 'weight_100', name: 'Тяжеловес', desc: 'Добыть 100 кг руды', icon: '⚖️', secret: false, check: (s) => s.totalWeight >= 100 },
-        { id: 'weight_1000', name: 'Гора', desc: 'Добыть 1000 кг руды', icon: '🏔️', secret: false, check: (s) => s.totalWeight >= 1000 },
-        // Секретные достижения
-        { id: 'secret_empty', name: '???', desc: 'Очистить инвентарь 5 раз', icon: '❓', secret: true, check: (s) => (s._secret_empty || 0) >= 5 },
-        { id: 'secret_sell', name: '???', desc: 'Продать инвентарь 10 раз', icon: '❓', secret: true, check: (s) => (s._secret_sell || 0) >= 10 },
-        { id: 'secret_auto', name: '???', desc: 'Иметь авто-копку 3 уровня', icon: '❓', secret: true, check: (s) => s.autoLevel >= 3 },
-        { id: 'secret_depth', name: '???', desc: 'Достичь глубины 500 метров', icon: '❓', secret: true, check: (s) => s.depth >= 500 },
-        { id: 'secret_void', name: '???', desc: 'Найти Воид', icon: '❓', secret: true, check: (s) => (s.blockStats.void || 0) >= 1 },
-        { id: 'secret_all_upgrades', name: '???', desc: 'Все улучшения на 3 уровне', icon: '❓', secret: true, check: (s) => s.speedLevel >= 3 && s.luckLevel >= 3 && s.strengthLevel >= 3 && s.autoLevel >= 3 && s.multLevel >= 3 },
-    ];
-
-    // ===== STATE =====
-    const S = {
-        inventory: [],
-        maxSlots: 3,
-        coins: 0,
-        depth: 0,
-        totalMined: 0,
-        totalBroken: 0,
-        speedLevel: 0,
-        luckLevel: 0,
-        strengthLevel: 0,
-        autoLevel: 0,
-        multLevel: 0,
-        slotLevel: 0,
-        speedPrice: 50,
-        luckPrice: 80,
-        strengthPrice: 100,
-        autoPrice: 200,
-        multPrice: 150,
-        slotPrice: 100,
-        currentBlock: null,
-        currentBlockHP: 0,
-        maxBlockHP: 0,
-        isDigging: false,
-        progress: 0,
-        autoInterval: null,
-        power: 1,
-        luckMult: 1,
-        speedMult: 1,
-        totalMult: 1,
-        damage: 1,
-        blockStats: {},
-        totalWeight: 0,
-        totalWeightMined: 0,
-        floatSpeed: 1.0,
-        floatHeight: 1.0,
-        floatEnabled: true,
-        achievements: {},
-        _secret_empty: 0,
-        _secret_sell: 0,
-        achUnlocked: new Set(),
-    };
-
-    // ===== DOM =====
-    const $ = id => document.getElementById(id);
-    const menuScreen = $('menuScreen');
-    const gameScreen = $('gameScreen');
-    const playBtn = $('playBtn');
-    const backToMenuBtn = $('backToMenuBtn');
-    const statsMenuBtn = $('statsMenuBtn');
-    const achievementsBtn = $('achievementsBtn');
-    const settingsBtn = $('settingsBtn');
-
-    const depthDisplay = $('depthDisplay');
-    const powerDisplay = $('powerDisplay');
-    const invDisplay = $('invDisplay');
-    const coinDisplay = $('coinDisplay');
-    const depthFill = $('depthFill');
-    const blockEmoji = $('blockEmoji');
-    const blockName = $('blockName');
-    const hpFill = $('hpFill');
-    const progressFill = $('progressFill');
-    const speedStat = $('speedStat');
-    const luckStat = $('luckStat');
-    const autoStat = $('autoStat');
-    const dmgStat = $('dmgStat');
-    const invBadge = $('invBadge');
-    const invSlots = $('invSlots');
-    const digArea = $('digArea');
-    const shopToggle = $('shopToggle');
-    const shopOverlay = $('shopOverlay');
-    const shopClose = $('shopClose');
-    const shopGrid = $('shopGrid');
-    const statsOverlay = $('statsOverlay');
-    const statsClose = $('statsClose');
-    const statsGrid = $('statsGrid');
-    const achievementsOverlay = $('achievementsOverlay');
-    const achievementsClose = $('achievementsClose');
-    const achGrid = $('achGrid');
-    const achCount = $('achCount');
-    const settingsOverlay = $('settingsOverlay');
-    const settingsClose = $('settingsClose');
-    const infoOverlay = $('infoOverlay');
-    const infoClose = $('infoClose');
-    const infoContent = $('infoContent');
-
-    // ===== HELPERS =====
-    function invCount() { return S.inventory.length; }
-
-    function getBlockById(id) { return BLOCKS.find(b => b.id === id); }
-
-    function getRandomWeight(block) {
-        return block.weightMin + Math.random() * (block.weightMax - block.weightMin);
-    }
-
-    function getRandomBlock() {
-        const depth = S.depth;
-        const available = BLOCKS.filter(b => depth >= b.depthMin && depth <= b.depthMax);
-        if (available.length === 0) return BLOCKS[0];
-
-        const weights = available.map(b => {
-            let base = Math.max(5, 100 - b.rarity * 4);
-            const depthBonus = Math.min(20, Math.floor(depth / 50));
-            if (b.rarity > 5) base += depthBonus;
-            return base;
-        });
-
-        const total = weights.reduce((a,b) => a+b, 0);
-        let rnd = Math.random() * total;
-        for (let i = 0; i < available.length; i++) {
-            rnd -= weights[i];
-            if (rnd <= 0) return available[i];
-        }
-        return available[available.length - 1];
-    }
-
-    function calculatePrice(weight, pricePerKg) {
-        return Math.floor(weight * pricePerKg);
-    }
-
-    // ===== ACHIEVEMENTS =====
-    function checkAchievements() {
-        let unlocked = 0;
-        for (const ach of ACHIEVEMENTS) {
-            if (!S.achUnlocked.has(ach.id) && ach.check(S)) {
-                S.achUnlocked.add(ach.id);
-                unlocked++;
-                // Показываем уведомление
-                showAchievementUnlock(ach);
-            }
-        }
-        if (unlocked > 0) {
-            renderAchievements();
-        }
-    }
-
-    function showAchievementUnlock(ach) {
-        const el = document.createElement('div');
-        el.className = 'ach-unlock-float';
-        el.innerHTML = `
-            <div style="text-align:center;">
-                <div style="font-size:40px;">${ach.icon}</div>
-                <div style="color:#ffd700;font-weight:900;font-size:18px;">ДОСТИЖЕНИЕ РАЗБЛОКИРОВАНО!</div>
-                <div style="color:#f0e0d0;font-size:16px;">${ach.secret ? '🔮 СЕКРЕТНОЕ: ' : ''}${ach.name}</div>
-                <div style="color:#7a6a5a;font-size:12px;">${ach.desc}</div>
+    <!-- КОЛЛЕКЦИЯ -->
+    <div class="modal-overlay" id="collectionOverlay">
+        <div class="modal">
+            <div class="header">
+                <h2>📚 КОЛЛЕКЦИЯ</h2>
+                <span class="count-badge" id="collectionCount">0 / 50</span>
+                <button class="close-btn" id="collectionClose">✕</button>
             </div>
-        `;
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 2500);
-    }
+            <div style="margin-bottom:12px;color:#7a6a5a;font-size:11px;letter-spacing:1px;">
+                🏆 За полностью собранную коллекцию биома — награда монетами!
+            </div>
+            <div class="collection-grid" id="collectionGrid"></div>
+        </div>
+    </div>
 
-    function renderAchievements() {
-        let total = ACHIEVEMENTS.length;
-        let unlocked = S.achUnlocked.size;
-        achCount.textContent = unlocked + ' / ' + total;
+    <!-- БИОМЫ (выбор) -->
+    <div class="modal-overlay" id="biomeSelectOverlay">
+        <div class="modal">
+            <div class="header">
+                <h2>🌍 ВЫБОР БИОМА</h2>
+                <span class="count-badge" id="biomeSelectStatus">Текущий: 🌿 Лес</span>
+                <button class="close-btn" id="biomeSelectClose">✕</button>
+            </div>
+            <div style="margin-bottom:12px;color:#7a6a5a;font-size:11px;letter-spacing:1px;">
+                🔓 Открывайте новые биомы, набирая глубину и монеты!
+            </div>
+            <div class="biome-select-grid" id="biomeSelectGrid"></div>
+        </div>
+    </div>
 
-        achGrid.innerHTML = '';
-        const sorted = [...ACHIEVEMENTS].sort((a, b) => {
-            if (a.secret && !b.secret) return 1;
-            if (!a.secret && b.secret) return -1;
-            return 0;
-        });
+    <!-- НАСТРОЙКИ -->
+    <div class="modal-overlay" id="settingsOverlay">
+        <div class="modal">
+            <div class="header">
+                <h2>⚙️ НАСТРОЙКИ</h2>
+                <button class="close-btn" id="settingsClose">✕</button>
+            </div>
+            <div class="settings-grid" id="settingsGrid">
+                <div class="settings-item">
+                    <div><div class="sname">🔊 Звук</div><div class="sdesc">Включить/выключить звуковые эффекты</div></div>
+                    <div class="scontrol">
+                        <input type="checkbox" id="soundToggle" checked>
+                        <label for="soundToggle">Вкл</label>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div><div class="sname">📊 FPS</div><div class="sdesc">Ограничение кадров в секунду</div></div>
+                    <div class="scontrol">
+                        <input type="range" id="fpsSlider" min="30" max="240" value="144" step="1">
+                        <span class="val" id="fpsVal">144</span>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div><div class="sname">💨 Скорость всплывающих сообщений</div><div class="sdesc">Медленнее / Быстрее / Выключить</div></div>
+                    <div class="scontrol">
+                        <select id="floatSpeedSelect">
+                            <option value="0.5" selected>Очень медленно</option>
+                            <option value="0.7">Медленно</option>
+                            <option value="1.0">Нормально</option>
+                            <option value="1.3">Быстро</option>
+                            <option value="1.8">Очень быстро</option>
+                            <option value="0">Выключить</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div><div class="sname">📏 Высота всплывания</div><div class="sdesc">Насколько высоко поднимаются сообщения</div></div>
+                    <div class="scontrol">
+                        <input type="range" id="floatHeightSlider" min="0.5" max="2.0" value="1.0" step="0.1">
+                        <span class="val" id="floatHeightVal">1.0x</span>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div><div class="sname">✨ Сглаживание</div><div class="sdesc">Включить сглаживание интерфейса</div></div>
+                    <div class="scontrol">
+                        <input type="checkbox" id="antialiasingToggle" checked>
+                        <label for="antialiasingToggle">Вкл</label>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div><div class="sname">💾 Авто-сохранение</div><div class="sdesc">Автоматически сохранять прогресс</div></div>
+                    <div class="scontrol">
+                        <input type="checkbox" id="autosaveToggle" checked>
+                        <label for="autosaveToggle">Вкл</label>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div><div class="sname">🎨 Тема</div><div class="sdesc">Цветовая схема интерфейса</div></div>
+                    <div class="scontrol">
+                        <select id="themeSelect">
+                            <option value="dark">Тёмная</option>
+                            <option value="light">Светлая</option>
+                            <option value="amber">Янтарная</option>
+                            <option value="cyber">Кибер</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-item" style="flex-direction:column;align-items:stretch;">
+                    <div><div class="sname">📋 ИНФОРМАЦИЯ О РУДАХ</div><div class="sdesc">Биом, глубина, вес и цена за кг каждой руды</div></div>
+                    <div class="ore-info-grid" id="oreInfoGrid"></div>
+                </div>
+                <div class="settings-item" style="border-color:#5a2a2a;">
+                    <div><div class="sname" style="color:#ff4444;">⚠️ ОПАСНО</div><div class="sdesc">Сбросить весь прогресс игры</div></div>
+                    <div class="scontrol">
+                        <button class="btn-reset" id="resetGameBtn">🔄 СБРОСИТЬ ВСЁ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        for (const ach of sorted) {
-            const div = document.createElement('div');
-            const isUnlocked = S.achUnlocked.has(ach.id);
-            div.className = 'ach-item';
-            if (isUnlocked) div.classList.add('unlocked');
-            else div.classList.add('locked');
-            if (ach.secret) div.classList.add('secret');
+    <!-- ПОДТВЕРЖДЕНИЕ СБРОСА -->
+    <div class="reset-confirm-overlay" id="resetConfirmOverlay">
+        <div class="reset-confirm-box">
+            <span class="icon">⚠️</span>
+            <div class="title">СБРОСИТЬ ПРОГРЕСС?</div>
+            <div class="desc">
+                ВСЕ данные будут удалены без возможности восстановления:<br>
+                • Инвентарь и монеты<br>
+                • Глубина и добытые блоки<br>
+                • Все улучшения и биомы<br>
+                • Достижения и коллекция
+            </div>
+            <div class="buttons">
+                <button class="btn-confirm" id="resetConfirmBtn">ДА, СБРОСИТЬ</button>
+                <button class="btn-cancel" id="resetCancelBtn">ОТМЕНА</button>
+            </div>
+        </div>
+    </div>
 
-            let displayName = ach.name;
-            let displayDesc = ach.desc;
-            let displayIcon = ach.icon;
-            
-            if (ach.secret && !isUnlocked) {
-                displayName = '???';
-                displayDesc = 'Секретное достижение';
-                displayIcon = '❓';
+    <!-- ИНФО О ПРЕДМЕТЕ -->
+    <div class="modal-overlay" id="infoOverlay">
+        <div class="modal" style="max-width:400px;">
+            <div class="header">
+                <h2>📦 ИНФОРМАЦИЯ</h2>
+                <button class="close-btn" id="infoClose">✕</button>
+            </div>
+            <div class="info-modal-content" id="infoContent"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // 1. РЕДКОСТЬ
+            // ============================================================
+            const RARITY = {
+                common: { name: 'Обычный', color: '#8a8a8a', multiplier: 1, emoji: '⬜', glowColor: 'transparent' },
+                uncommon: { name: 'Необычный', color: '#6bff6b', multiplier: 1.5, emoji: '🟩',
+                glowColor: 'rgba(107,255,107,0.3)' },
+                rare: { name: 'Редкий', color: '#6bcfff', multiplier: 2.5, emoji: '🟦', glowColor: 'rgba(107,207,255,0.4)' },
+                epic: { name: 'Эпический', color: '#9b59b6', multiplier: 4.5, emoji: '🟪',
+                glowColor: 'rgba(155,89,182,0.5)' },
+                legendary: { name: 'Легендарный', color: '#ffa500', multiplier: 8.0, emoji: '🟧',
+                    glowColor: 'rgba(255,165,0,0.6)' },
+                mythic: { name: 'Мифический', color: '#ff0000', multiplier: 15.0, emoji: '🔴',
+                glowColor: 'rgba(255,0,0,0.7)' },
+            };
+
+            const RARITY_ORDER = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
+            const RARITY_CHANCES = {
+                common: 55,
+                uncommon: 25,
+                rare: 12,
+                epic: 5,
+                legendary: 2.5,
+                mythic: 0.5,
+            };
+
+            function getRandomRarity() {
+                let roll = Math.random() * 100;
+                let cumulative = 0;
+                for (const rarity of RARITY_ORDER) {
+                    cumulative += RARITY_CHANCES[rarity];
+                    if (roll <= cumulative) return rarity;
+                }
+                return 'common';
             }
 
-            div.innerHTML = `
-                <div class="ach-icon">${displayIcon}</div>
-                <div class="ach-info">
-                    <div class="ach-name">${displayName}</div>
-                    <div class="ach-desc">${displayDesc}</div>
-                    ${ach.secret && isUnlocked ? '<div class="ach-progress">🔮 СЕКРЕТНОЕ</div>' : ''}
-                </div>
-                <div class="ach-status ${isUnlocked ? 'unlocked' : 'locked'}">${isUnlocked ? '✅' : '🔒'}</div>
-            `;
-            achGrid.appendChild(div);
-        }
-    }
+            // ============================================================
+            // 2. БИОМЫ И БЛОКИ
+            // ============================================================
+            const BIOMES = {
+                forest: { name: '🌿 Лес', icon: '🌿', depthMin: 0, depthMax: 25, color: '#2ecc71', unlockDepth: 0,
+                    unlockCoins: 0, reward: 0 },
+                desert: { name: '🏜️ Пустыня', icon: '🏜️', depthMin: 25, depthMax: 50, color: '#f1c40f', unlockDepth: 25,
+                    unlockCoins: 50, reward: 25 },
+                mountains: { name: '⛰️ Горы', icon: '⛰️', depthMin: 50, depthMax: 100, color: '#95a5a6',
+                    unlockDepth: 50, unlockCoins: 150, reward: 50 },
+                nether: { name: '🔥 Ад', icon: '🔥', depthMin: 100, depthMax: 200, color: '#e74c3c', unlockDepth: 100,
+                    unlockCoins: 400, reward: 100 },
+                ender: { name: '🌌 Эндер', icon: '🌌', depthMin: 200, depthMax: 1500, color: '#9b59b6', unlockDepth: 200,
+                    unlockCoins: 1000, reward: 200 },
+            };
 
-    // ===== FLOATING =====
-    function floatText(text, emoji, color) {
-        if (!S.floatEnabled) return;
-        const el = document.createElement('div');
-        el.className = 'float-msg';
-        el.textContent = (emoji || '') + ' ' + text;
-        el.style.left = (20 + Math.random() * 60) + '%';
-        el.style.top = (20 + Math.random() * 60) + '%';
-        el.style.color = color || '#ffd700';
-        el.style.setProperty('--float-duration', (0.9 / S.floatSpeed) + 's');
-        el.style.setProperty('--float-height-mult', S.floatHeight);
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), (950 / S.floatSpeed));
-    }
+            const BIOME_ORDER = ['forest', 'desert', 'mountains', 'nether', 'ender'];
 
-    function miningFloat(text, emoji, color) {
-        if (!S.floatEnabled) return;
-        const el = document.createElement('div');
-        el.className = 'mining-float';
-        el.textContent = (emoji || '') + ' ' + text;
-        el.style.left = (30 + Math.random() * 40) + '%';
-        el.style.top = (30 + Math.random() * 40) + '%';
-        el.style.color = color || '#f0e0d0';
-        el.style.setProperty('--float-duration', (0.7 / S.floatSpeed) + 's');
-        el.style.setProperty('--float-height-mult', S.floatHeight);
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), (750 / S.floatSpeed));
-    }
+            const BLOCKS = [
+                // === ЛЕС (10) ===
+                { id: 'wood', emoji: '🌳', name: 'Древесина', hp: 4, weightMin: 4.0, weightMax: 8.0, pricePerKg: 1.5,
+                    biome: 'forest', depthMin: 0, depthMax: 40, rarity: 1 },
+                { id: 'dirt', emoji: '🌱', name: 'Грязь', hp: 2, weightMin: 1.0, weightMax: 2.5, pricePerKg: 0.8,
+                    biome: 'forest', depthMin: 0, depthMax: 30, rarity: 1 },
+                { id: 'leaves', emoji: '🍂', name: 'Листва', hp: 2, weightMin: 0.3, weightMax: 0.8, pricePerKg: 1.0,
+                    biome: 'forest', depthMin: 0, depthMax: 20, rarity: 1 },
+                { id: 'grass', emoji: '🌾', name: 'Трава', hp: 2, weightMin: 0.2, weightMax: 0.5, pricePerKg: 1.2,
+                    biome: 'forest', depthMin: 0, depthMax: 15, rarity: 1 },
+                { id: 'log', emoji: '🪵', name: 'Бревно', hp: 6, weightMin: 6.0, weightMax: 12.0, pricePerKg: 2.0,
+                    biome: 'forest', depthMin: 0, depthMax: 50, rarity: 1 },
+                { id: 'clay', emoji: '🧱', name: 'Глина', hp: 5, weightMin: 2.0, weightMax: 4.0, pricePerKg: 3.5,
+                    biome: 'forest', depthMin: 5, depthMax: 60, rarity: 2 },
+                { id: 'roots', emoji: '🌿', name: 'Корни', hp: 4, weightMin: 1.5, weightMax: 3.5, pricePerKg: 2.5,
+                    biome: 'forest', depthMin: 10, depthMax: 70, rarity: 2 },
+                { id: 'mushroom', emoji: '🍄', name: 'Гриб', hp: 3, weightMin: 0.5, weightMax: 1.5, pricePerKg: 4.0,
+                    biome: 'forest', depthMin: 15, depthMax: 80, rarity: 3 },
+                { id: 'acorn', emoji: '🌰', name: 'Жёлудь', hp: 2, weightMin: 0.1, weightMax: 0.3, pricePerKg: 5.0,
+                    biome: 'forest', depthMin: 0, depthMax: 40, rarity: 3 },
+                { id: 'pine', emoji: '🌲', name: 'Сосна', hp: 5, weightMin: 5.0, weightMax: 10.0, pricePerKg: 2.2,
+                    biome: 'forest', depthMin: 0, depthMax: 60, rarity: 1 },
 
-    // ===== UI UPDATE =====
-    function updateUI() {
-        const count = invCount();
-        depthDisplay.textContent = Math.floor(S.depth);
-        powerDisplay.textContent = S.power.toFixed(1);
-        invDisplay.textContent = count + '/' + S.maxSlots;
-        coinDisplay.textContent = S.coins;
-        invBadge.textContent = count + '/' + S.maxSlots;
+                // === ПУСТЫНЯ (10) ===
+                { id: 'sand', emoji: '🟨', name: 'Песок', hp: 3, weightMin: 1.5, weightMax: 3.0, pricePerKg: 1.0,
+                    biome: 'desert', depthMin: 0, depthMax: 50, rarity: 1 },
+                { id: 'desert_stone', emoji: '🪨', name: 'Камень пустыни', hp: 6, weightMin: 3.0, weightMax: 6.0,
+                    pricePerKg: 2.0, biome: 'desert', depthMin: 0, depthMax: 80, rarity: 1 },
+                { id: 'fossil', emoji: '💀', name: 'Окаменелость', hp: 8, weightMin: 2.0, weightMax: 5.0, pricePerKg: 8.0,
+                    biome: 'desert', depthMin: 10, depthMax: 100, rarity: 4 },
+                { id: 'salt', emoji: '🧂', name: 'Соль', hp: 4, weightMin: 1.0, weightMax: 2.5, pricePerKg: 5.0,
+                    biome: 'desert', depthMin: 5, depthMax: 70, rarity: 3 },
+                { id: 'sandstone', emoji: '🔶', name: 'Песчаник', hp: 7, weightMin: 4.0, weightMax: 8.0, pricePerKg: 2.5,
+                    biome: 'desert', depthMin: 0, depthMax: 90, rarity: 1 },
+                { id: 'desert_clay', emoji: '🟫', name: 'Глина пустыни', hp: 5, weightMin: 2.5, weightMax: 5.0,
+                    pricePerKg: 4.0, biome: 'desert', depthMin: 5, depthMax: 80, rarity: 2 },
+                { id: 'artifact', emoji: '⚱️', name: 'Древний артефакт', hp: 10, weightMin: 0.5, weightMax: 2.0,
+                    pricePerKg: 25.0, biome: 'desert', depthMin: 20, depthMax: 120, rarity: 5 },
+                { id: 'gold_sand', emoji: '🟡', name: 'Золотой песок', hp: 6, weightMin: 2.0, weightMax: 4.0,
+                    pricePerKg: 15.0, biome: 'desert', depthMin: 30, depthMax: 100, rarity: 4 },
+                { id: 'desert_obsidian', emoji: '🔥', name: 'Обсидиан пустыни', hp: 12, weightMin: 3.0, weightMax: 6.0,
+                    pricePerKg: 20.0, biome: 'desert', depthMin: 40, depthMax: 120, rarity: 4 },
+                { id: 'cactus', emoji: '🌵', name: 'Кактус', hp: 4, weightMin: 1.0, weightMax: 3.0, pricePerKg: 3.0,
+                    biome: 'desert', depthMin: 0, depthMax: 60, rarity: 2 },
 
-        const dp = Math.min(100, (S.depth / 1500) * 100);
-        depthFill.style.width = dp + '%';
+                // === ГОРЫ (10) ===
+                { id: 'granite', emoji: '🪨', name: 'Гранит', hp: 8, weightMin: 4.0, weightMax: 8.0, pricePerKg: 2.0,
+                    biome: 'mountains', depthMin: 0, depthMax: 100, rarity: 1 },
+                { id: 'diorite', emoji: '🪨', name: 'Диорит', hp: 8, weightMin: 4.0, weightMax: 8.0, pricePerKg: 2.2,
+                    biome: 'mountains', depthMin: 0, depthMax: 120, rarity: 1 },
+                { id: 'andesite', emoji: '🪨', name: 'Андезит', hp: 8, weightMin: 4.0, weightMax: 8.0, pricePerKg: 2.5,
+                    biome: 'mountains', depthMin: 0, depthMax: 140, rarity: 1 },
+                { id: 'iron_ore', emoji: '🟤', name: 'Железная руда', hp: 12, weightMin: 6.0, weightMax: 12.0,
+                    pricePerKg: 4.5, biome: 'mountains', depthMin: 10, depthMax: 200, rarity: 3 },
+                { id: 'gold_ore', emoji: '🟡', name: 'Золотая руда', hp: 18, weightMin: 10.0, weightMax: 20.0,
+                    pricePerKg: 22.0, biome: 'mountains', depthMin: 20, depthMax: 250, rarity: 4 },
+                { id: 'silver_ore', emoji: '⚪', name: 'Серебряная руда', hp: 15, weightMin: 8.0, weightMax: 15.0,
+                    pricePerKg: 16.0, biome: 'mountains', depthMin: 30, depthMax: 220, rarity: 4 },
+                { id: 'amethyst_m', emoji: '🔮', name: 'Аметист', hp: 30, weightMin: 2.0, weightMax: 4.5, pricePerKg: 14.0,
+                    biome: 'mountains', depthMin: 60, depthMax: 300, rarity: 5 },
+                { id: 'diamond_m', emoji: '💎', name: 'Алмаз', hp: 40, weightMin: 2.0, weightMax: 5.0, pricePerKg: 68.0,
+                    biome: 'mountains', depthMin: 80, depthMax: 300, rarity: 6 },
+                { id: 'obsidian_m', emoji: '⬛', name: 'Обсидиан', hp: 100, weightMin: 2.5, weightMax: 4.5, pricePerKg: 28.0,
+                    biome: 'mountains', depthMin: 100, depthMax: 300, rarity: 5 },
+                { id: 'mithril', emoji: '🟣', name: 'Мифрил', hp: 75, weightMin: 6.0, weightMax: 13.0, pricePerKg: 42.0,
+                    biome: 'mountains', depthMin: 150, depthMax: 300, rarity: 7 },
 
-        S.speedMult = Math.max(0.25, 1 - S.speedLevel * 0.15);
-        S.luckMult = 1 + S.luckLevel * 0.1;
-        S.totalMult = 1 + S.multLevel * 0.2;
-        S.power = 1 + S.strengthLevel * 0.5;
-        S.damage = Math.floor(1 + S.strengthLevel * 0.4);
+                // === АД (10) ===
+                { id: 'netherrack', emoji: '🔴', name: 'Адский камень', hp: 10, weightMin: 5.0, weightMax: 10.0,
+                    pricePerKg: 3.0, biome: 'nether', depthMin: 100, depthMax: 400, rarity: 1 },
+                { id: 'soul_sand', emoji: '🟧', name: 'Адский песок', hp: 6, weightMin: 3.0, weightMax: 6.0,
+                    pricePerKg: 2.5, biome: 'nether', depthMin: 100, depthMax: 350, rarity: 1 },
+                { id: 'nether_quartz', emoji: '🟡', name: 'Адский кварц', hp: 8, weightMin: 2.0, weightMax: 4.0,
+                    pricePerKg: 10.0, biome: 'nether', depthMin: 120, depthMax: 400, rarity: 3 },
+                { id: 'lava_stone', emoji: '🔥', name: 'Лавовый камень', hp: 12, weightMin: 4.0, weightMax: 8.0,
+                    pricePerKg: 5.0, biome: 'nether', depthMin: 150, depthMax: 450, rarity: 2 },
+                { id: 'nether_iron', emoji: '🟤', name: 'Адское железо', hp: 14, weightMin: 7.0, weightMax: 14.0,
+                    pricePerKg: 8.0, biome: 'nether', depthMin: 150, depthMax: 400, rarity: 3 },
+                { id: 'nether_coal', emoji: '⚫', name: 'Адский уголь', hp: 10, weightMin: 2.0, weightMax: 5.0,
+                    pricePerKg: 6.0, biome: 'nether', depthMin: 130, depthMax: 380, rarity: 3 },
+                { id: 'nether_amethyst', emoji: '🟣', name: 'Адский аметист', hp: 25, weightMin: 2.5, weightMax: 5.0,
+                    pricePerKg: 18.0, biome: 'nether', depthMin: 180, depthMax: 450, rarity: 5 },
+                { id: 'nether_diamond', emoji: '🔶', name: 'Адский алмаз', hp: 35, weightMin: 2.5, weightMax: 6.0,
+                    pricePerKg: 45.0, biome: 'nether', depthMin: 200, depthMax: 500, rarity: 6 },
+                { id: 'netherite', emoji: '🔶', name: 'Незерит', hp: 130, weightMin: 8.0, weightMax: 18.0,
+                    pricePerKg: 120.0, biome: 'nether', depthMin: 300, depthMax: 600, rarity: 8 },
+                { id: 'nether_star', emoji: '⭐', name: 'Адская звезда', hp: 20, weightMin: 1.0, weightMax: 3.0,
+                    pricePerKg: 80.0, biome: 'nether', depthMin: 350, depthMax: 600, rarity: 7 },
 
-        speedStat.textContent = (1 / S.speedMult).toFixed(1) + 'x';
-        luckStat.textContent = S.luckMult.toFixed(1) + 'x';
-        autoStat.textContent = S.autoLevel > 0 ? 'УР.' + S.autoLevel : 'ВЫКЛ';
-        dmgStat.textContent = S.damage;
+                // === ЭНДЕР (10) ===
+                { id: 'end_stone', emoji: '🟨', name: 'Эндер-камень', hp: 160, weightMin: 3.0, weightMax: 6.0,
+                    pricePerKg: 38.0, biome: 'ender', depthMin: 400, depthMax: 1000, rarity: 3 },
+                { id: 'end_quartz', emoji: '🟣', name: 'Эндер-кварц', hp: 12, weightMin: 2.0, weightMax: 4.0,
+                    pricePerKg: 30.0, biome: 'ender', depthMin: 420, depthMax: 900, rarity: 4 },
+                { id: 'end_amethyst', emoji: '🔮', name: 'Эндер-аметист', hp: 25, weightMin: 2.0, weightMax: 5.0,
+                    pricePerKg: 45.0, biome: 'ender', depthMin: 450, depthMax: 1000, rarity: 5 },
+                { id: 'end_diamond', emoji: '💎', name: 'Эндер-алмаз', hp: 35, weightMin: 2.5, weightMax: 6.0,
+                    pricePerKg: 85.0, biome: 'ender', depthMin: 500, depthMax: 1100, rarity: 6 },
+                { id: 'end_netherite', emoji: '🔶', name: 'Эндер-незерит', hp: 120, weightMin: 8.0, weightMax: 18.0,
+                    pricePerKg: 110.0, biome: 'ender', depthMin: 500, depthMax: 1200, rarity: 7 },
+                { id: 'end_obsidian', emoji: '⬛', name: 'Обсидиан эндера', hp: 100, weightMin: 3.0, weightMax: 6.0,
+                    pricePerKg: 50.0, biome: 'ender', depthMin: 400, depthMax: 1000, rarity: 5 },
+                { id: 'draconite', emoji: '🟣', name: 'Драконит', hp: 150, weightMin: 5.0, weightMax: 12.0,
+                    pricePerKg: 150.0, biome: 'ender', depthMin: 600, depthMax: 1300, rarity: 8 },
+                { id: 'ender_pearl', emoji: '🌌', name: 'Эндер-жемчуг', hp: 8, weightMin: 0.5, weightMax: 1.5,
+                    pricePerKg: 200.0, biome: 'ender', depthMin: 700, depthMax: 1400, rarity: 7 },
+                { id: 'ender_eye', emoji: '🔮', name: 'Эндер-глаз', hp: 5, weightMin: 0.3, weightMax: 1.0,
+                    pricePerKg: 300.0, biome: 'ender', depthMin: 800, depthMax: 1500, rarity: 8 },
+                { id: 'void', emoji: '🌌', name: 'Воид', hp: 200, weightMin: 0.05, weightMax: 0.4, pricePerKg: 450.0,
+                    biome: 'ender', depthMin: 800, depthMax: 2000, rarity: 9 },
+            ];
 
-        renderInventory();
-        checkAchievements();
-    }
+            // ============================================================
+            // 3. СОСТОЯНИЕ ИГРЫ
+            // ============================================================
+            const S = {
+                inventory: [],
+                maxSlots: 3,
+                coins: 0,
+                depth: 0,
+                totalMined: 0,
+                totalBroken: 0,
+                totalDamage: 0,
+                speedLevel: 0,
+                luckLevel: 0,
+                strengthLevel: 0,
+                autoLevel: 0,
+                multLevel: 0,
+                slotLevel: 0,
+                speedPrice: 75,
+                luckPrice: 110,
+                strengthPrice: 145,
+                autoPrice: 280,
+                multPrice: 210,
+                slotPrice: 150,
+                currentBlock: null,
+                currentBlockHP: 0,
+                maxBlockHP: 0,
+                isDigging: false,
+                progress: 0,
+                autoInterval: null,
+                power: 1,
+                luckMult: 1,
+                speedMult: 1,
+                totalMult: 1,
+                damage: 1,
+                blockStats: {},
+                totalWeight: 0,
+                totalWeightMined: 0,
+                floatSpeed: 0.5,
+                floatHeight: 1.0,
+                floatEnabled: true,
+                _secret_empty: 0,
+                _secret_sell: 0,
+                visitedBiomes: {},
+                unlockedBiomes: { forest: true },
+                currentBiome: 'forest',
+                selectedBiome: 'forest',
+                collectionRewards: {},
+                totalCollectionReward: 0,
+                isLegendaryBlock: false,
+                legendaryRarity: null,
+                isGameActive: false,
+            };
 
-    function renderInventory() {
-        invSlots.innerHTML = '';
-        for (let i = 0; i < S.maxSlots; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'inv-slot';
-            if (i < S.inventory.length) {
-                const item = S.inventory[i];
-                const block = getBlockById(item.id);
-                const weight = item.weight || 0;
-                slot.innerHTML = `
-                    <div class="iemoji">${block ? block.emoji : '❓'}</div>
-                    <div class="iweight">${weight.toFixed(1)} кг</div>
-                    <div class="slot-id">#${i+1}</div>
+            // ============================================================
+            // 4. DOM
+            // ============================================================
+            const $ = id => document.getElementById(id);
+            const menuScreen = $('menuScreen');
+            const gameScreen = $('gameScreen');
+            const playBtn = $('playBtn');
+            const backToMenuBtn = $('backToMenuBtn');
+            const statsMenuBtn = $('statsMenuBtn');
+            const questsBtn = $('questsBtn');
+            const collectionBtn = $('collectionBtn');
+            const biomeSelectBtn = $('biomeSelectBtn');
+            const settingsBtn = $('settingsBtn');
+
+            const depthDisplay = $('depthDisplay');
+            const powerDisplay = $('powerDisplay');
+            const invDisplay = $('invDisplay');
+            const coinDisplay = $('coinDisplay');
+            const depthFill = $('depthFill');
+            const blockEmoji = $('blockEmoji');
+            const blockName = $('blockName');
+            const hpFill = $('hpFill');
+            const progressFill = $('progressFill');
+            const invBadge = $('invBadge');
+            const invSlots = $('invSlots');
+            const biomeDisplay = $('biomeDisplay');
+            const digArea = $('digArea');
+            const rarityGlow = $('rarityGlow');
+
+            const shopToggle = $('shopToggle');
+            const shopOverlay = $('shopOverlay');
+            const shopClose = $('shopClose');
+            const shopGrid = $('shopGrid');
+
+            const statsOverlay = $('statsOverlay');
+            const statsClose = $('statsClose');
+            const statsGrid = $('statsGrid');
+
+            const questsOverlay = $('questsOverlay');
+            const questsClose = $('questsClose');
+
+            const collectionOverlay = $('collectionOverlay');
+            const collectionClose = $('collectionClose');
+            const collectionGrid = $('collectionGrid');
+            const collectionCount = $('collectionCount');
+
+            const biomeSelectOverlay = $('biomeSelectOverlay');
+            const biomeSelectClose = $('biomeSelectClose');
+            const biomeSelectGrid = $('biomeSelectGrid');
+            const biomeSelectStatus = $('biomeSelectStatus');
+
+            const settingsOverlay = $('settingsOverlay');
+            const settingsClose = $('settingsClose');
+
+            const infoOverlay = $('infoOverlay');
+            const infoClose = $('infoClose');
+            const infoContent = $('infoContent');
+
+            const resetConfirmOverlay = $('resetConfirmOverlay');
+            const resetConfirmBtn = $('resetConfirmBtn');
+            const resetCancelBtn = $('resetCancelBtn');
+            const resetGameBtn = $('resetGameBtn');
+
+            // ============================================================
+            // 5. СОХРАНЕНИЕ
+            // ============================================================
+            function saveGame() {
+                try {
+                    const data = {
+                        inventory: S.inventory,
+                        maxSlots: S.maxSlots,
+                        coins: S.coins,
+                        depth: S.depth,
+                        totalMined: S.totalMined,
+                        totalBroken: S.totalBroken,
+                        totalDamage: S.totalDamage,
+                        speedLevel: S.speedLevel,
+                        luckLevel: S.luckLevel,
+                        strengthLevel: S.strengthLevel,
+                        autoLevel: S.autoLevel,
+                        multLevel: S.multLevel,
+                        slotLevel: S.slotLevel,
+                        speedPrice: S.speedPrice,
+                        luckPrice: S.luckPrice,
+                        strengthPrice: S.strengthPrice,
+                        autoPrice: S.autoPrice,
+                        multPrice: S.multPrice,
+                        slotPrice: S.slotPrice,
+                        blockStats: S.blockStats,
+                        totalWeight: S.totalWeight,
+                        totalWeightMined: S.totalWeightMined,
+                        _secret_empty: S._secret_empty,
+                        _secret_sell: S._secret_sell,
+                        visitedBiomes: S.visitedBiomes,
+                        unlockedBiomes: S.unlockedBiomes,
+                        selectedBiome: S.selectedBiome,
+                        collectionRewards: S.collectionRewards,
+                        totalCollectionReward: S.totalCollectionReward,
+                    };
+                    localStorage.setItem('rocketDigSave', JSON.stringify(data));
+                } catch (e) {
+                    console.log('Save failed:', e);
+                }
+            }
+
+            function loadGame() {
+                try {
+                    const raw = localStorage.getItem('rocketDigSave');
+                    if (!raw) return false;
+                    const data = JSON.parse(raw);
+                    Object.assign(S, data);
+                    return true;
+                } catch (e) {
+                    console.log('Load failed:', e);
+                    return false;
+                }
+            }
+
+            function resetGame() {
+                // Останавливаем авто-копку
+                stopAuto();
+
+                // Сбрасываем все данные
+                S.inventory = [];
+                S.maxSlots = 3;
+                S.coins = 0;
+                S.depth = 0;
+                S.totalMined = 0;
+                S.totalBroken = 0;
+                S.totalDamage = 0;
+                S.speedLevel = 0;
+                S.luckLevel = 0;
+                S.strengthLevel = 0;
+                S.autoLevel = 0;
+                S.multLevel = 0;
+                S.slotLevel = 0;
+                S.speedPrice = 75;
+                S.luckPrice = 110;
+                S.strengthPrice = 145;
+                S.autoPrice = 280;
+                S.multPrice = 210;
+                S.slotPrice = 150;
+                S.blockStats = {};
+                S.totalWeight = 0;
+                S.totalWeightMined = 0;
+                S._secret_empty = 0;
+                S._secret_sell = 0;
+                S.visitedBiomes = {};
+                S.unlockedBiomes = { forest: true };
+                S.selectedBiome = 'forest';
+                S.collectionRewards = {};
+                S.totalCollectionReward = 0;
+                S.isLegendaryBlock = false;
+                S.legendaryRarity = null;
+                S.currentBlock = null;
+                S.currentBlockHP = 0;
+                S.maxBlockHP = 0;
+                S.isDigging = false;
+                S.progress = 0;
+
+                // Очищаем локальное хранилище
+                localStorage.removeItem('rocketDigSave');
+
+                // Перезапускаем игру
+                spawnNewBlock();
+                updateUI();
+                renderCollection();
+                renderBiomeSelect();
+
+                floatText('Игра сброшена!', '🔄', '#ff6b6b');
+            }
+
+            setInterval(saveGame, 10000);
+
+            // ============================================================
+            // 6. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+            // ============================================================
+            function invCount() { return S.inventory.length; }
+
+            function getBlockById(id) { return BLOCKS.find(b => b.id === id); }
+
+            function getBiomeForDepth(depth) {
+                if (depth >= 200) return 'ender';
+                if (depth >= 100) return 'nether';
+                if (depth >= 50) return 'mountains';
+                if (depth >= 25) return 'desert';
+                return 'forest';
+            }
+
+            function getBlocksForBiome(biomeId) {
+                return BLOCKS.filter(b => b.biome === biomeId);
+            }
+
+            function getRandomWeight(block) {
+                return block.weightMin + Math.random() * (block.weightMax - block.weightMin);
+            }
+
+            function getRandomBlockForBiome(biomeId) {
+                const available = BLOCKS.filter(b => b.biome === biomeId && S.depth >= b.depthMin && S.depth <= b
+                .depthMax);
+                if (available.length === 0) {
+                    const fallback = BLOCKS.filter(b => b.biome === biomeId);
+                    return fallback.length > 0 ? fallback[0] : BLOCKS[0];
+                }
+                const weights = available.map(b => Math.max(5, 100 - b.rarity * 5));
+                const total = weights.reduce((a, b) => a + b, 0);
+                let rnd = Math.random() * total;
+                for (let i = 0; i < available.length; i++) {
+                    rnd -= weights[i];
+                    if (rnd <= 0) return available[i];
+                }
+                return available[available.length - 1];
+            }
+
+            function calculatePrice(weight, pricePerKg, rarity) {
+                const multiplier = RARITY[rarity] ? RARITY[rarity].multiplier : 1;
+                return Math.floor(weight * pricePerKg * multiplier);
+            }
+
+            function getCurrentBiome() {
+                const id = S.selectedBiome || getBiomeForDepth(S.depth);
+                return { id, data: BIOMES[id] };
+            }
+
+            function isBiomeUnlocked(biomeId) {
+                if (biomeId === 'forest') return true;
+                const biome = BIOMES[biomeId];
+                if (!biome) return false;
+                const depthOk = S.depth >= biome.unlockDepth;
+                const coinsOk = S.coins >= biome.unlockCoins;
+                return depthOk && coinsOk;
+            }
+
+            function checkBiomeUnlocks() {
+                let unlocked = false;
+                for (const biomeId of BIOME_ORDER) {
+                    if (!S.unlockedBiomes[biomeId] && isBiomeUnlocked(biomeId)) {
+                        S.unlockedBiomes[biomeId] = true;
+                        S.coins += BIOMES[biomeId].reward;
+                        unlocked = true;
+                        showBiomeUnlock(biomeId);
+                    }
+                }
+                if (unlocked) {
+                    updateUI();
+                    renderBiomeSelect();
+                    saveGame();
+                }
+                return unlocked;
+            }
+
+            function showBiomeUnlock(biomeId) {
+                const biome = BIOMES[biomeId];
+                const el = document.createElement('div');
+                el.className = 'biome-unlock-float';
+                el.innerHTML =
+                    `
+                    <div style="text-align:center;">
+                        <div style="font-size:40px;">${biome.icon}</div>
+                        <div style="color:#6bff8a;font-weight:900;font-size:18px;">🔓 НОВЫЙ БИОМ ОТКРЫТ!</div>
+                        <div style="color:#f0e0d0;font-size:20px;">${biome.name}</div>
+                        <div style="color:#ffd700;font-size:14px;">+${biome.reward} монет</div>
+                    </div>
                 `;
-                slot.style.borderColor = block ? block.color : '#2d1f18';
-                if (invCount() >= S.maxSlots) slot.classList.add('full');
-                slot.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (block) showItemInfo(block, weight);
-                });
-            } else {
-                slot.className = 'inv-slot empty';
-                slot.textContent = '⬜';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 3000);
             }
-            invSlots.appendChild(slot);
-        }
-    }
 
-    // ===== INFO MODAL =====
-    function showItemInfo(block, weight) {
-        const rarityColors = {
-            1: '#8a7a6a', 2: '#9a8a7a', 3: '#6a6a6a', 4: '#b08a6a',
-            5: '#ffd700', 6: '#c0c0c0', 7: '#9b59b6', 8: '#6bcfff',
-            9: '#2ecc71', 10: '#e74c3c', 11: '#8e44ad', 12: '#2c3e50',
-            13: '#e67e22', 14: '#f1c40f', 15: '#8e44ad',
-        };
-        const rarityNames = {
-            1: 'Обычный', 2: 'Обычный', 3: 'Необычный', 4: 'Необычный',
-            5: 'Редкий', 6: 'Редкий', 7: 'Эпический', 8: 'Эпический',
-            9: 'Легендарный', 10: 'Легендарный', 11: 'Мифический', 12: 'Мифический',
-            13: 'Божественный', 14: 'Божественный', 15: 'Изначальный',
-        };
-        const color = rarityColors[block.rarity] || '#ffd700';
-        const rarity = rarityNames[block.rarity] || 'Неизвестно';
-        const price = calculatePrice(weight, block.pricePerKg);
-
-        infoContent.innerHTML = `
-            <div class="big-emoji">${block.emoji}</div>
-            <div class="item-name" style="color:${color}">${block.name}</div>
-            <div class="item-detail">Редкость: <span style="color:${color}">${rarity}</span></div>
-            <div class="item-detail">Вес: <span>${weight.toFixed(2)} кг</span></div>
-            <div class="item-detail">Цена за кг: <span>${block.pricePerKg} монет</span></div>
-            <div class="item-detail">Стоимость: <span style="color:#ffd700;">${price} монет</span></div>
-            <div class="item-detail">HP: <span>${block.hp}</span></div>
-            <div class="item-detail">Глубина: <span>${block.depthMin} - ${block.depthMax} м</span></div>
-            <div class="item-divider"></div>
-            <div class="item-detail" style="font-size:12px;color:#7a6a5a;">
-                Появляется на глубине от ${block.depthMin} до ${block.depthMax} метров
-            </div>
-            <div class="item-detail" style="font-size:11px;color:#6bcfff;margin-top:6px;">
-                ⚖️ Возможный вес: ${block.weightMin} - ${block.weightMax} кг
-            </div>
-        `;
-        infoOverlay.classList.add('active');
-    }
-
-    // ===== INVENTORY FUNCTIONS =====
-    function addToInventory(id) {
-        if (S.inventory.length >= S.maxSlots) {
-            const block = getBlockById(id);
-            const weight = getRandomWeight(block);
-            const price = calculatePrice(weight, block.pricePerKg);
-            S.coins += price;
-            floatText('+' + price + ' монет (инвентарь полон)', '💰', '#ffd700');
-            return false;
-        }
-        const block = getBlockById(id);
-        const weight = getRandomWeight(block);
-        S.inventory.push({ id, weight });
-        return true;
-    }
-
-    function sellInventory() {
-        if (S.inventory.length === 0) {
-            floatText('Инвентарь пуст', '⚠️', '#ff6b6b');
-            return;
-        }
-        let earned = 0;
-        let totalWeight = 0;
-        for (const item of S.inventory) {
-            const block = getBlockById(item.id);
-            const weight = item.weight || block.baseWeight || 0;
-            const price = calculatePrice(weight, block.pricePerKg);
-            earned += price;
-            totalWeight += weight;
-            S.blockStats[item.id] = (S.blockStats[item.id] || 0) + 1;
-        }
-        S.coins += earned;
-        S.totalWeightMined += totalWeight;
-        S.inventory = [];
-        S._secret_sell = (S._secret_sell || 0) + 1;
-        floatText('+' + earned + ' монет (' + totalWeight.toFixed(1) + ' кг)', '💰', '#ffd700');
-        updateUI();
-    }
-
-    function clearInventory() {
-        if (S.inventory.length === 0) return;
-        S.inventory = [];
-        S._secret_empty = (S._secret_empty || 0) + 1;
-        floatText('Инвентарь очищен', '🗑️', '#8a7a6a');
-        updateUI();
-    }
-
-    function spawnNewBlock() {
-        const block = getRandomBlock();
-        S.currentBlock = block;
-        S.maxBlockHP = Math.floor(block.hp * (1 + S.depth / 500));
-        S.currentBlockHP = S.maxBlockHP;
-        hpFill.style.width = '100%';
-        hpFill.style.background = 'linear-gradient(90deg, #ff3a3a, #ffd700)';
-        blockEmoji.textContent = '⛏️';
-        blockName.textContent = 'ШАХТА';
-        updateUI();
-    }
-
-    // ===== КОПКА =====
-    function startDig() {
-        if (S.isDigging) return;
-        if (!S.currentBlock) { spawnNewBlock(); return; }
-        if (invCount() >= S.maxSlots) {
-            floatText('Инвентарь полон! Продайте ресурсы.', '⚠️', '#ff6b6b');
-            return;
-        }
-
-        S.isDigging = true;
-        S.progress = 0;
-        const duration = Math.max(50, 180 * S.speedMult);
-        const startTime = performance.now();
-
-        function tick() {
-            if (!S.isDigging) return;
-            const elapsed = performance.now() - startTime;
-            const p = Math.min(1, elapsed / duration);
-            S.progress = p;
-            progressFill.style.width = (p * 100) + '%';
-
-            if (p < 1) {
-                requestAnimationFrame(tick);
-            } else {
-                progressFill.style.width = '100%';
-                finishDig();
+            // ============================================================
+            // 7. ВСПЛЫВАЮЩИЕ СООБЩЕНИЯ
+            // ============================================================
+            function floatText(text, emoji, color) {
+                if (!S.floatEnabled) return;
+                const el = document.createElement('div');
+                el.className = 'float-msg';
+                el.textContent = (emoji || '') + ' ' + text;
+                el.style.left = (20 + Math.random() * 60) + '%';
+                el.style.top = (20 + Math.random() * 60) + '%';
+                el.style.color = color || '#ffd700';
+                el.style.setProperty('--float-duration', (0.9 / S.floatSpeed) + 's');
+                el.style.setProperty('--float-height-mult', S.floatHeight);
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), (950 / S.floatSpeed));
             }
-        }
-        requestAnimationFrame(tick);
-    }
 
-    function finishDig() {
-        if (!S.currentBlock) { S.isDigging = false; return; }
+            function miningFloat(text, emoji, color) {
+                if (!S.floatEnabled) return;
+                const el = document.createElement('div');
+                el.className = 'mining-float';
+                el.textContent = (emoji || '') + ' ' + text;
+                el.style.left = (30 + Math.random() * 40) + '%';
+                el.style.top = (30 + Math.random() * 40) + '%';
+                el.style.color = color || '#f0e0d0';
+                el.style.setProperty('--float-duration', (0.7 / S.floatSpeed) + 's');
+                el.style.setProperty('--float-height-mult', S.floatHeight);
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), (750 / S.floatSpeed));
+            }
 
-        const dmg = S.damage;
-        S.currentBlockHP -= dmg;
+            function showLegendaryBlock(rarity) {
+                const isMythic = rarity === 'mythic';
+                const el = document.createElement('div');
+                el.className = isMythic ? 'mythic-float' : 'legendary-float';
+                el.textContent = isMythic ? '🔴 МИФИЧЕСКАЯ ШАХТА!' : '🟧 ЛЕГЕНДАРНАЯ ШАХТА!';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 2500);
+            }
 
-        const hpPercent = Math.max(0, (S.currentBlockHP / S.maxBlockHP) * 100);
-        hpFill.style.width = hpPercent + '%';
+            // ============================================================
+            // 8. UI ОБНОВЛЕНИЕ
+            // ============================================================
+            function updateUI() {
+                const count = invCount();
+                const biome = getCurrentBiome();
+                S.currentBiome = biome.id;
 
-        miningFloat(dmg + ' урона', '💥', '#ff6b6b');
+                depthDisplay.textContent = Math.floor(S.depth);
+                powerDisplay.textContent = S.power.toFixed(1);
+                invDisplay.textContent = count + '/' + S.maxSlots;
+                coinDisplay.textContent = S.coins;
+                invBadge.textContent = count + '/' + S.maxSlots;
+                biomeDisplay.textContent = biome.data.name + ' ' + biome.data.icon;
 
-        if (S.currentBlockHP <= 0) {
-            const block = S.currentBlock;
-            const amount = Math.floor(1 + S.strengthLevel * 0.3 * S.totalMult);
-            let added = 0;
-            let displayWeight = 0;
-            for (let i = 0; i < amount; i++) {
-                if (addToInventory(block.id)) {
-                    added++;
-                    const item = S.inventory[S.inventory.length - 1];
-                    if (item) displayWeight += item.weight;
-                } else {
-                    break;
+                const dp = Math.min(100, (S.depth / 1500) * 100);
+                depthFill.style.width = dp + '%';
+
+                S.speedMult = Math.max(0.25, 1 - S.speedLevel * 0.15);
+                S.luckMult = 1 + S.luckLevel * 0.1;
+                S.totalMult = 1 + S.multLevel * 0.2;
+                S.power = 1 + S.strengthLevel * 0.5;
+                S.damage = Math.floor(1 + S.strengthLevel * 0.4);
+
+                renderInventory();
+                checkBiomeUnlocks();
+                checkCollectionRewards();
+
+                if (biomeSelectOverlay.classList.contains('active')) {
+                    renderBiomeSelect();
                 }
             }
-            if (added > 0) {
-                miningFloat(added + ' ' + block.name + ' (' + displayWeight.toFixed(1) + ' кг)', block.emoji, block.color);
-                floatText('Добыто ' + added + ' ' + block.name + ' (' + displayWeight.toFixed(1) + ' кг)', block.emoji, block.color);
-                S.totalMined += added;
-                S.totalWeight += displayWeight;
-                S.totalBroken++;
-                S.depth += 0.2 + S.speedLevel * 0.03;
-            }
-            spawnNewBlock();
-        }
 
-        S.isDigging = false;
-        progressFill.style.width = '0%';
-        updateUI();
-
-        if (S.autoLevel > 0 && !S.autoInterval) {
-            startAuto();
-        }
-    }
-
-    function startAuto() {
-        if (S.autoInterval) clearInterval(S.autoInterval);
-        if (S.autoLevel > 0) {
-            const interval = Math.max(80, 600 - S.autoLevel * 40);
-            S.autoInterval = setInterval(() => {
-                if (!S.isDigging && invCount() < S.maxSlots) {
-                    startDig();
+            function renderInventory() {
+                invSlots.innerHTML = '';
+                for (let i = 0; i < S.maxSlots; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'inv-slot';
+                    if (i < S.inventory.length) {
+                        const item = S.inventory[i];
+                        const block = getBlockById(item.id);
+                        const weight = item.weight || 0;
+                        const rarity = item.rarity || 'common';
+                        const rarityData = RARITY[rarity];
+                        const color = rarityData ? rarityData.color : '#8a8a8a';
+                        const rarityName = rarityData ? rarityData.name : 'Обычный';
+                        slot.innerHTML =
+                            `
+                            <div class="iemoji">${block ? block.emoji : '❓'}</div>
+                            <div class="iweight">${weight.toFixed(1)} кг</div>
+                            <div class="irarity" style="color:${color}">${rarityName}</div>
+                            <div class="slot-id">#${i+1}</div>
+                        `;
+                        slot.style.borderColor = color;
+                        if (invCount() >= S.maxSlots) slot.classList.add('full');
+                        slot.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (block) showItemInfo(block, weight, rarity);
+                        });
+                    } else {
+                        slot.className = 'inv-slot empty';
+                        slot.textContent = '⬜';
+                    }
+                    invSlots.appendChild(slot);
                 }
-            }, interval);
-        }
-    }
-
-    function stopAuto() {
-        if (S.autoInterval) {
-            clearInterval(S.autoInterval);
-            S.autoInterval = null;
-        }
-    }
-
-    // ===== МАГАЗИН =====
-    function buyUpgrade(type) {
-        const price = S[type + 'Price'];
-        if (S.coins < price) {
-            floatText('Не хватает монет!', '❌', '#ff6b6b');
-            return;
-        }
-        S.coins -= price;
-        S[type + 'Level']++;
-        S[type + 'Price'] = Math.floor(price * 1.6);
-        floatText('Улучшение куплено!', '✅', '#6bff6b');
-        updateUI();
-        renderShop();
-    }
-
-    function buySlot() {
-        const price = S.slotPrice;
-        if (S.coins < price) {
-            floatText('Не хватает монет!', '❌', '#ff6b6b');
-            return;
-        }
-        S.coins -= price;
-        S.maxSlots++;
-        S.slotLevel++;
-        S.slotPrice = Math.floor(price * 2.5);
-        floatText('Слот куплен! +1 место', '📦', '#6bcfff');
-        updateUI();
-        renderShop();
-    }
-
-    function renderShop() {
-        const upgrades = [
-            { key: 'speed', name: '⚡ Скорость копки', desc: '−15% времени копки', priceKey: 'speedPrice', levelKey: 'speedLevel' },
-            { key: 'luck', name: '🍀 Удача', desc: '+10% шанс редких руд', priceKey: 'luckPrice', levelKey: 'luckLevel' },
-            { key: 'strength', name: '💪 Сила удара', desc: '+0.4 урона за уровень', priceKey: 'strengthPrice', levelKey: 'strengthLevel' },
-            { key: 'auto', name: '🤖 Авто-копка', desc: 'Автоматическая добыча', priceKey: 'autoPrice', levelKey: 'autoLevel' },
-            { key: 'mult', name: '📈 Множитель', desc: '×1.2 ресурсов за уровень', priceKey: 'multPrice', levelKey: 'multLevel' },
-        ];
-
-        shopGrid.innerHTML = '';
-
-        const slotDiv = document.createElement('div');
-        slotDiv.className = 'shop-item';
-        slotDiv.classList.toggle('locked', S.coins < S.slotPrice);
-        slotDiv.innerHTML = `
-            <div class="sname">📦 Доп. слот инвентаря</div>
-            <div class="sdesc">+1 место в инвентаре (сейчас ${S.maxSlots})</div>
-            <div class="slvl">Куплено: ${S.slotLevel}</div>
-            <div class="sprice">💰 ${S.slotPrice}</div>
-        `;
-        slotDiv.addEventListener('click', buySlot);
-        shopGrid.appendChild(slotDiv);
-
-        for (const up of upgrades) {
-            const div = document.createElement('div');
-            div.className = 'shop-item';
-            const price = S[up.priceKey];
-            const level = S[up.levelKey];
-            div.classList.toggle('locked', S.coins < price);
-            div.innerHTML = `
-                <div class="sname">${up.name}</div>
-                <div class="sdesc">${up.desc}</div>
-                <div class="slvl">Уровень: ${level}</div>
-                <div class="sprice">💰 ${price}</div>
-            `;
-            div.addEventListener('click', () => buyUpgrade(up.key));
-            shopGrid.appendChild(div);
-        }
-    }
-
-    // ===== СТАТИСТИКА =====
-    function renderStats() {
-        const count = invCount();
-        statsGrid.innerHTML = `
-            <div class="stat-item"><div class="slabel">⛏️ Глубина</div><div class="svalue gold">${Math.floor(S.depth)} м</div></div>
-            <div class="stat-item"><div class="slabel">💎 Всего добыто</div><div class="svalue cyan">${S.totalMined} шт</div></div>
-            <div class="stat-item"><div class="slabel">⚖️ Общий вес</div><div class="svalue orange">${S.totalWeight.toFixed(1)} кг</div></div>
-            <div class="stat-item"><div class="slabel">🧱 Блоков разрушено</div><div class="svalue orange">${S.totalBroken}</div></div>
-            <div class="stat-item"><div class="slabel">📦 Инвентарь</div><div class="svalue green">${count}/${S.maxSlots}</div></div>
-            <div class="stat-item"><div class="slabel">💰 Монет</div><div class="svalue gold">${S.coins}</div></div>
-            <div class="stat-item"><div class="slabel">⚡ Сила удара</div><div class="svalue pink">${S.power.toFixed(1)}</div></div>
-            <div class="stat-item"><div class="slabel">⚡ Скорость</div><div class="svalue cyan">${(1/S.speedMult).toFixed(1)}x</div></div>
-            <div class="stat-item"><div class="slabel">🍀 Удача</div><div class="svalue green">${S.luckMult.toFixed(1)}x</div></div>
-            <div class="stat-item"><div class="slabel">📈 Множитель</div><div class="svalue gold">${S.totalMult.toFixed(1)}x</div></div>
-            <div class="stat-item"><div class="slabel">🤖 Авто-копка</div><div class="svalue orange">${S.autoLevel > 0 ? 'УР.' + S.autoLevel : 'ВЫКЛ'}</div></div>
-            <div class="stat-item"><div class="slabel">📦 Слотов инвентаря</div><div class="svalue cyan">${S.maxSlots}</div></div>
-            <div class="stat-item"><div class="slabel">🏆 Достижений</div><div class="svalue gold">${S.achUnlocked.size} / ${ACHIEVEMENTS.length}</div></div>
-        `;
-
-        if (S.inventory.length > 0) {
-            const blockStatsDiv = document.createElement('div');
-            blockStatsDiv.style.gridColumn = '1 / -1';
-            blockStatsDiv.style.marginTop = '8px';
-            blockStatsDiv.innerHTML = `<div style="color:#8a7a6a;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">📊 ТЕКУЩИЙ ИНВЕНТАРЬ</div>`;
-            const grid = document.createElement('div');
-            grid.style.display = 'grid';
-            grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(100px, 1fr))';
-            grid.style.gap = '4px';
-
-            const blockCounts = {};
-            for (const item of S.inventory) {
-                blockCounts[item.id] = (blockCounts[item.id] || 0) + 1;
             }
 
-            for (const [id, count] of Object.entries(blockCounts)) {
+            // ============================================================
+            // 9. ИНФО О ПРЕДМЕТЕ
+            // ============================================================
+            function showItemInfo(block, weight, rarity) {
+                const rarityData = RARITY[rarity] || RARITY.common;
+                const color = rarityData.color;
+                const rarityName = rarityData.name;
+                const price = calculatePrice(weight, block.pricePerKg, rarity);
+                const biome = BIOMES[block.biome];
+
+                infoContent.innerHTML =
+                    `
+                    <div class="big-emoji">${block.emoji}</div>
+                    <div class="item-name" style="color:${color}">${block.name}</div>
+                    <div class="rarity-badge" style="background:${color}20;color:${color};border:2px solid ${color};">${rarityData.emoji} ${rarityName}</div>
+                    <div class="item-detail">Биом: <span>${biome ? biome.name : 'Неизвестно'}</span></div>
+                    <div class="item-detail">Вес: <span>${weight.toFixed(2)} кг</span></div>
+                    <div class="item-detail">Цена за кг: <span>${block.pricePerKg} монет</span></div>
+                    <div class="item-detail">Множитель редкости: <span style="color:${color}">×${rarityData.multiplier}</span></div>
+                    <div class="item-detail">Стоимость: <span style="color:#ffd700;">${price} монет</span></div>
+                    <div class="item-detail">HP: <span>${block.hp}</span></div>
+                    <div class="item-detail">Глубина: <span>${block.depthMin} - ${block.depthMax} м</span></div>
+                    <div class="item-divider"></div>
+                    <div class="item-detail" style="font-size:12px;color:#7a6a5a;">
+                        Появляется в биоме ${biome ? biome.name : '???'} на глубине ${block.depthMin}-${block.depthMax} м
+                    </div>
+                    <div class="item-detail" style="font-size:11px;color:#6bcfff;margin-top:6px;">
+                        ⚖️ Возможный вес: ${block.weightMin} - ${block.weightMax} кг
+                    </div>
+                `;
+                infoOverlay.classList.add('active');
+            }
+
+            window.showBlockInfo = function(id) {
                 const block = getBlockById(id);
-                if (block && count > 0) {
-                    let totalBlockWeight = 0;
-                    for (const item of S.inventory) {
-                        if (item.id === id) {
-                            totalBlockWeight += item.weight || block.baseWeight || 0;
+                if (block) {
+                    const weight = (block.weightMin + block.weightMax) / 2;
+                    showItemInfo(block, weight, 'common');
+                }
+            };
+
+            // ============================================================
+            // 10. ИНВЕНТАРЬ
+            // ============================================================
+            function addToInventory(id, rarity) {
+                if (S.inventory.length >= S.maxSlots) {
+                    const block = getBlockById(id);
+                    const weight = getRandomWeight(block);
+                    const price = calculatePrice(weight, block.pricePerKg, rarity);
+                    S.coins += price;
+                    floatText('+' + price + ' монет (инвентарь полон)', '💰', '#ffd700');
+                    return false;
+                }
+                const block = getBlockById(id);
+                const weight = getRandomWeight(block);
+                S.inventory.push({ id, weight, rarity });
+                return true;
+            }
+
+            function sellInventory() {
+                if (S.inventory.length === 0) {
+                    floatText('Инвентарь пуст', '⚠️', '#ff6b6b');
+                    return;
+                }
+                let earned = 0;
+                let totalWeight = 0;
+                for (const item of S.inventory) {
+                    const block = getBlockById(item.id);
+                    const weight = item.weight || 0;
+                    const rarity = item.rarity || 'common';
+                    const price = calculatePrice(weight, block.pricePerKg, rarity);
+                    earned += price;
+                    totalWeight += weight;
+                    S.blockStats[item.id] = (S.blockStats[item.id] || 0) + 1;
+                }
+                S.coins += earned;
+                S.totalWeightMined += totalWeight;
+                S.inventory = [];
+                S._secret_sell = (S._secret_sell || 0) + 1;
+                floatText('+' + earned + ' монет (' + totalWeight.toFixed(1) + ' кг)', '💰', '#ffd700');
+                saveGame();
+                updateUI();
+            }
+
+            function clearInventory() {
+                if (S.inventory.length === 0) return;
+                S.inventory = [];
+                S._secret_empty = (S._secret_empty || 0) + 1;
+                floatText('Инвентарь очищен', '🗑️', '#8a7a6a');
+                saveGame();
+                updateUI();
+            }
+
+            function spawnNewBlock() {
+                const biomeId = S.selectedBiome || getBiomeForDepth(S.depth);
+                if (!S.visitedBiomes[biomeId]) {
+                    S.visitedBiomes[biomeId] = true;
+                }
+
+                const isLegendary = Math.random() < 0.015;
+                let block;
+                let rarity;
+
+                if (isLegendary) {
+                    const rarities = ['legendary', 'mythic'];
+                    const weights = [70, 30];
+                    let roll = Math.random() * 100;
+                    let cumulative = 0;
+                    let selectedRarity = 'legendary';
+                    for (let i = 0; i < rarities.length; i++) {
+                        cumulative += weights[i];
+                        if (roll <= cumulative) {
+                            selectedRarity = rarities[i];
+                            break;
                         }
                     }
-                    const el = document.createElement('div');
-                    el.style.cssText = 'background:rgba(20,15,12,0.4);padding:6px;border-radius:8px;text-align:center;border:1px solid #2d1f18;cursor:pointer;transition:0.08s;';
-                    el.onmouseover = () => { el.style.borderColor = block.color; };
-                    el.onmouseout = () => { el.style.borderColor = '#2d1f18'; };
-                    el.onclick = () => {
-                        const item = S.inventory.find(i => i.id === id);
-                        showItemInfo(block, item ? item.weight : block.baseWeight);
-                    };
-                    el.innerHTML = `
-                        <div style="font-size:20px;">${block.emoji}</div>
-                        <div style="color:#f0e0d0;font-weight:800;font-size:14px;">${count} шт</div>
-                        <div style="color:#6bcfff;font-size:10px;">${totalBlockWeight.toFixed(1)} кг</div>
-                        <div style="color:#7a6a5a;font-size:8px;">${(totalBlockWeight * block.pricePerKg / count).toFixed(0)} монет/шт</div>
-                    `;
-                    grid.appendChild(el);
+                    rarity = selectedRarity;
+                    block = getRandomBlockForBiome(biomeId);
+                    S.isLegendaryBlock = true;
+                    S.legendaryRarity = rarity;
+                    showLegendaryBlock(rarity);
+                } else {
+                    rarity = getRandomRarity();
+                    block = getRandomBlockForBiome(biomeId);
+                    S.isLegendaryBlock = false;
+                    S.legendaryRarity = null;
+                }
+
+                S.currentBlock = block;
+                S.currentBlockRarity = rarity;
+                S.maxBlockHP = Math.floor(block.hp * (1 + S.depth / 500));
+                S.currentBlockHP = S.maxBlockHP;
+                hpFill.style.width = '100%';
+                hpFill.style.background = 'linear-gradient(90deg, #ff3a3a, #ffd700)';
+                blockEmoji.textContent = '⛏️';
+                blockName.textContent = 'ШАХТА';
+
+                if (isLegendary) {
+                    const glowColor = RARITY[rarity]?.glowColor || 'transparent';
+                    rarityGlow.className = 'rarity-glow active ' + rarity;
+                    digArea.style.borderColor = RARITY[rarity]?.color || '#1f1612';
+                } else {
+                    rarityGlow.className = 'rarity-glow';
+                    digArea.style.borderColor = '#1f1612';
+                }
+
+                updateUI();
+            }
+
+            // ============================================================
+            // 11. КОПКА
+            // ============================================================
+            function startDig() {
+                if (!S.isGameActive) return;
+                if (S.isDigging) return;
+                if (!S.currentBlock) { spawnNewBlock(); return; }
+                if (invCount() >= S.maxSlots) {
+                    floatText('Инвентарь полон! Продайте ресурсы.', '⚠️', '#ff6b6b');
+                    return;
+                }
+
+                S.isDigging = true;
+                S.progress = 0;
+                const duration = Math.max(50, 180 * S.speedMult);
+                const startTime = performance.now();
+
+                function tick() {
+                    if (!S.isDigging || !S.isGameActive) {
+                        if (!S.isGameActive) {
+                            S.isDigging = false;
+                            progressFill.style.width = '0%';
+                        }
+                        return;
+                    }
+                    const elapsed = performance.now() - startTime;
+                    const p = Math.min(1, elapsed / duration);
+                    S.progress = p;
+                    progressFill.style.width = (p * 100) + '%';
+
+                    if (p < 1) {
+                        requestAnimationFrame(tick);
+                    } else {
+                        progressFill.style.width = '100%';
+                        finishDig();
+                    }
+                }
+                requestAnimationFrame(tick);
+            }
+
+            function finishDig() {
+                if (!S.isGameActive) {
+                    S.isDigging = false;
+                    progressFill.style.width = '0%';
+                    return;
+                }
+                if (!S.currentBlock) { S.isDigging = false; return; }
+
+                const dmg = S.damage;
+                S.currentBlockHP -= dmg;
+                S.totalDamage = (S.totalDamage || 0) + dmg;
+
+                const hpPercent = Math.max(0, (S.currentBlockHP / S.maxBlockHP) * 100);
+                hpFill.style.width = hpPercent + '%';
+
+                miningFloat(dmg + ' урона', '💥', '#ff6b6b');
+
+                if (S.currentBlockHP <= 0) {
+                    const block = S.currentBlock;
+                    const rarity = S.currentBlockRarity || 'common';
+                    const amount = Math.floor(1 + S.strengthLevel * 0.3 * S.totalMult);
+                    let added = 0;
+                    let displayWeight = 0;
+                    for (let i = 0; i < amount; i++) {
+                        if (addToInventory(block.id, rarity)) {
+                            added++;
+                            const item = S.inventory[S.inventory.length - 1];
+                            if (item) displayWeight += item.weight;
+                        } else {
+                            break;
+                        }
+                    }
+                    if (added > 0) {
+                        const rarityData = RARITY[rarity];
+                        const color = rarityData ? rarityData.color : '#8a8a8a';
+                        const rarityName = rarityData ? rarityData.name : 'Обычный';
+                        const price = calculatePrice(displayWeight / added, block.pricePerKg, rarity);
+                        miningFloat(added + ' ' + block.name + ' (' + displayWeight.toFixed(1) + ' кг) [' + rarityName + ']',
+                            block.emoji, color);
+                        floatText('Добыто ' + added + ' ' + block.name + ' (' + displayWeight.toFixed(1) + ' кг) [' +
+                            rarityName + ']', block.emoji, color);
+                        S.totalMined += added;
+                        S.totalWeight += displayWeight;
+                        S.totalBroken++;
+                        S.depth += 0.2 + S.speedLevel * 0.03;
+                    }
+                    spawnNewBlock();
+                }
+
+                S.isDigging = false;
+                progressFill.style.width = '0%';
+                updateUI();
+                saveGame();
+
+                if (S.autoLevel > 0 && !S.autoInterval && S.isGameActive) {
+                    startAuto();
                 }
             }
-            blockStatsDiv.appendChild(grid);
-            statsGrid.appendChild(blockStatsDiv);
-        }
-    }
 
-    // ===== ORE INFO IN SETTINGS =====
-    function renderOreInfo() {
-        const grid = document.getElementById('oreInfoGrid');
-        grid.innerHTML = '';
-        for (const block of BLOCKS) {
-            const div = document.createElement('div');
-            div.className = 'ore-info-item';
-            const avgPrice = ((block.weightMin + block.weightMax) / 2 * block.pricePerKg).toFixed(0);
-            div.innerHTML = `
-                <span class="oemoji">${block.emoji}</span>
-                <div>
-                    <div class="oname">${block.name}</div>
-                    <div class="odepth">${block.depthMin}-${block.depthMax} м</div>
-                    <div class="oweight">${block.weightMin}-${block.weightMax} кг · ${block.pricePerKg} монет/кг</div>
-                    <div style="color:#ffd700;font-size:9px;">~${avgPrice} монет/шт</div>
-                </div>
-            `;
-            grid.appendChild(div);
-        }
-    }
-
-    // ===== НАВИГАЦИЯ =====
-    function showMenu() {
-        menuScreen.style.display = 'flex';
-        gameScreen.classList.remove('active');
-    }
-
-    function showGame() {
-        menuScreen.style.display = 'none';
-        gameScreen.classList.add('active');
-        if (!S.currentBlock) spawnNewBlock();
-        updateUI();
-    }
-
-    // ===== СОБЫТИЯ =====
-    playBtn.addEventListener('click', showGame);
-    backToMenuBtn.addEventListener('click', showMenu);
-
-    statsMenuBtn.addEventListener('click', () => {
-        statsOverlay.classList.toggle('active');
-        renderStats();
-    });
-    statsClose.addEventListener('click', () => statsOverlay.classList.remove('active'));
-    statsOverlay.addEventListener('click', (e) => {
-        if (e.target === statsOverlay) statsOverlay.classList.remove('active');
-    });
-
-    achievementsBtn.addEventListener('click', () => {
-        achievementsOverlay.classList.toggle('active');
-        renderAchievements();
-    });
-    achievementsClose.addEventListener('click', () => achievementsOverlay.classList.remove('active'));
-    achievementsOverlay.addEventListener('click', (e) => {
-        if (e.target === achievementsOverlay) achievementsOverlay.classList.remove('active');
-    });
-
-    settingsBtn.addEventListener('click', () => {
-        settingsOverlay.classList.toggle('active');
-        renderOreInfo();
-    });
-    settingsClose.addEventListener('click', () => settingsOverlay.classList.remove('active'));
-    settingsOverlay.addEventListener('click', (e) => {
-        if (e.target === settingsOverlay) settingsOverlay.classList.remove('active');
-    });
-
-    infoClose.addEventListener('click', () => infoOverlay.classList.remove('active'));
-    infoOverlay.addEventListener('click', (e) => {
-        if (e.target === infoOverlay) infoOverlay.classList.remove('active');
-    });
-
-    // Settings: float speed
-    const floatSpeedSelect = document.getElementById('floatSpeedSelect');
-    floatSpeedSelect.addEventListener('change', () => {
-        const val = parseFloat(floatSpeedSelect.value);
-        if (val === 0) {
-            S.floatEnabled = false;
-        } else {
-            S.floatEnabled = true;
-            S.floatSpeed = val;
-        }
-    });
-
-    const floatHeightSlider = document.getElementById('floatHeightSlider');
-    const floatHeightVal = document.getElementById('floatHeightVal');
-    floatHeightSlider.addEventListener('input', () => {
-        const val = parseFloat(floatHeightSlider.value);
-        floatHeightVal.textContent = val.toFixed(1) + 'x';
-        S.floatHeight = val;
-    });
-
-    const fpsSlider = $('fpsSlider');
-    const fpsVal = $('fpsVal');
-    fpsSlider.addEventListener('input', () => {
-        fpsVal.textContent = fpsSlider.value;
-    });
-
-    const themeSelect = $('themeSelect');
-    themeSelect.addEventListener('change', () => {
-        const theme = themeSelect.value;
-        const container = document.getElementById('gameContainer');
-        const colors = {
-            dark: { bg: '#0f0b09', card: '#1a1410' },
-            light: { bg: '#e8ddd0', card: '#d5c8b8' },
-            amber: { bg: '#1a1408', card: '#2a2010' },
-            cyber: { bg: '#080c1a', card: '#101a2a' },
-        };
-        const c = colors[theme] || colors.dark;
-        container.style.background = c.bg;
-        document.querySelectorAll('.stat-card, .panel, .dig-panel, .modal, .settings-item, .shop-item, .inv-slot, .shop-modal').forEach(el => {
-            el.style.background = theme === 'light' ? 'rgba(200,180,160,0.6)' : 
-                                 theme === 'amber' ? 'rgba(40,30,16,0.6)' :
-                                 theme === 'cyber' ? 'rgba(10,20,40,0.6)' :
-                                 'rgba(12,9,7,0.6)';
-        });
-    });
-
-    // GAME EVENTS
-    digArea.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (!S.isDigging && invCount() < S.maxSlots) {
-            startDig();
-        } else if (invCount() >= S.maxSlots) {
-            floatText('Инвентарь полон! Продайте ресурсы.', '⚠️', '#ff6b6b');
-        }
-    });
-
-    document.querySelectorAll('.mine-block, .btn-main, .btn-sm, .menu-btn, .shop-item, .inv-slot').forEach(el => {
-        el.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-        });
-    });
-
-    document.getElementById('sellInvBtn').addEventListener('click', sellInventory);
-    document.getElementById('clearInvBtn').addEventListener('click', clearInventory);
-
-    shopToggle.addEventListener('click', () => {
-        shopOverlay.classList.toggle('active');
-        renderShop();
-    });
-    shopClose.addEventListener('click', () => shopOverlay.classList.remove('active'));
-    shopOverlay.addEventListener('click', (e) => {
-        if (e.target === shopOverlay) shopOverlay.classList.remove('active');
-    });
-
-    // KEYBOARD
-    document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-        if (gameScreen.classList.contains('active')) {
-            if (e.key === ' ' || e.key === 'Space') {
-                e.preventDefault();
-                if (!S.isDigging && invCount() < S.maxSlots) startDig();
+            function startAuto() {
+                if (S.autoInterval) clearInterval(S.autoInterval);
+                if (S.autoLevel > 0 && S.isGameActive) {
+                    const interval = Math.max(300, 1800 - S.autoLevel * 120);
+                    S.autoInterval = setInterval(() => {
+                        if (S.isGameActive && !S.isDigging && invCount() < S.maxSlots) {
+                            startDig();
+                        }
+                    }, interval);
+                }
             }
-            if (e.key === 's' || e.key === 'S') sellInventory();
-            if (e.key === 'm' || e.key === 'M') {
-                shopOverlay.classList.toggle('active');
+
+            function stopAuto() {
+                if (S.autoInterval) {
+                    clearInterval(S.autoInterval);
+                    S.autoInterval = null;
+                }
+            }
+
+            // ============================================================
+            // 12. МАГАЗИН
+            // ============================================================
+            function buyUpgrade(type) {
+                const price = S[type + 'Price'];
+                if (S.coins < price) {
+                    floatText('Не хватает монет!', '❌', '#ff6b6b');
+                    return;
+                }
+                S.coins -= price;
+                S[type + 'Level']++;
+                S[type + 'Price'] = Math.floor(price * 1.8);
+                floatText('Улучшение куплено!', '✅', '#6bff6b');
+                saveGame();
+                updateUI();
                 renderShop();
             }
-            if (e.key === 'Escape') {
-                if (shopOverlay.classList.contains('active')) shopOverlay.classList.remove('active');
-                else showMenu();
-            }
-        }
-        if (e.key === 'Escape') {
-            if (statsOverlay.classList.contains('active')) statsOverlay.classList.remove('active');
-            if (achievementsOverlay.classList.contains('active')) achievementsOverlay.classList.remove('active');
-            if (settingsOverlay.classList.contains('active')) settingsOverlay.classList.remove('active');
-            if (shopOverlay.classList.contains('active')) shopOverlay.classList.remove('active');
-            if (infoOverlay.classList.contains('active')) infoOverlay.classList.remove('active');
-        }
-    });
 
-    // START
-    spawnNewBlock();
-    updateUI();
-    renderAchievements();
-    console.log('[ROCKET::ACHIEVEMENTS] Активен. Достижения добавлены!');
-})();
-</script>
+            function buySlot() {
+                const price = S.slotPrice;
+                if (S.coins < price) {
+                    floatText('Не хватает монет!', '❌', '#ff6b6b');
+                    return;
+                }
+                S.coins -= price;
+                S.maxSlots++;
+                S.slotLevel++;
+                S.slotPrice = Math.floor(price * 2.5);
+                floatText('Слот куплен! +1 место', '📦', '#6bcfff');
+                saveGame();
+                updateUI();
+                renderShop();
+            }
+
+            function renderShop() {
+                const upgrades = [
+                    { key: 'speed', name: '⚡ Скорость копки', desc: '−15% времени копки', priceKey: 'speedPrice',
+                        levelKey: 'speedLevel' },
+                    { key: 'luck', name: '🍀 Удача', desc: '+10% шанс редких руд', priceKey: 'luckPrice',
+                        levelKey: 'luckLevel' },
+                    { key: 'strength', name: '💪 Сила удара', desc: '+0.4 урона за уровень',
+                        priceKey: 'strengthPrice', levelKey: 'strengthLevel' },
+                    { key: 'auto', name: '🤖 Авто-копка', desc: 'Автоматическая добыча (медленнее)', priceKey: 'autoPrice',
+                        levelKey: 'autoLevel' },
+                    { key: 'mult', name: '📈 Множитель', desc: '×1.2 ресурсов за уровень', priceKey: 'multPrice',
+                        levelKey: 'multLevel' },
+                ];
+
+                shopGrid.innerHTML = '';
+
+                const slotDiv = document.createElement('div');
+                slotDiv.className = 'shop-item';
+                slotDiv.classList.toggle('locked', S.coins < S.slotPrice);
+                slotDiv.innerHTML =
+                    `
+                    <div class="sname">📦 Доп. слот инвентаря</div>
+                    <div class="sdesc">+1 место в инвентаре (сейчас ${S.maxSlots})</div>
+                    <div class="slvl">Куплено: ${S.slotLevel}</div>
+                    <div class="sprice">💰 ${S.slotPrice}</div>
+                `;
+                slotDiv.addEventListener('click', buySlot);
+                shopGrid.appendChild(slotDiv);
+
+                for (const up of upgrades) {
+                    const div = document.createElement('div');
+                    div.className = 'shop-item';
+                    const price = S[up.priceKey];
+                    const level = S[up.levelKey];
+                    div.classList.toggle('locked', S.coins < price);
+                    div.innerHTML =
+                        `
+                        <div class="sname">${up.name}</div>
+                        <div class="sdesc">${up.desc}</div>
+                        <div class="slvl">Уровень: ${level}</div>
+                        <div class="sprice">💰 ${price}</div>
+                    `;
+                    div.addEventListener('click', () => buyUpgrade(up.key));
+                    shopGrid.appendChild(div);
+                }
+            }
+
+            // ============================================================
+            // 13. СТАТИСТИКА
+            // ============================================================
+            function renderStats() {
+                const count = invCount();
+                const biome = getCurrentBiome();
+                const allBiomes = Object.keys(BIOMES).length;
+                const visited = Object.keys(S.visitedBiomes || {}).length;
+                const unlocked = Object.keys(S.unlockedBiomes || {}).length;
+
+                let legendaryCount = 0;
+                let mythicCount = 0;
+                for (const item of S.inventory) {
+                    if (item.rarity === 'legendary') legendaryCount++;
+                    if (item.rarity === 'mythic') mythicCount++;
+                }
+
+                statsGrid.innerHTML =
+                    `
+                    <div class="stat-item"><div class="slabel">🌍 Биом</div><div class="svalue gold">${biome.data.name}</div></div>
+                    <div class="stat-item"><div class="slabel">🗺️ Исследовано биомов</div><div class="svalue cyan">${visited}/${allBiomes}</div></div>
+                    <div class="stat-item"><div class="slabel">🔓 Открыто биомов</div><div class="svalue gold">${unlocked}/${allBiomes}</div></div>
+                    <div class="stat-item"><div class="slabel">⛏️ Глубина</div><div class="svalue gold">${Math.floor(S.depth)} м</div></div>
+                    <div class="stat-item"><div class="slabel">💎 Всего добыто</div><div class="svalue cyan">${S.totalMined} шт</div></div>
+                    <div class="stat-item"><div class="slabel">⚖️ Общий вес</div><div class="svalue orange">${S.totalWeight.toFixed(1)} кг</div></div>
+                    <div class="stat-item"><div class="slabel">🧱 Блоков разрушено</div><div class="svalue orange">${S.totalBroken}</div></div>
+                    <div class="stat-item"><div class="slabel">💥 Всего урона</div><div class="svalue red">${S.totalDamage || 0}</div></div>
+                    <div class="stat-item"><div class="slabel">📦 Инвентарь</div><div class="svalue green">${count}/${S.maxSlots}</div></div>
+                    <div class="stat-item"><div class="slabel">💰 Монет</div><div class="svalue gold">${S.coins}</div></div>
+                    <div class="stat-item"><div class="slabel">⚡ Сила удара</div><div class="svalue pink">${S.power.toFixed(1)}</div></div>
+                    <div class="stat-item"><div class="slabel">⚡ Скорость</div><div class="svalue cyan">${(1/S.speedMult).toFixed(1)}x</div></div>
+                    <div class="stat-item"><div class="slabel">🍀 Удача</div><div class="svalue green">${S.luckMult.toFixed(1)}x</div></div>
+                    <div class="stat-item"><div class="slabel">🤖 Авто-копка</div><div class="svalue orange">${S.autoLevel > 0 ? 'УР.' + S.autoLevel : 'ВЫКЛ'}</div></div>
+                    <div class="stat-item"><div class="slabel">📦 Слотов инвентаря</div><div class="svalue cyan">${S.maxSlots}</div></div>
+                    <div class="stat-item"><div class="slabel">📚 Коллекция</div><div class="svalue gold">${BLOCKS.filter(b => (S.blockStats[b.id] || 0) > 0).length} / ${BLOCKS.length}</div></div>
+                    <div class="stat-item"><div class="slabel">🟧 Легендарных предметов</div><div class="svalue orange">${legendaryCount}</div></div>
+                    <div class="stat-item"><div class="slabel">🔴 Мифических предметов</div><div class="svalue red">${mythicCount}</div></div>
+                `;
+
+                if (S.inventory.length > 0) {
+                    const blockStatsDiv = document.createElement('div');
+                    blockStatsDiv.style.gridColumn = '1 / -1';
+                    blockStatsDiv.style.marginTop = '8px';
+                    blockStatsDiv.innerHTML =
+                        `<div style="color:#8a7a6a;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">📊 ТЕКУЩИЙ ИНВЕНТАРЬ</div>`;
+                    const grid = document.createElement('div');
+                    grid.style.display = 'grid';
+                    grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(100px, 1fr))';
+                    grid.style.gap = '4px';
+
+                    for (const item of S.inventory) {
+                        const block = getBlockById(item.id);
+                        if (block) {
+                            const weight = item.weight || 0;
+                            const rarity = item.rarity || 'common';
+                            const rarityData = RARITY[rarity];
+                            const color = rarityData ? rarityData.color : '#8a8a8a';
+                            const price = calculatePrice(weight, block.pricePerKg, rarity);
+                            const el = document.createElement('div');
+                            el.style.cssText =
+                                `background:rgba(20,15,12,0.4);padding:6px;border-radius:8px;text-align:center;border:1px solid ${color};cursor:pointer;transition:0.08s;`;
+                            el.onclick = () => {
+                                showItemInfo(block, weight, rarity);
+                            };
+                            el.innerHTML =
+                                `
+                                <div style="font-size:20px;">${block.emoji}</div>
+                                <div style="color:#f0e0d0;font-weight:800;font-size:12px;">${block.name}</div>
+                                <div style="color:${color};font-size:10px;font-weight:700;">${rarityData ? rarityData.name : 'Обычный'}</div>
+                                <div style="color:#6bcfff;font-size:9px;">${weight.toFixed(1)} кг</div>
+                                <div style="color:#ffd700;font-size:10px;">${price} монет</div>
+                            `;
+                            grid.appendChild(el);
+                        }
+                    }
+                    blockStatsDiv.appendChild(grid);
+                    statsGrid.appendChild(blockStatsDiv);
+                }
+            }
+
+            // ============================================================
+            // 14. КОЛЛЕКЦИЯ
+            // ============================================================
+            function getBiomeCollectionProgress(biomeId) {
+                const blocks = BLOCKS.filter(b => b.biome === biomeId);
+                let found = 0;
+                let total = blocks.length;
+                for (const block of blocks) {
+                    if ((S.blockStats[block.id] || 0) > 0) found++;
+                }
+                return { found, total, blocks, percent: total > 0 ? (found / total) * 100 : 0 };
+            }
+
+            function isBiomeComplete(biomeId) {
+                const p = getBiomeCollectionProgress(biomeId);
+                return p.found === p.total && p.total > 0;
+            }
+
+            function getBiomeReward(biomeId) {
+                const rewards = {
+                    forest: 150,
+                    desert: 200,
+                    mountains: 300,
+                    nether: 500,
+                    ender: 750,
+                };
+                return rewards[biomeId] || 0;
+            }
+
+            function checkCollectionRewards() {
+                let totalReward = 0;
+                for (const biomeId of Object.keys(BIOMES)) {
+                    if (isBiomeComplete(biomeId) && !S.collectionRewards[biomeId]) {
+                        const reward = getBiomeReward(biomeId);
+                        S.coins += reward;
+                        S.collectionRewards[biomeId] = true;
+                        totalReward += reward;
+                        showCollectionReward(biomeId, reward);
+                    }
+                }
+                const allComplete = Object.keys(BIOMES).every(b => isBiomeComplete(b));
+                if (allComplete && !S.collectionRewards['_all']) {
+                    S.coins += 1000;
+                    S.collectionRewards['_all'] = true;
+                    totalReward += 1000;
+                    showCollectionReward('Все биомы', 1000);
+                }
+                if (totalReward > 0) {
+                    saveGame();
+                    updateUI();
+                    renderCollection();
+                }
+                return totalReward;
+            }
+
+            function showCollectionReward(biomeId, reward) {
+                const name = biomeId === 'Все биомы' ? 'Все биомы' : BIOMES[biomeId]?.name || biomeId;
+                const el = document.createElement('div');
+                el.className = 'collection-reward-float';
+                el.innerHTML =
+                    `
+                    <div style="text-align:center;">
+                        <div style="font-size:40px;">📚</div>
+                        <div style="color:#ffd700;font-weight:900;font-size:18px;">КОЛЛЕКЦИЯ СОБРАНА!</div>
+                        <div style="color:#f0e0d0;font-size:16px;">${name}</div>
+                        <div style="color:#6bff8a;font-size:14px;">+${reward} монет</div>
+                    </div>
+                `;
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 3000);
+            }
+
+            function renderCollection() {
+                const allBlocks = BLOCKS.length;
+                let totalFound = 0;
+                for (const block of BLOCKS) {
+                    if ((S.blockStats[block.id] || 0) > 0) totalFound++;
+                }
+                const countEl = document.getElementById('collectionCount');
+                if (countEl) countEl.textContent = totalFound + ' / ' + allBlocks;
+
+                const grid = document.getElementById('collectionGrid');
+                if (!grid) return;
+                grid.innerHTML = '';
+
+                for (const [biomeId, biome] of Object.entries(BIOMES)) {
+                    const p = getBiomeCollectionProgress(biomeId);
+                    const complete = isBiomeComplete(biomeId);
+                    const reward = getBiomeReward(biomeId);
+                    const rewarded = S.collectionRewards[biomeId] || false;
+
+                    const div = document.createElement('div');
+                    div.className = 'collection-biome';
+                    div.innerHTML =
+                        `
+                        <div class="biome-header">
+                            <div class="biome-name">${biome.icon} ${biome.name}</div>
+                            <div class="biome-count">${p.found}/${p.total}</div>
+                            <div class="biome-reward">${complete ? (rewarded ? '✅ +' + reward : '💰 +' + reward) : '💰 ' + reward}</div>
+                        </div>
+                        <div class="biome-progress">
+                            <div class="biome-progress-fill" style="width:${p.percent}%;"></div>
+                        </div>
+                        ${complete ? '<div class="biome-complete">✅ Коллекция полностью собрана!</div>' : ''}
+                        <div class="biome-blocks">
+                            ${p.blocks.map(block => {
+                                const found = (S.blockStats[block.id] || 0) > 0;
+                                return `
+                                    <div class="cblock ${found ? 'found' : 'missing'}" onclick="${found ? `window.showBlockInfo('${block.id}')` : ''}">
+                                        <div class="cemoji">${block.emoji}</div>
+                                        <span class="cname">${found ? block.name : '???'}</span>
+                                        ${found ? `<span class="ccount">${S.blockStats[block.id] || 0}</span>` : ''}
+                                        ${!found ? '<div style="font-size:7px;color:#3f3028;">🔒</div>' : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    grid.appendChild(div);
+                }
+            }
+
+            // ============================================================
+            // 15. ВЫБОР БИОМА
+            // ============================================================
+            function renderBiomeSelect() {
+                const current = S.selectedBiome || getBiomeForDepth(S.depth);
+                const statusEl = document.getElementById('biomeSelectStatus');
+                if (statusEl) statusEl.textContent = 'Текущий: ' + BIOMES[current].name;
+
+                const grid = document.getElementById('biomeSelectGrid');
+                if (!grid) return;
+                grid.innerHTML = '';
+
+                for (const [id, biome] of Object.entries(BIOMES)) {
+                    const div = document.createElement('div');
+                    div.className = 'biome-select-item';
+                    const isUnlocked = S.unlockedBiomes[id] || false;
+                    const isActive = id === current;
+
+                    if (!isUnlocked) div.classList.add('locked');
+                    if (isActive && isUnlocked) div.classList.add('active');
+
+                    const visited = S.visitedBiomes[id] ? '✅' : '❌';
+                    const depthProgress = Math.min(100, (S.depth / biome.unlockDepth) * 100);
+                    const coinsProgress = Math.min(100, (S.coins / biome.unlockCoins) * 100);
+                    const depthDone = S.depth >= biome.unlockDepth;
+                    const coinsDone = S.coins >= biome.unlockCoins;
+
+                    let progressHTML = '';
+                    if (!isUnlocked && id !== 'forest') {
+                        progressHTML =
+                            `
+                            <div class="bs-progress">
+                                <div class="bs-progress-text">
+                                    <span class="depth-text">📊 ${Math.floor(S.depth)}/${biome.unlockDepth} м</span>
+                                    <span class="coins-text">💰 ${S.coins}/${biome.unlockCoins}</span>
+                                </div>
+                                <div class="bs-bar">
+                                    <div class="bs-bar-fill depth" style="width:${depthProgress}%;"></div>
+                                </div>
+                                <div class="bs-bar">
+                                    <div class="bs-bar-fill coins" style="width:${coinsProgress}%;"></div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    div.innerHTML =
+                        `
+                        <div class="bs-icon">${biome.icon}</div>
+                        <div class="bs-name">${biome.name}</div>
+                        <div class="bs-depth">${biome.depthMin}-${biome.depthMax} м</div>
+                        <div class="bs-status">${isUnlocked ? '✅ ОТКРЫТ' : '🔒 ЗАКРЫТ'}</div>
+                        ${progressHTML}
+                        ${!isUnlocked && id !== 'forest' ? `<div class="bs-requirements">
+                            <span class="req ${depthDone ? 'done' : 'pending'}">${depthDone ? '✅' : '❌'} ${biome.unlockDepth} м</span>
+                            <span class="req ${coinsDone ? 'done' : 'pending'}">${coinsDone ? '✅' : '❌'} ${biome.unlockCoins} монет</span>
+                        </div>` : ''}
+                    `;
+
+                    div.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        if (!isUnlocked) {
+                            floatText('Этот биом ещё не открыт!', '🔒', '#ff6b6b');
+                            return;
+                        }
+                        S.selectedBiome = id;
+                        S.depth = biome.depthMin + 5;
+                        spawnNewBlock();
+                        updateUI();
+                        renderBiomeSelect();
+                        document.getElementById('biomeSelectOverlay').classList.remove('active');
+                        floatText('Переключено на ' + biome.name, biome.icon, biome.color);
+                        saveGame();
+                    });
+                    grid.appendChild(div);
+                }
+            }
+
+            // ============================================================
+            // 16. ИНФОРМАЦИЯ О РУДАХ В НАСТРОЙКАХ
+            // ============================================================
+            function renderOreInfo() {
+                const grid = document.getElementById('oreInfoGrid');
+                grid.innerHTML = '';
+                for (const block of BLOCKS) {
+                    const biome = BIOMES[block.biome];
+                    const div = document.createElement('div');
+                    div.className = 'ore-info-item';
+                    const avgPrice = ((block.weightMin + block.weightMax) / 2 * block.pricePerKg).toFixed(0);
+                    div.innerHTML =
+                        `
+                        <span class="oemoji">${block.emoji}</span>
+                        <div>
+                            <div class="oname">${block.name}</div>
+                            <div class="odepth">${biome ? biome.name : '???'} · ${block.depthMin}-${block.depthMax} м</div>
+                            <div class="oweight">${block.weightMin}-${block.weightMax} кг · ${block.pricePerKg} монет/кг</div>
+                            <div style="color:#ffd700;font-size:9px;">~${avgPrice} монет/шт</div>
+                            <div class="orarity" style="color:#8a8a8a;">⬜ Обычный · 🟩 Необычный · 🟦 Редкий · 🟪 Эпический · 🟧 Легендарный · 🔴 Мифический</div>
+                        </div>
+                    `;
+                    grid.appendChild(div);
+                }
+            }
+
+            // ============================================================
+            // 17. НАВИГАЦИЯ
+            // ============================================================
+            function showMenu() {
+                S.isGameActive = false;
+                stopAuto();
+                menuScreen.style.display = 'flex';
+                gameScreen.classList.remove('active');
+                renderCollection();
+            }
+
+            function showGame() {
+                S.isGameActive = true;
+                menuScreen.style.display = 'none';
+                gameScreen.classList.add('active');
+                if (!S.currentBlock) spawnNewBlock();
+                updateUI();
+                if (S.autoLevel > 0) {
+                    startAuto();
+                }
+            }
+
+            // ============================================================
+            // 18. СОБЫТИЯ
+            // ============================================================
+            playBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showGame();
+            });
+            backToMenuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showMenu();
+            });
+
+            statsMenuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                statsOverlay.classList.toggle('active');
+                renderStats();
+            });
+            statsClose.addEventListener('click', function(e) {
+                e.preventDefault();
+                statsOverlay.classList.remove('active');
+            });
+            statsOverlay.addEventListener('click', function(e) {
+                if (e.target === statsOverlay) statsOverlay.classList.remove('active');
+            });
+
+            questsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                questsOverlay.classList.toggle('active');
+            });
+            questsClose.addEventListener('click', function(e) {
+                e.preventDefault();
+                questsOverlay.classList.remove('active');
+            });
+            questsOverlay.addEventListener('click', function(e) {
+                if (e.target === questsOverlay) questsOverlay.classList.remove('active');
+            });
+
+            collectionBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                collectionOverlay.classList.toggle('active');
+                renderCollection();
+            });
+            collectionClose.addEventListener('click', function(e) {
+                e.preventDefault();
+                collectionOverlay.classList.remove('active');
+            });
+            collectionOverlay.addEventListener('click', function(e) {
+                if (e.target === collectionOverlay) collectionOverlay.classList.remove('active');
+            });
+
+            biomeSelectBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                biomeSelectOverlay.classList.toggle('active');
+                renderBiomeSelect();
+            });
+            biomeSelectClose.addEventListener('click', function(e) {
+                e.preventDefault();
+                biomeSelectOverlay.classList.remove('active');
+            });
+            biomeSelectOverlay.addEventListener('click', function(e) {
+                if (e.target === biomeSelectOverlay) biomeSelectOverlay.classList.remove('active');
+            });
+
+            settingsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                settingsOverlay.classList.toggle('active');
+                renderOreInfo();
+            });
+            settingsClose.addEventListener('click', function(e) {
+                e.preventDefault();
+                settingsOverlay.classList.remove('active');
+            });
+            settingsOverlay.addEventListener('click', function(e) {
+                if (e.target === settingsOverlay) settingsOverlay.classList.remove('active');
+            });
+
+            infoClose.addEventListener('click', function(e) {
+                e.preventDefault();
+                infoOverlay.classList.remove('active');
+            });
+            infoOverlay.addEventListener('click', function(e) {
+                if (e.target === infoOverlay) infoOverlay.classList.remove('active');
+            });
+
+            // Сброс игры
+            resetGameBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                resetConfirmOverlay.classList.add('active');
+            });
+
+            resetConfirmBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                resetConfirmOverlay.classList.remove('active');
+                resetGame();
+            });
+
+            resetCancelBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                resetConfirmOverlay.classList.remove('active');
+            });
+
+            resetConfirmOverlay.addEventListener('click', function(e) {
+                if (e.target === resetConfirmOverlay) {
+                    resetConfirmOverlay.classList.remove('active');
+                }
+            });
+
+            // Игровые события
+            document.getElementById('sellInvBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                sellInventory();
+            });
+            document.getElementById('clearInvBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                clearInventory();
+            });
+
+            shopToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                shopOverlay.classList.toggle('active');
+                renderShop();
+            });
+            shopClose.addEventListener('click', function(e) {
+                e.preventDefault();
+                shopOverlay.classList.remove('active');
+            });
+            shopOverlay.addEventListener('click', function(e) {
+                if (e.target === shopOverlay) shopOverlay.classList.remove('active');
+            });
+
+            digArea.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!S.isGameActive) return;
+                if (!S.isDigging && invCount() < S.maxSlots) {
+                    startDig();
+                } else if (invCount() >= S.maxSlots) {
+                    floatText('Инвентарь полон! Продайте ресурсы.', '⚠️', '#ff6b6b');
+                }
+            });
+
+            document.querySelectorAll('.mine-block, .btn-main, .btn-sm, .menu-btn, .shop-item, .inv-slot, .biome-select-item')
+                .forEach(el => {
+                    el.addEventListener('mousedown', function(e) {
+                        e.preventDefault();
+                    });
+                });
+
+            // Настройки
+            const floatSpeedSelect = document.getElementById('floatSpeedSelect');
+            floatSpeedSelect.value = '0.5';
+            floatSpeedSelect.addEventListener('change', function() {
+                const val = parseFloat(floatSpeedSelect.value);
+                if (val === 0) {
+                    S.floatEnabled = false;
+                } else {
+                    S.floatEnabled = true;
+                    S.floatSpeed = val;
+                }
+            });
+
+            const floatHeightSlider = document.getElementById('floatHeightSlider');
+            const floatHeightVal = document.getElementById('floatHeightVal');
+            floatHeightSlider.addEventListener('input', function() {
+                const val = parseFloat(floatHeightSlider.value);
+                floatHeightVal.textContent = val.toFixed(1) + 'x';
+                S.floatHeight = val;
+            });
+
+            const fpsSlider = document.getElementById('fpsSlider');
+            const fpsVal = document.getElementById('fpsVal');
+            fpsSlider.addEventListener('input', function() {
+                fpsVal.textContent = fpsSlider.value;
+            });
+
+            const themeSelect = document.getElementById('themeSelect');
+            themeSelect.addEventListener('change', function() {
+                const theme = themeSelect.value;
+                const container = document.getElementById('gameContainer');
+                const colors = {
+                    dark: { bg: '#0f0b09', card: '#1a1410' },
+                    light: { bg: '#e8ddd0', card: '#d5c8b8' },
+                    amber: { bg: '#1a1408', card: '#2a2010' },
+                    cyber: { bg: '#080c1a', card: '#101a2a' },
+                };
+                const c = colors[theme] || colors.dark;
+                container.style.background = c.bg;
+                document.querySelectorAll(
+                        '.stat-card, .panel, .dig-panel, .modal, .settings-item, .shop-item, .inv-slot, .shop-modal, .collection-biome, .biome-select-item'
+                        )
+                    .forEach(el => {
+                        el.style.background = theme === 'light' ? 'rgba(200,180,160,0.6)' :
+                            theme === 'amber' ? 'rgba(40,30,16,0.6)' :
+                            theme === 'cyber' ? 'rgba(10,20,40,0.6)' :
+                            'rgba(12,9,7,0.6)';
+                    });
+            });
+
+            // Клавиатура
+            document.addEventListener('keydown', function(e) {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+                if (gameScreen.classList.contains('active') && S.isGameActive) {
+                    if (e.key === ' ' || e.key === 'Space') {
+                        e.preventDefault();
+                        if (!S.isDigging && invCount() < S.maxSlots) startDig();
+                    }
+                    if (e.key === 's' || e.key === 'S') sellInventory();
+                    if (e.key === 'm' || e.key === 'M') {
+                        shopOverlay.classList.toggle('active');
+                        renderShop();
+                    }
+                    if (e.key === 'Escape') {
+                        if (shopOverlay.classList.contains('active')) shopOverlay.classList.remove('active');
+                        else showMenu();
+                    }
+                }
+                if (e.key === 'Escape') {
+                    if (statsOverlay.classList.contains('active')) statsOverlay.classList.remove('active');
+                    if (questsOverlay.classList.contains('active')) questsOverlay.classList.remove('active');
+                    if (collectionOverlay.classList.contains('active')) collectionOverlay.classList.remove('active');
+                    if (biomeSelectOverlay.classList.contains('active')) biomeSelectOverlay.classList.remove('active');
+                    if (settingsOverlay.classList.contains('active')) settingsOverlay.classList.remove('active');
+                    if (shopOverlay.classList.contains('active')) shopOverlay.classList.remove('active');
+                    if (infoOverlay.classList.contains('active')) infoOverlay.classList.remove('active');
+                    if (resetConfirmOverlay.classList.contains('active')) resetConfirmOverlay.classList.remove('active');
+                }
+            });
+
+            // ============================================================
+            // 19. СТАРТ
+            // ============================================================
+            const loaded = loadGame();
+
+            // Начинаем в меню
+            S.isGameActive = false;
+            menuScreen.style.display = 'flex';
+            gameScreen.classList.remove('active');
+
+            spawnNewBlock();
+            updateUI();
+            renderCollection();
+            renderBiomeSelect();
+
+            if (loaded) {
+                console.log('[ROCKET] Прогресс загружен!');
+            } else {
+                console.log('[ROCKET] Новая игра!');
+            }
+
+            console.log('[ROCKET::MEGA] Активен! 5 биомов, 50 блоков, система редкости, легендарная шахта!');
+        })();
+    </script>
 </body>
 </html>
+```
