@@ -9,21 +9,14 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    padding: 20px;
-    color: #2d3748;
-    display: flex;
-    justify-content: center;
+    min-height: 100vh; padding: 20px; color: #2d3748;
+    display: flex; justify-content: center;
   }
   .container {
-    background: #fff;
-    border-radius: 20px;
-    padding: 25px 22px;
-    max-width: 560px;
-    width: 100%;
+    background: #fff; border-radius: 20px; padding: 25px 22px;
+    max-width: 560px; width: 100%;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    height: fit-content;
-    margin: auto;
+    height: fit-content; margin: auto;
   }
   h1 { font-size: 21px; text-align: center; color: #4c51bf; margin-bottom: 6px; }
   .subtitle { text-align: center; color: #718096; font-size: 13px; margin-bottom: 18px; }
@@ -48,16 +41,16 @@
   }
   .custom-input.visible { display: block; }
   .custom-input:focus { border-color: #667eea; background: #fff; }
-  .nav { display: flex; gap: 10px; margin-top: 8px; }
   .btn {
-    flex: 1; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff; border: none; border-radius: 11px; font-size: 15px;
-    font-weight: 600; cursor: pointer; transition: transform 0.1s, opacity 0.2s;
-    font-family: inherit;
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; border: none; border-radius: 11px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s; font-family: inherit;
+    margin-top: 8px;
   }
   .btn:hover:not(:disabled) { transform: translateY(-2px); }
   .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .btn-back { flex: 0 0 90px; background: #edf2f7; color: #4a5568; }
   .step { text-align: center; font-size: 12.5px; color: #a0aec0; margin-top: 12px; }
   .final { display: none; text-align: center; }
   .final.active { display: block; }
@@ -79,7 +72,7 @@
     text-align: center; color: #2d3748;
   }
   .name-input:focus { border-color: #667eea; }
-  .comment-block { text-align: center; }
+  .comment-block { text-align: center; display: none; }
   .comment-block h2 { color: #4c51bf; font-size: 18px; margin-bottom: 8px; }
   .comment-block p { color: #718096; font-size: 13.5px; margin-bottom: 14px; line-height: 1.5; }
   .comment-area {
@@ -88,12 +81,15 @@
     resize: vertical; color: #2d3748; margin-bottom: 14px;
   }
   .comment-area:focus { border-color: #667eea; }
+  .send-progress {
+    font-size: 13px; color: #667eea; font-weight: 600;
+    margin-top: 10px; min-height: 20px;
+  }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- ЭКРАН 1: ИНТРО -->
   <div class="intro" id="intro">
     <h1>💜 Привет!</h1>
     <p>Это небольшой тест из 100 вопросов — просто расскажи о себе честно. Тут нет правильных ответов, а если ни один вариант не подходит — выбери <b>«✍️ Свой вариант»</b> и напиши как думаешь ты.</p>
@@ -101,25 +97,23 @@
     <button class="btn" id="startBtn">Начать ✨</button>
   </div>
 
-  <!-- ЭКРАН 2: ТЕСТ -->
   <div class="quiz-wrapper" id="quizWrapper" style="display:none;">
     <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
     <form id="quiz"></form>
   </div>
 
-  <!-- ЭКРАН 3: КОММЕНТАРИЙ -->
-  <div class="comment-block" id="commentBlock" style="display:none;">
+  <div class="comment-block" id="commentBlock">
     <h2>Последний штрих 💌</h2>
     <p>Если хочешь — напиши что-нибудь от себя. Это увидит только он.</p>
     <textarea class="comment-area" id="commentArea" placeholder="Твоё сообщение..." maxlength="800"></textarea>
     <button class="btn" id="sendBtn">Отправить 💜</button>
   </div>
 
-  <!-- ЭКРАН 4: ФИНАЛ -->
   <div class="final" id="final">
     <h2 id="finalTitle">Отправка...</h2>
     <p id="finalText">Секунду 💜</p>
     <div class="spinner" id="spinner"></div>
+    <div class="send-progress" id="sendProgress"></div>
     <div class="error" id="error" style="display:none;"></div>
   </div>
 
@@ -129,10 +123,9 @@
 const BOT_TOKEN = "8826609232:AAFL1rKSv8X5f4j6n6DbFY5HXRyJ8zfFqNg";
 const CHAT_ID   = "5734995679";
 const CUSTOM_LABEL = "✍️ Свой вариант";
+const SEND_TIMEOUT_MS = 30000; // 30 секунд
 
-/* ============ 100 ВОПРОСОВ ============ */
 const questions = [
-  // --- Знакомство (1-10) ---
   { q: "Что для тебя важно при первом знакомстве с парнем?", a: ["Как он выглядит", "Как он разговаривает", "Его чувство юмора", "Его взгляд и уверенность"] },
   { q: "Как ты поймёшь, что парень тебе действительно нравится?", a: ["Постоянно думаю о нём", "Хочу проводить с ним время", "Рассказываю о нём подругам", "Волнуюсь перед встречей"] },
   { q: "Что бы ты хотела, чтобы парень сделал на первом свидании?", a: ["Купил цветы", "Придумал что-то необычное", "Просто был собой", "Был внимательным слушателем"] },
@@ -143,8 +136,6 @@ const questions = [
   { q: "Что цепляет тебя в переписке?", a: ["Юмор", "Внимание к деталям", "Интересные темы", "Комплименты"] },
   { q: "Идеальный темп развития отношений для тебя?", a: ["Медленно и нежно", "Средний темп", "Быстро и страстно", "Как получится"] },
   { q: "О чём ты бы хотела говорить с парнем в первые дни?", a: ["О мечтах", "О жизни", "О хобби", "Обо всём подряд"] },
-
-  // --- Отношение к парню (11-20) ---
   { q: "Как ты будешь относиться к своему парню, когда влюблена?", a: ["Буду баловать заботой", "Буду уважать его свободу", "Буду дарить нежность", "Буду вдохновлять его"] },
   { q: "Что для тебя значит 'быть рядом' с парнем?", a: ["Всегда поддерживать", "Слушать и слышать", "Быть его тылом", "Радовать каждый день"] },
   { q: "Как ты будешь выражать свою любовь?", a: ["Словами", "Объятиями", "Заботой", "Вниманием к мелочам"] },
@@ -155,8 +146,6 @@ const questions = [
   { q: "Что ты чувствуешь, когда парень заботится о тебе?", a: ["Благодарность", "Нежность", "Хочу ответить взаимностью", "Ощущаю себя любимой"] },
   { q: "Как часто ты хотела бы видеться?", a: ["Каждый день", "Через день", "Пару раз в неделю", "По настроению"] },
   { q: "Что для тебя важнее в отношениях?", a: ["Доверие", "Страсть", "Общие цели", "Поддержка"] },
-
-  // --- Эмоции и чувства (21-30) ---
   { q: "Как ты реагируешь, если сильно скучаешь по парню?", a: ["Пишу сразу", "Звоню", "Жду, пока напишет", "Пишу милое сообщение"] },
   { q: "Что ты чувствуешь, когда парень обнимает тебя?", a: ["Спокойствие", "Защищённость", "Счастье", "Всё сразу"] },
   { q: "Как ты относишься к комплиментам от парня?", a: ["Обожаю", "Приятно смущаюсь", "Люблю, когда искренние", "Ценю, но не главное"] },
@@ -167,8 +156,6 @@ const questions = [
   { q: "Как ты хочешь, чтобы парень успокаивал тебя?", a: ["Обнял", "Выслушал", "Сказал что-то тёплое", "Просто был рядом"] },
   { q: "Как часто ты говоришь 'люблю'?", a: ["Часто", "Только когда сильно чувствую", "Редко, но метко", "Предпочитаю показывать"] },
   { q: "Что для тебя значит 'быть счастливой' в отношениях?", a: ["Чувствовать себя любимой", "Знать, что он рядом", "Смеяться вместе", "Расти вместе"] },
-
-  // --- Конфликты (31-40) ---
   { q: "Как ты ведёшь себя в ссоре?", a: ["Сразу обсуждаю", "Беру паузу", "Плачу", "Молчу"] },
   { q: "Что для тебя неприемлемо в отношениях?", a: ["Измена", "Ложь", "Грубость", "Игнор"] },
   { q: "Как ты миришься после ссоры?", a: ["Первой иду навстречу", "Жду его шага", "Предлагаю поговорить", "Обнимаю без слов"] },
@@ -179,8 +166,6 @@ const questions = [
   { q: "Что ты сделаешь, если парень уйдёт в себя?", a: ["Дам время", "Буду рядом", "Спрошу что случилось", "Заберу себе внимание"] },
   { q: "Как ты реагируешь на критику?", a: ["Спокойно принимаю", "Обижаюсь", "Обдумываю", "Отвечаю критикой"] },
   { q: "Что для тебя знак, что отношения закончились?", a: ["Пропало доверие", "Нет чувств", "Нет общих целей", "Постоянные ссоры"] },
-
-  // --- Границы и уважение (41-50) ---
   { q: "Как ты относишься к личному пространству в отношениях?", a: ["Оно должно быть", "Небольшое, но есть", "Мне не нужно", "Зависит от ситуации"] },
   { q: "Как ты относишься к друзьям парня?", a: ["Хочу знать всех", "Достаточно пару раз", "Не лезу в его круг", "Дружу вместе"] },
   { q: "Как ты относишься к хобби парня?", a: ["Поддерживаю", "Хочу участвовать", "Не мешаю", "Интересно узнать"] },
@@ -191,8 +176,6 @@ const questions = [
   { q: "Как ты относишься к бывшим парня?", a: ["Не общаюсь", "Спокойно", "Не обсуждаю", "Считаю это личным"] },
   { q: "Как ты относишься к тому, что парень общается с другими девушками?", a: ["Нормально, если друзья", "Ревную немного", "Не люблю", "Спокойно"] },
   { q: "Что для тебя переступить черту в отношениях?", a: ["Изменить", "Солгать о важном", "Унизить", "Предать доверие"] },
-
-  // --- Будущее и планы (51-60) ---
   { q: "Как ты видишь отношения через год?", a: ["Живём вместе", "Всё ещё вместе и счастливы", "Строим планы на будущее", "Не загадываю"] },
   { q: "Хочешь ли ты детей?", a: ["Да, обязательно", "Да, но позже", "Пока не знаю", "Нет"] },
   { q: "Как ты относишься к браку?", a: ["Мечтаю о нём", "Скорее да, чем нет", "Пока не думаю", "Не считаю обязательным"] },
@@ -203,8 +186,6 @@ const questions = [
   { q: "Что для тебя важно в общем доме?", a: ["Уют", "Чистота", "Гармония", "Своё место"] },
   { q: "Как ты видишь воспитание детей?", a: ["Строго", "Мягко и с любовью", "Свобода выбора", "Как договоримся"] },
   { q: "Как ты видишь старость вместе?", a: ["Вместе и счастливы", "Путешествуя", "С семьёй рядом", "В тишине"] },
-
-  // --- Личные качества (61-75) ---
   { q: "Как ты проводишь свободный вечер?", a: ["Дома с книгой/сериалом", "С друзьями", "За хобби", "Планирую что-то новое"] },
   { q: "Твой идеальный выходной — это...", a: ["Поездка на природу", "Город и кафе", "Домашний уют", "Спонтанное приключение"] },
   { q: "Как ты относишься к сюрпризам?", a: ["Обожаю", "Люблю приятные", "Только неожиданные", "Не очень"] },
@@ -220,8 +201,6 @@ const questions = [
   { q: "Как ты относишься к животным?", a: ["Обожаю", "Люблю, но не дома", "Спокойно", "Хочу питомца"] },
   { q: "Что тебя вдохновляет?", a: ["Люди рядом", "Искусство", "Природа", "Мечты"] },
   { q: "Как ты относишься к религии?", a: ["Верующая", "Скорее духовная", "Не верую", "Спокойно к любой"] },
-
-  // --- Быт (76-85) ---
   { q: "Как ты относишься к готовке?", a: ["Люблю готовить", "Готовлю по настроению", "Не люблю, но умею", "Не умею"] },
   { q: "Как ты относишься к уборке?", a: ["Люблю порядок", "Убираю по настроению", "Делим с парнем", "Не люблю"] },
   { q: "Как ты относишься к планированию?", a: ["Планирую всё", "Планирую главное", "Спонтанность", "По ситуации"] },
@@ -232,16 +211,12 @@ const questions = [
   { q: "Как ты относишься к тому, чтобы парень готовил?", a: ["Обожаю", "Приятно", "Нормально", "Мне всё равно"] },
   { q: "Как ты относишься к домашним животным в доме?", a: ["Хочу", "Может быть", "Не хочу", "Уже есть"] },
   { q: "Как ты относишься к тому, чтобы жить вместе до свадьбы?", a: ["Да, обязательно", "Возможно", "Нет", "Считаю правильным"] },
-
-  // --- Нежность (86-91) ---
   { q: "Как ты относишься к проявлению нежности на людях?", a: ["Обожаю", "Спокойно", "Только за руку", "Не люблю"] },
   { q: "Как часто ты хочешь слышать 'люблю тебя'?", a: ["Каждый день", "Часто", "Иногда", "По настроению"] },
   { q: "Как ты относишься к объятиям?", a: ["Обожаю", "Люблю", "Иногда", "Спокойно"] },
   { q: "Что для тебя важно в интимной близости?", a: ["Доверие", "Нежность", "Страсть", "Взаимность"] },
   { q: "Как ты относишься к тому, чтобы говорить о чувствах?", a: ["Открыто", "Когда важно", "Редко", "Затрудняюсь"] },
   { q: "Как ты хочешь, чтобы парень показывал, что любит?", a: ["Словами", "Действиями", "Подарками", "Вниманием"] },
-
-  // --- Глубокие (92-100) ---
   { q: "Что для тебя самое важное в жизни?", a: ["Любовь", "Семья", "Самореализация", "Счастье близких"] },
   { q: "Что бы ты сделала, если бы поссорилась с парнем из-за ерунды?", a: ["Первой помирилась", "Подождала бы его", "Обсудила бы", "Забыла бы"] },
   { q: "Как ты видишь идеальные отношения?", a: ["Гармония и любовь", "Дружба и страсть", "Взаимная поддержка", "Свобода и уважение"] },
@@ -253,7 +228,6 @@ const questions = [
   { q: "Что бы ты хотела сказать своему будущему парню прямо сейчас?", a: ["Что жду его", "Что буду любить", "Что буду беречь", "Что уже скучаю"] }
 ];
 
-/* ============ СОСТОЯНИЕ ============ */
 let current = 0;
 const answers = new Array(questions.length).fill(null);
 const customs = new Array(questions.length).fill("");
@@ -330,33 +304,21 @@ function render() {
   };
   div.appendChild(input);
 
-  const nav = document.createElement('div');
-  nav.className = 'nav';
-
-  if (current > 0) {
-    const back = document.createElement('button');
-    back.type = 'button';
-    back.className = 'btn btn-back';
-    back.textContent = '← Назад';
-    back.onclick = () => { current--; render(); };
-    nav.appendChild(back);
-  }
-
   const nextBtn = document.createElement('button');
   nextBtn.type = 'button';
   nextBtn.className = 'btn';
-  nextBtn.textContent = current === questions.length - 1 ? 'Далее →' : 'Далее →';
+  nextBtn.textContent = 'Далее →';
   nextBtn.disabled = !isReady();
   nextBtn.onclick = () => {
     if (current < questions.length - 1) {
       current++;
       render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       showComment();
     }
   };
-  nav.appendChild(nextBtn);
-  div.appendChild(nav);
+  div.appendChild(nextBtn);
 
   const step = document.createElement('div');
   step.className = 'step';
@@ -377,6 +339,7 @@ function isReady() {
 function showComment() {
   quizWrapper.style.display = 'none';
   commentBlock.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 document.getElementById('sendBtn').onclick = () => {
@@ -384,12 +347,58 @@ document.getElementById('sendBtn').onclick = () => {
   submit(comment);
 };
 
+// байтовая длина в UTF-8
+function byteLen(str) {
+  return new TextEncoder().encode(str).length;
+}
+
+// режем по байтам с запасом под HTML-теги и заголовок части
+function splitByBytes(text, maxBytes) {
+  const parts = [];
+  let buf = '';
+  for (const line of text.split('\n')) {
+    const candidate = buf + (buf ? '\n' : '') + line;
+    if (byteLen(candidate) > maxBytes) {
+      if (buf) parts.push(buf);
+      buf = line;
+    } else {
+      buf = candidate;
+    }
+  }
+  if (buf) parts.push(buf);
+  return parts;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+async function sendWithTimeout(url, body, timeoutMs) {
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal
+    });
+    const data = await res.json();
+    return data;
+  } finally {
+    clearTimeout(t);
+  }
+}
+
 async function submit(comment) {
   commentBlock.style.display = 'none';
   document.getElementById('final').classList.add('active');
 
   const now = new Date();
-  const dateStr = now.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const dateStr = now.toLocaleString('ru-RU', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
 
   let text = `💜 <b>Ответы на тест</b>\n`;
   text += `👤 <b>Имя:</b> ${escapeHtml(userName)}\n`;
@@ -408,54 +417,60 @@ async function submit(comment) {
     text += `──────────────────\n💌 <b>Её комментарий:</b>\n${escapeHtml(comment)}\n`;
   }
 
-  const chunks = splitMessage(text, 3900);
+  // запас 3500 байт — гарантированно помещается в лимит Telegram 4096
+  const chunks = splitByBytes(text, 3500);
+  const progressEl = document.getElementById('sendProgress');
 
   try {
     for (let i = 0; i < chunks.length; i++) {
+      progressEl.textContent = `Отправка ${i + 1} из ${chunks.length}...`;
+
       const header = chunks.length > 1 ? `📄 Часть ${i + 1}/${chunks.length}\n\n` : '';
-      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text: header + chunks[i],
-          parse_mode: 'HTML'
-        })
-      });
-      const data = await res.json();
-      if (!data.ok) throw new Error(data.description || 'Ошибка Telegram');
+      const payload = {
+        chat_id: CHAT_ID,
+        text: header + chunks[i],
+        parse_mode: 'HTML',
+        disable_web_page_preview: true
+      };
+
+      let data = await sendWithTimeout(
+        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+        payload,
+        SEND_TIMEOUT_MS
+      );
+
+      // если упало из-за parse_mode — повторяем без HTML
+      if (!data.ok) {
+        console.warn('Telegram error, retry without parse_mode:', data.description);
+        data = await sendWithTimeout(
+          `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+          { ...payload, parse_mode: undefined, text: (header + chunks[i]).replace(/<[^>]+>/g, '') },
+          SEND_TIMEOUT_MS
+        );
+      }
+
+      if (!data.ok) {
+        throw new Error(data.description || 'Ошибка Telegram');
+      }
+
       await new Promise(r => setTimeout(r, 400));
     }
 
+    progressEl.textContent = '';
     document.getElementById('finalTitle').textContent = 'Готово! 💜';
     document.getElementById('finalText').textContent = 'Спасибо за ответы!';
     document.getElementById('spinner').style.display = 'none';
   } catch (err) {
+    progressEl.textContent = '';
     document.getElementById('finalTitle').textContent = 'Ошибка 😔';
-    document.getElementById('finalText').textContent = 'Не удалось отправить.';
+    document.getElementById('finalText').textContent = 'Не удалось отправить. Попробуй ещё раз.';
     document.getElementById('spinner').style.display = 'none';
     const e = document.getElementById('error');
     e.style.display = 'block';
-    e.textContent = err.message;
+    e.textContent = (err.name === 'AbortError')
+      ? 'Превышено время ожидания (30 сек). Проверь интернет и токен бота.'
+      : err.message;
   }
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
-function splitMessage(text, maxLen) {
-  const parts = [];
-  let current = '';
-  for (const line of text.split('\n')) {
-    if ((current + line + '\n').length > maxLen) {
-      parts.push(current);
-      current = '';
-    }
-    current += line + '\n';
-  }
-  if (current.trim()) parts.push(current);
-  return parts;
 }
 
 nameInput.addEventListener('keydown', (e) => {
