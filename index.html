@@ -46,8 +46,7 @@
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: #fff; border: none; border-radius: 11px;
     font-size: 15px; font-weight: 600; cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s; font-family: inherit;
-    margin-top: 8px;
+    transition: transform 0.1s, opacity 0.2s; font-family: inherit; margin-top: 8px;
   }
   .btn:hover:not(:disabled) { transform: translateY(-2px); }
   .btn:disabled { opacity: 0.35; cursor: not-allowed; }
@@ -81,10 +80,6 @@
     resize: vertical; color: #2d3748; margin-bottom: 14px;
   }
   .comment-area:focus { border-color: #667eea; }
-  .send-progress {
-    font-size: 13px; color: #667eea; font-weight: 600;
-    margin-top: 10px; min-height: 20px;
-  }
 </style>
 </head>
 <body>
@@ -92,7 +87,7 @@
 
   <div class="intro" id="intro">
     <h1>💜 Привет!</h1>
-    <p>Это небольшой тест из 100 вопросов — просто расскажи о себе честно. Тут нет правильных ответов, а если ни один вариант не подходит — выбери <b>«✍️ Свой вариант»</b> и напиши как думаешь ты.</p>
+    <p>Это небольшой тест из 100 вопросов — просто расскажи о себе честно. Если ни один вариант не подходит — выбери <b>«✍️ Свой вариант»</b> и напиши как думаешь ты.</p>
     <input class="name-input" id="nameInput" type="text" placeholder="Как тебя зовут?" maxlength="40">
     <button class="btn" id="startBtn">Начать ✨</button>
   </div>
@@ -104,8 +99,8 @@
 
   <div class="comment-block" id="commentBlock">
     <h2>Последний штрих 💌</h2>
-    <p>Если хочешь — напиши что-нибудь от себя. Это увидит только он.</p>
-    <textarea class="comment-area" id="commentArea" placeholder="Твоё сообщение..." maxlength="800"></textarea>
+    <p>Если хочешь — напиши что-нибудь от себя.</p>
+    <textarea class="comment-area" id="commentArea" placeholder="Твоё сообщение..." maxlength="500"></textarea>
     <button class="btn" id="sendBtn">Отправить 💜</button>
   </div>
 
@@ -113,7 +108,6 @@
     <h2 id="finalTitle">Отправка...</h2>
     <p id="finalText">Секунду 💜</p>
     <div class="spinner" id="spinner"></div>
-    <div class="send-progress" id="sendProgress"></div>
     <div class="error" id="error" style="display:none;"></div>
   </div>
 
@@ -123,7 +117,6 @@
 const BOT_TOKEN = "8826609232:AAFL1rKSv8X5f4j6n6DbFY5HXRyJ8zfFqNg";
 const CHAT_ID   = "5734995679";
 const CUSTOM_LABEL = "✍️ Свой вариант";
-const SEND_TIMEOUT_MS = 30000; // 30 секунд
 
 const questions = [
   { q: "Что для тебя важно при первом знакомстве с парнем?", a: ["Как он выглядит", "Как он разговаривает", "Его чувство юмора", "Его взгляд и уверенность"] },
@@ -244,7 +237,7 @@ document.getElementById('startBtn').onclick = () => {
   const name = nameInput.value.trim();
   if (!name) {
     nameInput.style.borderColor = '#e53e3e';
-    nameInput.placeholder = 'Введи имя, пожалуйста 😊';
+    nameInput.placeholder = 'Введи имя 😊';
     return;
   }
   userName = name;
@@ -315,7 +308,9 @@ function render() {
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      showComment();
+      quizWrapper.style.display = 'none';
+      commentBlock.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
   div.appendChild(nextBtn);
@@ -330,146 +325,72 @@ function render() {
 }
 
 function isReady() {
-  if (answers[current] === 'custom') {
-    return (customs[current] || '').trim().length > 0;
-  }
+  if (answers[current] === 'custom') return (customs[current] || '').trim().length > 0;
   return answers[current] !== null;
 }
 
-function showComment() {
-  quizWrapper.style.display = 'none';
-  commentBlock.style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
 document.getElementById('sendBtn').onclick = () => {
-  const comment = document.getElementById('commentArea').value.trim();
-  submit(comment);
+  submit(document.getElementById('commentArea').value.trim());
 };
-
-// байтовая длина в UTF-8
-function byteLen(str) {
-  return new TextEncoder().encode(str).length;
-}
-
-// режем по байтам с запасом под HTML-теги и заголовок части
-function splitByBytes(text, maxBytes) {
-  const parts = [];
-  let buf = '';
-  for (const line of text.split('\n')) {
-    const candidate = buf + (buf ? '\n' : '') + line;
-    if (byteLen(candidate) > maxBytes) {
-      if (buf) parts.push(buf);
-      buf = line;
-    } else {
-      buf = candidate;
-    }
-  }
-  if (buf) parts.push(buf);
-  return parts;
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
-async function sendWithTimeout(url, body, timeoutMs) {
-  const controller = new AbortController();
-  const t = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: controller.signal
-    });
-    const data = await res.json();
-    return data;
-  } finally {
-    clearTimeout(t);
-  }
-}
 
 async function submit(comment) {
   commentBlock.style.display = 'none';
   document.getElementById('final').classList.add('active');
 
   const now = new Date();
-  const dateStr = now.toLocaleString('ru-RU', {
-    day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit'
-  });
+  const dateStr = now.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  let text = `💜 <b>Ответы на тест</b>\n`;
-  text += `👤 <b>Имя:</b> ${escapeHtml(userName)}\n`;
-  text += `🕐 <b>Время:</b> ${dateStr}\n`;
-  text += `📊 <b>Всего вопросов:</b> ${questions.length}\n`;
-  text += `──────────────────\n\n`;
+  const header = `💜 Ответы на тест\n👤 ${userName}  |  🕐 ${dateStr}\n──────────────\n`;
 
+  // Пытаемся собрать полный отчёт (с вопросами)
+  let full = header;
   questions.forEach((q, i) => {
     const ans = answers[i] === 'custom'
-      ? `✍️ ${escapeHtml(customs[i].trim())}`
-      : escapeHtml(q.a[answers[i]]);
-    text += `<b>${i + 1}. ${escapeHtml(q.q)}</b>\n➡️ ${ans}\n\n`;
+      ? `✍️ ${customs[i].trim()}`
+      : q.a[answers[i]];
+    full += `${i + 1}. ${q.q}\n➡️ ${ans}\n\n`;
   });
+  if (comment) full += `──────────────\n💌 ${comment}\n`;
 
-  if (comment) {
-    text += `──────────────────\n💌 <b>Её комментарий:</b>\n${escapeHtml(comment)}\n`;
+  // Если не влезает в лимит Telegram (4096 символов) — короткий вариант
+  let text;
+  if (full.length <= 4000) {
+    text = full;
+  } else {
+    text = header;
+    questions.forEach((q, i) => {
+      const ans = answers[i] === 'custom'
+        ? `✍️ ${customs[i].trim()}`
+        : q.a[answers[i]];
+      text += `${i + 1}. ${ans}\n`;
+    });
+    if (comment) text += `──────────────\n💌 ${comment}\n`;
   }
 
-  // запас 3500 байт — гарантированно помещается в лимит Telegram 4096
-  const chunks = splitByBytes(text, 3500);
-  const progressEl = document.getElementById('sendProgress');
+  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
   try {
-    for (let i = 0; i < chunks.length; i++) {
-      progressEl.textContent = `Отправка ${i + 1} из ${chunks.length}...`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: CHAT_ID, text: text })
+    });
+    const data = await res.json();
 
-      const header = chunks.length > 1 ? `📄 Часть ${i + 1}/${chunks.length}\n\n` : '';
-      const payload = {
-        chat_id: CHAT_ID,
-        text: header + chunks[i],
-        parse_mode: 'HTML',
-        disable_web_page_preview: true
-      };
-
-      let data = await sendWithTimeout(
-        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-        payload,
-        SEND_TIMEOUT_MS
-      );
-
-      // если упало из-за parse_mode — повторяем без HTML
-      if (!data.ok) {
-        console.warn('Telegram error, retry without parse_mode:', data.description);
-        data = await sendWithTimeout(
-          `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-          { ...payload, parse_mode: undefined, text: (header + chunks[i]).replace(/<[^>]+>/g, '') },
-          SEND_TIMEOUT_MS
-        );
-      }
-
-      if (!data.ok) {
-        throw new Error(data.description || 'Ошибка Telegram');
-      }
-
-      await new Promise(r => setTimeout(r, 400));
+    if (data.ok) {
+      document.getElementById('finalTitle').textContent = 'Готово! 💜';
+      document.getElementById('finalText').textContent = 'Спасибо за ответы!';
+      document.getElementById('spinner').style.display = 'none';
+    } else {
+      throw new Error(data.description || 'Ошибка Telegram');
     }
-
-    progressEl.textContent = '';
-    document.getElementById('finalTitle').textContent = 'Готово! 💜';
-    document.getElementById('finalText').textContent = 'Спасибо за ответы!';
-    document.getElementById('spinner').style.display = 'none';
   } catch (err) {
-    progressEl.textContent = '';
     document.getElementById('finalTitle').textContent = 'Ошибка 😔';
-    document.getElementById('finalText').textContent = 'Не удалось отправить. Попробуй ещё раз.';
+    document.getElementById('finalText').textContent = 'Сообщение не ушло.';
     document.getElementById('spinner').style.display = 'none';
     const e = document.getElementById('error');
     e.style.display = 'block';
-    e.textContent = (err.name === 'AbortError')
-      ? 'Превышено время ожидания (30 сек). Проверь интернет и токен бота.'
-      : err.message;
+    e.textContent = err.message || 'Проверь интернет.';
   }
 }
 
