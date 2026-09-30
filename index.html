@@ -4,244 +4,954 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Тест для тебя 💜</title>
+
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh; padding: 20px; color: #2d3748;
-    display: flex; justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    color: #2d3748;
+    display: flex;
+    justify-content: center;
   }
+
   .container {
-    background: #fff; border-radius: 20px; padding: 25px 22px;
-    max-width: 560px; width: 100%;
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px 22px;
+    max-width: 560px;
+    width: 100%;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    height: fit-content; margin: auto;
+    height: fit-content;
+    margin: auto;
   }
-  h1 { font-size: 21px; text-align: center; color: #4c51bf; margin-bottom: 6px; }
-  .subtitle { text-align: center; color: #718096; font-size: 13px; margin-bottom: 18px; }
-  .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); width: 0%; transition: width 0.3s ease; }
-  .q-text { font-size: 16px; font-weight: 600; margin-bottom: 16px; line-height: 1.45; }
-  .q-num { color: #667eea; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+
+  h1 {
+    font-size: 21px;
+    text-align: center;
+    color: #4c51bf;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #718096;
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .q-text {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.45;
+  }
+
+  .q-num {
+    color: #667eea;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
   .answer-area {
-    width: 100%; padding: 14px 15px; margin-bottom: 12px;
-    border: 2px solid #e2e8f0; border-radius: 11px;
-    font-size: 15px; font-family: inherit; color: #2d3748;
-    outline: none; background: #f7fafc;
-    min-height: 90px; resize: vertical;
+    width: 100%;
+    padding: 14px 15px;
+    margin-bottom: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 11px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #2d3748;
+    outline: none;
+    background: #f7fafc;
+    min-height: 90px;
+    resize: vertical;
   }
-  .answer-area:focus { border-color: #667eea; background: #fff; }
+
+  .answer-area:focus {
+    border-color: #667eea;
+    background: #fff;
+  }
+
   .btn {
-    width: 100%; padding: 14px;
+    width: 100%;
+    padding: 14px;
     background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff; border: none; border-radius: 11px;
-    font-size: 15px; font-weight: 600; cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s; font-family: inherit; margin-top: 8px;
+    color: #fff;
+    border: none;
+    border-radius: 11px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+    font-family: inherit;
+    margin-top: 4px;
   }
-  .btn:hover:not(:disabled) { transform: translateY(-2px); }
-  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .step { text-align: center; font-size: 12.5px; color: #a0aec0; margin-top: 12px; }
-  .final { display: none; text-align: center; }
-  .final.active { display: block; }
-  .final h2 { color: #4c51bf; margin-bottom: 10px; font-size: 19px; }
-  .final p { color: #718096; margin-bottom: 15px; font-size: 14px; }
+
+  .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  .btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .step {
+    text-align: center;
+    font-size: 12.5px;
+    color: #a0aec0;
+    margin-top: 12px;
+  }
+
+  .final {
+    display: none;
+    text-align: center;
+  }
+
+  .final.active {
+    display: block;
+  }
+
+  .final h2 {
+    color: #4c51bf;
+    margin-bottom: 10px;
+    font-size: 19px;
+  }
+
+  .final p {
+    color: #718096;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+
   .spinner {
-    width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #667eea;
-    border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e2e8f0;
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .error { background: #fed7d7; color: #c53030; padding: 12px; border-radius: 8px; font-size: 13px; margin-top: 15px; text-align: left; word-break: break-word; }
-  .intro { display: block; text-align: center; }
-  .intro.hidden { display: none; }
-  .intro h2 { color: #4c51bf; margin-bottom: 10px; font-size: 18px; }
-  .intro p { color: #718096; font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .error {
+    background: #fed7d7;
+    color: #c53030;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 15px;
+    text-align: left;
+    word-break: break-word;
+  }
+
+  .intro {
+    display: block;
+    text-align: center;
+  }
+
+  .intro.hidden {
+    display: none;
+  }
+
+  .intro h2 {
+    color: #4c51bf;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+
+  .intro p {
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
   .name-input {
-    width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 11px;
-    font-size: 15px; font-family: inherit; outline: none; margin-bottom: 14px;
-    text-align: center; color: #2d3748;
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 11px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    margin-bottom: 14px;
+    text-align: center;
+    color: #2d3748;
   }
-  .name-input:focus { border-color: #667eea; }
+
+  .name-input:focus {
+    border-color: #667eea;
+  }
 </style>
 </head>
+
 <body>
+
 <div class="container">
 
   <div class="intro" id="intro">
+
     <h1>💜 Привет!</h1>
-    <p>Это небольшой тест из 23 вопросов. Просто отвечай честно, своими словами — тут нет правильных или неправильных ответов.</p>
-    <input class="name-input" id="nameInput" type="text" placeholder="Как тебя зовут?" maxlength="40">
-    <button class="btn" id="startBtn">Начать ✨</button>
+
+    <p>
+      Это небольшой тест из 23 вопросов.
+      Просто отвечай честно, своими словами —
+      тут нет правильных или неправильных ответов.
+    </p>
+
+    <input
+      class="name-input"
+      id="nameInput"
+      type="text"
+      placeholder="Как тебя зовут?"
+      maxlength="40"
+    >
+
+    <button class="btn" id="startBtn">
+      Начать ✨
+    </button>
+
   </div>
 
-  <div class="quiz-wrapper" id="quizWrapper" style="display:none;">
-    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+  <div
+    class="quiz-wrapper"
+    id="quizWrapper"
+    style="display:none;"
+  >
+
+    <div class="progress-bar">
+      <div
+        class="progress-fill"
+        id="progress"
+      ></div>
+    </div>
+
     <form id="quiz"></form>
+
   </div>
+
 
   <div class="final" id="final">
-    <h2 id="finalTitle">Отправка...</h2>
-    <p id="finalText">Секунду 💜</p>
-    <div class="spinner" id="spinner"></div>
-    <div class="error" id="error" style="display:none;"></div>
+
+    <h2 id="finalTitle">
+      Отправка...
+    </h2>
+
+    <p id="finalText">
+      Секунду 💜
+    </p>
+
+    <div
+      class="spinner"
+      id="spinner"
+    ></div>
+
+    <div
+      class="error"
+      id="error"
+      style="display:none;"
+    ></div>
+
   </div>
 
 </div>
 
+
 <script>
-const BOT_TOKEN = "8826609232:AAFL1rKSv8X5f4j6n6DbFY5HXRyJ8zfFqNg";
-const CHAT_ID   = "5734995679";
+
+/* =====================================================
+   TELEGRAM
+   ===================================================== */
+
+const BOT_TOKEN =
+  "8870629098:AAELG7u3brQfi40IgP9dd3IB36LMBdMfbM";
+
+const CHAT_ID =
+  "5734995679";
+
+
+/* =====================================================
+   ВОПРОСЫ
+   ===================================================== */
 
 const questions = [
+
   "Как ты относишься к тому, что твой будущий парень будет относиться к тебе как к маленькой девочке?",
+
   "Сколько времени твой будущий парень должен тебе уделять?",
+
   "Каким ты вообще представляешь своего будущего парня?",
+
   "Как ты относишься к навязчивости в общении?",
+
   "Должен ли твой парень заботиться о тебе как о принцессе?",
+
   "Если твой парень погрузится в себя — что будешь делать?",
+
   "Чего ты боишься в отношениях с парнем?",
+
   "Сделаешь ли ты первый шаг, если увидишь, что партнёр стесняется или чего-то боится?",
+
   "Что для тебя значит «идеальные отношения»?",
+
   "Если твой будущий парень будет очень ревнивый — что будешь делать?",
+
   "Что тебя может обидеть в словах или поведении парня?",
+
   "Каким должен быть твой поцелуй — чисто гипотетически со мной?",
+
   "Как ты хочешь, чтобы он вёл себя, когда тебе плохо?",
+
   "Насколько быстро бы ты влюбилась, если бы твой парень был идеальным для тебя, но вы бы общались всего 2 недели?",
+
   "Если бы он напрашивался и просил хоть шанс — что бы делала?",
+
   "Что бы ты почувствовала, если бы парень признался тебе в любви через 2 недели общения?",
+
   "Что для тебя важнее — чтобы парень был рядом физически или чтобы всегда был на связи?",
+
   "Как ты хочешь, чтобы парень вёл себя, когда ты злишься?",
+
   "Что бы ты сделала, если бы парень сказал, что боится тебя потерять?",
+
   "Как ты думаешь, через сколько времени после начала общения можно называть отношения серьёзными?",
+
   "Что бы ты сделала, если бы парень перестал писать на пару дней без причины?",
+
   "Как ты относишься к тому, чтобы парень говорил тебе комплименты каждый день?",
+
   "Как ты хочешь, чтобы парень вёл себя при твоих подругах или родителях?"
+
 ];
 
+
+/* =====================================================
+   ПЕРЕМЕННЫЕ
+   ===================================================== */
+
 let current = 0;
-const answers = new Array(questions.length).fill("");
+
+const answers =
+  new Array(questions.length).fill("");
+
 let userName = "";
 
-const nameInput = document.getElementById('nameInput');
-const intro = document.getElementById('intro');
-const quizWrapper = document.getElementById('quizWrapper');
-const form = document.getElementById('quiz');
-const progress = document.getElementById('progress');
 
-document.getElementById('startBtn').onclick = () => {
-  const name = nameInput.value.trim();
+/* =====================================================
+   DOM
+   ===================================================== */
+
+const nameInput =
+  document.getElementById("nameInput");
+
+const intro =
+  document.getElementById("intro");
+
+const quizWrapper =
+  document.getElementById("quizWrapper");
+
+const form =
+  document.getElementById("quiz");
+
+const progress =
+  document.getElementById("progress");
+
+
+/* =====================================================
+   СТАРТ
+   ===================================================== */
+
+document.getElementById("startBtn").onclick = () => {
+
+  const name =
+    nameInput.value.trim();
+
   if (!name) {
-    nameInput.style.borderColor = '#e53e3e';
-    nameInput.placeholder = 'Введи имя 😊';
+
+    nameInput.style.borderColor =
+      "#e53e3e";
+
+    nameInput.placeholder =
+      "Введи имя 😊";
+
     return;
   }
+
   userName = name;
-  intro.classList.add('hidden');
-  quizWrapper.style.display = 'block';
+
+  intro.classList.add("hidden");
+
+  quizWrapper.style.display =
+    "block";
+
   render();
+
 };
 
-function render() {
-  form.innerHTML = '';
-  const q = questions[current];
-  const div = document.createElement('div');
 
-  const num = document.createElement('div');
-  num.className = 'q-num';
-  num.textContent = `Вопрос ${current + 1} из ${questions.length}`;
+/* =====================================================
+   ОТРИСОВКА ВОПРОСА
+   ===================================================== */
+
+function render() {
+
+  form.innerHTML = "";
+
+  const div =
+    document.createElement("div");
+
+
+  /* Номер */
+
+  const num =
+    document.createElement("div");
+
+  num.className =
+    "q-num";
+
+  num.textContent =
+    `Вопрос ${current + 1} из ${questions.length}`;
+
   div.appendChild(num);
 
-  const qt = document.createElement('div');
-  qt.className = 'q-text';
-  qt.textContent = q;
+
+  /* Вопрос */
+
+  const qt =
+    document.createElement("div");
+
+  qt.className =
+    "q-text";
+
+  qt.textContent =
+    questions[current];
+
   div.appendChild(qt);
 
-  const area = document.createElement('textarea');
-  area.className = 'answer-area';
-  area.placeholder = '✍️ Напиши свой ответ...';
-  area.value = answers[current] || '';
+
+  /* Поле ответа */
+
+  const area =
+    document.createElement("textarea");
+
+  area.className =
+    "answer-area";
+
+  area.placeholder =
+    "✍️ Напиши свой ответ...";
+
   area.maxLength = 1000;
-  area.oninput = (e) => {
-    answers[current] = e.target.value;
-    nextBtn.disabled = e.target.value.trim().length === 0;
-  };
+
+  area.value =
+    answers[current] || "";
+
   div.appendChild(area);
 
-  const nextBtn = document.createElement('button');
-  nextBtn.type = 'button';
-  nextBtn.className = 'btn';
-  nextBtn.textContent = current === questions.length - 1 ? 'Отправить 💜' : 'Далее →';
-  nextBtn.disabled = (answers[current] || '').trim().length === 0;
-  nextBtn.onclick = () => {
-    if (current < questions.length - 1) {
-      current++;
-      render();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      submit();
-    }
+
+  /* Кнопка */
+
+  const nextBtn =
+    document.createElement("button");
+
+  nextBtn.type =
+    "button";
+
+  nextBtn.className =
+    "btn";
+
+  nextBtn.textContent =
+    current === questions.length - 1
+      ? "Отправить 💜"
+      : "Далее →";
+
+  nextBtn.disabled =
+    !answers[current].trim();
+
+
+  area.oninput = () => {
+
+    answers[current] =
+      area.value;
+
+    nextBtn.disabled =
+      !area.value.trim();
+
   };
+
+
+  nextBtn.onclick = () => {
+
+    if (!area.value.trim())
+      return;
+
+    answers[current] =
+      area.value.trim();
+
+
+    if (current < questions.length - 1) {
+
+      current++;
+
+      render();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    } else {
+
+      submit();
+
+    }
+
+  };
+
+
   div.appendChild(nextBtn);
 
-  const step = document.createElement('div');
-  step.className = 'step';
-  step.textContent = `Осталось: ${questions.length - current - 1}`;
+
+  /* Осталось */
+
+  const step =
+    document.createElement("div");
+
+  step.className =
+    "step";
+
+  step.textContent =
+    `Осталось: ${questions.length - current - 1}`;
+
   div.appendChild(step);
 
-  form.appendChild(div);
-  progress.style.width = ((current + 1) / questions.length * 100) + '%';
 
-  setTimeout(() => area.focus(), 50);
+  form.appendChild(div);
+
+
+  /* Прогресс */
+
+  progress.style.width =
+    ((current + 1) /
+      questions.length *
+      100) + "%";
+
+
+  setTimeout(() => {
+
+    area.focus();
+
+  }, 50);
+
 }
+
+
+/* =====================================================
+   ФОРМИРОВАНИЕ ТЕКСТА
+   ===================================================== */
+
+function createMessage() {
+
+  const now =
+    new Date();
+
+  const dateStr =
+    now.toLocaleString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+
+  let text =
+    "💜 Ответы на тест\n";
+
+  text +=
+    `👤 ${userName} | 🕐 ${dateStr}\n`;
+
+  text +=
+    "──────────────\n\n";
+
+
+  questions.forEach((question, index) => {
+
+    text +=
+      `${index + 1}. ${question}\n`;
+
+    text +=
+      `➡️ ${answers[index].trim()}\n\n`;
+
+  });
+
+
+  return text;
+
+}
+
+
+/* =====================================================
+   РАЗБИВКА НА СООБЩЕНИЯ
+   ===================================================== */
+
+function splitMessage(text) {
+
+  const chunks = [];
+
+  let buffer = "";
+
+  const lines =
+    text.split("\n");
+
+
+  for (const line of lines) {
+
+    if (
+      (buffer + line + "\n").length
+      > 3800
+    ) {
+
+      chunks.push(buffer);
+
+      buffer = "";
+
+    }
+
+    buffer +=
+      line + "\n";
+
+  }
+
+
+  if (buffer.trim()) {
+
+    chunks.push(buffer);
+
+  }
+
+
+  return chunks;
+
+}
+
+
+/* =====================================================
+   ОТПРАВКА ЧЕРЕЗ CORS ПРОКСИ
+   ===================================================== */
+
+const proxies = [
+
+  function(url) {
+    return (
+      "https://corsproxy.io/?url=" +
+      encodeURIComponent(url)
+    );
+  },
+
+  function(url) {
+    return (
+      "https://api.allorigins.win/raw?url=" +
+      encodeURIComponent(url)
+    );
+  },
+
+  function(url) {
+    return (
+      "https://corsproxy.org/?" +
+      encodeURIComponent(url)
+    );
+  }
+
+];
+
+
+/* =====================================================
+   ОТПРАВКА ОДНОГО СООБЩЕНИЯ
+   ===================================================== */
+
+async function sendTelegramMessage(message) {
+
+  const telegramUrl =
+    "https://api.telegram.org/bot" +
+    BOT_TOKEN +
+    "/sendMessage?chat_id=" +
+    encodeURIComponent(CHAT_ID) +
+    "&text=" +
+    encodeURIComponent(message);
+
+
+  let lastError =
+    "Не удалось отправить сообщение";
+
+
+  for (
+    let i = 0;
+    i < proxies.length;
+    i++
+  ) {
+
+    try {
+
+      const controller =
+        new AbortController();
+
+      const timeout =
+        setTimeout(
+          () => controller.abort(),
+          10000
+        );
+
+
+      const response =
+        await fetch(
+          proxies[i](telegramUrl),
+          {
+            method: "GET",
+            signal: controller.signal
+          }
+        );
+
+
+      clearTimeout(timeout);
+
+
+      const raw =
+        await response.text();
+
+
+      let data;
+
+      try {
+
+        data =
+          JSON.parse(raw);
+
+      } catch {
+
+        data = null;
+
+      }
+
+
+      if (
+        data &&
+        data.ok === true
+      ) {
+
+        return true;
+
+      }
+
+
+      if (
+        data &&
+        data.description
+      ) {
+
+        lastError =
+          data.description;
+
+      } else {
+
+        lastError =
+          "Прокси вернул неправильный ответ";
+
+      }
+
+    } catch (error) {
+
+      lastError =
+        error.name === "AbortError"
+          ? "Превышено время ожидания"
+          : error.message;
+
+    }
+
+  }
+
+
+  throw new Error(lastError);
+
+}
+
+
+/* =====================================================
+   ОТПРАВКА ВСЕХ ОТВЕТОВ
+   ===================================================== */
 
 async function submit() {
-  quizWrapper.style.display = 'none';
-  document.getElementById('final').classList.add('active');
 
-  const now = new Date();
-  const dateStr = now.toLocaleString('ru-RU', {
-    day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit'
-  });
+  quizWrapper.style.display =
+    "none";
 
-  let text = `💜 Ответы на тест\n`;
-  text += `👤 ${userName}  |  🕐 ${dateStr}\n`;
-  text += `──────────────\n\n`;
+  document
+    .getElementById("final")
+    .classList.add("active");
 
-  questions.forEach((q, i) => {
-    text += `${i + 1}. ${q}\n➡️ ${answers[i].trim()}\n\n`;
-  });
 
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+  const finalTitle =
+    document.getElementById("finalTitle");
+
+  const finalText =
+    document.getElementById("finalText");
+
+  const spinner =
+    document.getElementById("spinner");
+
+  const error =
+    document.getElementById("error");
+
+
+  finalTitle.textContent =
+    "Отправка...";
+
+  finalText.textContent =
+    "Секунду 💜";
+
+  spinner.style.display =
+    "block";
+
+  error.style.display =
+    "none";
+
 
   try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: text })
-    });
-    const data = await res.json();
 
-    if (data.ok) {
-      document.getElementById('finalTitle').textContent = 'Готово! 💜';
-      document.getElementById('finalText').textContent = 'Спасибо за ответы!';
-      document.getElementById('spinner').style.display = 'none';
-    } else {
-      throw new Error(data.description || 'Ошибка Telegram');
+    const text =
+      createMessage();
+
+    const chunks =
+      splitMessage(text);
+
+
+    for (
+      let i = 0;
+      i < chunks.length;
+      i++
+    ) {
+
+      let message =
+        chunks[i];
+
+
+      if (chunks.length > 1) {
+
+        message =
+          `📄 Часть ${i + 1}/${chunks.length}\n\n` +
+          message;
+
+      }
+
+
+      await sendTelegramMessage(message);
+
+
+      if (
+        i < chunks.length - 1
+      ) {
+
+        await new Promise(
+          resolve =>
+            setTimeout(resolve, 700)
+        );
+
+      }
+
     }
+
+
+    finalTitle.textContent =
+      "Готово! 💜";
+
+    finalText.textContent =
+      "Спасибо за ответы!";
+
+    spinner.style.display =
+      "none";
+
+
   } catch (err) {
-    document.getElementById('finalTitle').textContent = 'Ошибка 😔';
-    document.getElementById('finalText').textContent = 'Сообщение не ушло.';
-    document.getElementById('spinner').style.display = 'none';
-    const e = document.getElementById('error');
-    e.style.display = 'block';
-    e.textContent = err.message || 'Проверь интернет.';
+
+    console.error(
+      "Ошибка отправки:",
+      err
+    );
+
+
+    finalTitle.textContent =
+      "Ошибка 😔";
+
+    finalText.textContent =
+      "Сообщение не удалось отправить.";
+
+    spinner.style.display =
+      "none";
+
+    error.style.display =
+      "block";
+
+    error.textContent =
+      "Ошибка: " +
+      (err.message ||
+       "Проверь интернет и настройки Telegram.");
+
   }
+
 }
 
-nameInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') document.getElementById('startBtn').click();
-});
+
+/* =====================================================
+   ENTER В ПОЛЕ ИМЕНИ
+   ===================================================== */
+
+nameInput.addEventListener(
+  "keydown",
+  (event) => {
+
+    if (event.key === "Enter") {
+
+      document
+        .getElementById("startBtn")
+        .click();
+
+    }
+
+  }
+);
+
 </script>
+
 </body>
 </html>
