@@ -194,11 +194,6 @@ function render() {
   setTimeout(() => area.focus(), 50);
 }
 
-// === ОТПРАВКА ===
-// Метод 1: fetch (10 сек таймаут)
-// Метод 2: <img> с URL (обходит CORS и любые блокировки)
-// Telegram лимит 4096 символов. Режем на куски, но редко нужно для 23 вопросов.
-
 async function submit() {
   quizWrapper.style.display = 'none';
   document.getElementById('final').classList.add('active');
@@ -217,7 +212,7 @@ async function submit() {
     text += `${i + 1}. ${q}\n➡️ ${answers[i].trim()}\n\n`;
   });
 
-  // Режем по 3500 символов (с запасом под лимит 4096)
+  // Режем по 3500 символов
   const chunks = [];
   let buf = '';
   for (const line of text.split('\n')) {
@@ -235,7 +230,7 @@ async function submit() {
         ? `📄 Часть ${i + 1}/${chunks.length}\n\n${chunks[i]}`
         : chunks[i];
 
-      const ok = await sendMessage(part);
+      const ok = await sendViaProxy(part);
       if (!ok) throw new Error('Telegram отклонил сообщение');
       if (i < chunks.length - 1) await sleep(400);
     }
@@ -255,57 +250,44 @@ async function submit() {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// --- Метод 1: fetch с таймаутом ---
-async function tryFetch(text) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 10000);
-  try {
-    const res = await fetch(
-      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: CHAT_ID, text }),
-        signal: controller.signal
+// Список бесплатных CORS-прокси. Пробуем по очереди, пока один не сработает.
+const PROXIES = [
+  // 1. corsproxy.io
+  (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+  // 2. allorigins
+  (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  // 3. corsproxy.org
+  (url) => `https://corsproxy.org/?${encodeURIComponent(url)}`,
+  // 4. whateverorigin
+  (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+  // 5. без прокси (прямой запрос — на всякий)
+  (url) => url
+];
+
+async function sendViaProxy(text) {
+  const tgUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
+
+  for (let i = 0; i < PROXIES.length; i++) {
+    const proxyUrl = PROXIES[i](tgUrl);
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      const res = await fetch(proxyUrl, { signal: controller.signal });
+      clearTimeout(timer);
+
+      const raw = await res.text();
+      // Ищем признак успеха в ответе Telegram
+      if (raw.includes('"ok":true')) {
+        return true;
       }
-    );
-    const data = await res.json();
-    return data.ok === true;
-  } catch (e) {
-    return false;
-  } finally {
-    clearTimeout(timer);
+      // Если прокси вернул ошибку — идём к следующему
+      console.warn(`Прокси ${i + 1} не сработал:`, raw.substring(0, 200));
+    } catch (e) {
+      console.warn(`Прокси ${i + 1} упал:`, e.message);
+      // пробуем следующий
+    }
   }
-}
-
-// --- Метод 2: через <img> с GET-запросом (обходит CORS) ---
-function tryImg(text) {
-  return new Promise((resolve) => {
-    const encoded = encodeURIComponent(text);
-    // GET /sendMessage — Telegram поддерживает и GET
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encoded}`;
-    const img = new Image();
-    let done = false;
-    const finish = (ok) => {
-      if (done) return;
-      done = true;
-      img.onload = null;
-      img.onerror = null;
-      resolve(ok);
-    };
-    img.onload = () => finish(true);
-    img.onerror = () => finish(true); // картинки нет, но запрос ушёл
-    img.src = url;
-    setTimeout(() => finish(true), 5000); // если вообще ничего — считаем что ушло
-  });
-}
-
-// Пробуем оба метода: сначала fetch, если не ок — img
-async function sendMessage(text) {
-  const ok = await tryFetch(text);
-  if (ok) return true;
-  // Фолбэк
-  return await tryImg(text);
+  return false;
 }
 
 nameInput.addEventListener('keydown', (e) => {
