@@ -212,31 +212,23 @@ async function submit() {
     text += `${i + 1}. ${q}\n➡️ ${answers[i].trim()}\n\n`;
   });
 
-  // Режем по 3500 символов на случай длинных ответов
-  const chunks = [];
-  let buf = '';
-  for (const line of text.split('\n')) {
-    if ((buf + line + '\n').length > 3500) {
-      chunks.push(buf);
-      buf = '';
-    }
-    buf += line + '\n';
-  }
-  if (buf.trim()) chunks.push(buf);
+  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
   try {
-    for (let i = 0; i < chunks.length; i++) {
-      const part = chunks.length > 1
-        ? `📄 Часть ${i + 1}/${chunks.length}\n\n${chunks[i]}`
-        : chunks[i];
-      const ok = await sendViaProxy(part);
-      if (!ok) throw new Error('Telegram отклонил сообщение');
-      if (i < chunks.length - 1) await sleep(400);
-    }
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: CHAT_ID, text: text })
+    });
+    const data = await res.json();
 
-    document.getElementById('finalTitle').textContent = 'Готово! 💜';
-    document.getElementById('finalText').textContent = 'Спасибо за ответы!';
-    document.getElementById('spinner').style.display = 'none';
+    if (data.ok) {
+      document.getElementById('finalTitle').textContent = 'Готово! 💜';
+      document.getElementById('finalText').textContent = 'Спасибо за ответы!';
+      document.getElementById('spinner').style.display = 'none';
+    } else {
+      throw new Error(data.description || 'Ошибка Telegram');
+    }
   } catch (err) {
     document.getElementById('finalTitle').textContent = 'Ошибка 😔';
     document.getElementById('finalText').textContent = 'Сообщение не ушло.';
@@ -245,38 +237,6 @@ async function submit() {
     e.style.display = 'block';
     e.textContent = err.message || 'Проверь интернет.';
   }
-}
-
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-// Список бесплатных CORS-прокси. Пробуем по очереди, пока один не сработает.
-const PROXIES = [
-  (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-  (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  (url) => `https://corsproxy.org/?${encodeURIComponent(url)}`,
-  (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-  (url) => url
-];
-
-async function sendViaProxy(text) {
-  const tgUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`;
-
-  for (let i = 0; i < PROXIES.length; i++) {
-    const proxyUrl = PROXIES[i](tgUrl);
-    try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 8000);
-      const res = await fetch(proxyUrl, { signal: controller.signal });
-      clearTimeout(timer);
-
-      const raw = await res.text();
-      if (raw.includes('"ok":true')) return true;
-      console.warn(`Прокси ${i + 1} не сработал:`, raw.substring(0, 200));
-    } catch (e) {
-      console.warn(`Прокси ${i + 1} упал:`, e.message);
-    }
-  }
-  return false;
 }
 
 nameInput.addEventListener('keydown', (e) => {
