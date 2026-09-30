@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Вопросы для тебя 💜</title>
+<title>Тест для тебя 💜</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -22,23 +22,31 @@
   .subtitle { text-align: center; color: #718096; font-size: 13px; margin-bottom: 18px; }
   .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
   .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); width: 0%; transition: width 0.3s ease; }
-  .q-text { font-size: 16.5px; font-weight: 600; margin-bottom: 16px; line-height: 1.45; }
+  .q-text { font-size: 16px; font-weight: 600; margin-bottom: 16px; line-height: 1.45; }
   .q-num { color: #667eea; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-  .answer-area {
-    width: 100%; padding: 14px; border: 2px solid #e2e8f0;
-    border-radius: 12px; font-size: 14.5px; font-family: inherit;
-    outline: none; min-height: 130px; resize: vertical;
-    color: #2d3748; background: #f7fafc; line-height: 1.5;
-    transition: border-color 0.15s, background 0.15s;
+  .option {
+    display: block; width: 100%; padding: 12px 15px; margin-bottom: 8px;
+    background: #f7fafc; border: 2px solid #e2e8f0; border-radius: 11px;
+    font-size: 14.5px; text-align: left; cursor: pointer;
+    transition: all 0.15s; color: #2d3748; font-family: inherit;
   }
-  .answer-area:focus { border-color: #667eea; background: #fff; }
+  .option:hover { background: #edf2f7; border-color: #a3bffa; }
+  .option.selected { background: #e6efff; border-color: #667eea; color: #4c51bf; font-weight: 600; }
+  .option.custom-toggle { background: #fffaf0; border-color: #f6ad55; color: #c05621; }
+  .option.custom-toggle.selected { background: #feebc8; border-color: #dd6b20; color: #9c4221; }
+  .custom-input {
+    display: none; width: 100%; padding: 12px 15px; margin-bottom: 10px;
+    border: 2px solid #dd6b20; border-radius: 11px; font-size: 14.5px;
+    font-family: inherit; color: #2d3748; outline: none; background: #fffaf0;
+  }
+  .custom-input.visible { display: block; }
+  .custom-input:focus { border-color: #667eea; background: #fff; }
   .btn {
     width: 100%; padding: 14px;
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: #fff; border: none; border-radius: 11px;
     font-size: 15px; font-weight: 600; cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s; font-family: inherit;
-    margin-top: 14px;
+    transition: transform 0.1s, opacity 0.2s; font-family: inherit; margin-top: 8px;
   }
   .btn:hover:not(:disabled) { transform: translateY(-2px); }
   .btn:disabled { opacity: 0.35; cursor: not-allowed; }
@@ -55,14 +63,23 @@
   .error { background: #fed7d7; color: #c53030; padding: 12px; border-radius: 8px; font-size: 13px; margin-top: 15px; text-align: left; word-break: break-word; }
   .intro { display: block; text-align: center; }
   .intro.hidden { display: none; }
-  .intro h1 { font-size: 22px; margin-bottom: 10px; }
-  .intro p { color: #718096; font-size: 14px; margin-bottom: 18px; line-height: 1.55; }
+  .intro h2 { color: #4c51bf; margin-bottom: 10px; font-size: 18px; }
+  .intro p { color: #718096; font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
   .name-input {
     width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 11px;
     font-size: 15px; font-family: inherit; outline: none; margin-bottom: 14px;
     text-align: center; color: #2d3748;
   }
   .name-input:focus { border-color: #667eea; }
+  .comment-block { text-align: center; display: none; }
+  .comment-block h2 { color: #4c51bf; font-size: 18px; margin-bottom: 8px; }
+  .comment-block p { color: #718096; font-size: 13.5px; margin-bottom: 14px; line-height: 1.5; }
+  .comment-area {
+    width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 11px;
+    font-size: 14.5px; font-family: inherit; outline: none; min-height: 110px;
+    resize: vertical; color: #2d3748; margin-bottom: 14px;
+  }
+  .comment-area:focus { border-color: #667eea; }
 </style>
 </head>
 <body>
@@ -70,7 +87,7 @@
 
   <div class="intro" id="intro">
     <h1>💜 Привет!</h1>
-    <p>Это несколько вопросов — просто ответь честно, как чувствуешь. Здесь нет правильных ответов, пиши столько, сколько хочешь.</p>
+    <p>Ответь честно на несколько вопросов — тут нет правильных ответов. Если ни один вариант не подходит, выбери <b>«✍️ Свой вариант»</b> и напиши как думаешь ты.</p>
     <input class="name-input" id="nameInput" type="text" placeholder="Как тебя зовут?" maxlength="40">
     <button class="btn" id="startBtn">Начать ✨</button>
   </div>
@@ -78,6 +95,13 @@
   <div class="quiz-wrapper" id="quizWrapper" style="display:none;">
     <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
     <form id="quiz"></form>
+  </div>
+
+  <div class="comment-block" id="commentBlock">
+    <h2>Последний штрих 💌</h2>
+    <p>Если хочешь — напиши что-нибудь от себя.</p>
+    <textarea class="comment-area" id="commentArea" placeholder="Твоё сообщение..." maxlength="500"></textarea>
+    <button class="btn" id="sendBtn">Отправить 💜</button>
   </div>
 
   <div class="final" id="final">
@@ -90,42 +114,92 @@
 </div>
 
 <script>
-const BOT_TOKEN = "8870629098:AAELG7u3brQfiq40IgP9dd3IB36LMBdMfbM";
-const CHAT_ID   = "8850351378";
+const BOT_TOKEN = "8826609232:AAFL1rKSv8X5f4j6n6DbFY5HXRyJ8zfFqNg";
+const CHAT_ID   = "5734995679";
+const CUSTOM_LABEL = "✍️ Свой вариант";
 
+/* ================= ВОПРОСЫ ================= */
 const questions = [
-  "Как ты относишься к тому, что твой будущий парень будет относиться к тебе как к маленькой девочке?",
-  "Сколько времени твой будущий парень должен тебе уделять?",
-  "Каким ты вообще представляешь своего будущего парня?",
-  "Как ты относишься к навязчивости в общении?",
-  "Должен ли твой парень заботиться о тебе как о принцессе?",
-  "Если твой парень погрузится в себя — что будешь делать?",
-  "Чего ты боишься в отношениях с парнем?",
-  "Сделаешь ли ты первый шаг, если увидишь, что партнёр стесняется или чего-то боится?",
-  "Что для тебя значит «идеальные отношения»?",
-  "Если твой будущий парень будет очень ревнивый — что будешь делать?",
-  "Что тебя может обидеть в словах или поведении парня?",
-  "Каким должен быть твой поцелуй — чисто гипотетически со мной?",
-  "Как ты хочешь, чтобы он вёл себя, когда тебе плохо?",
-  "Насколько быстро бы ты влюбилась, если бы твой парень был идеальным для тебя, но вы бы общались всего 2 недели?",
-  "Если бы он напрашивался и просил хоть шанс — что бы делала?",
-  "Что бы ты почувствовала, если бы парень признался тебе в любви через 2 недели общения?",
-  "Что для тебя важнее — чтобы парень был рядом физически или чтобы всегда был на связи?",
-  "Как ты хочешь, чтобы парень вёл себя, когда ты злишься?",
-  "Что бы ты сделала, если бы парень сказал, что боится тебя потерять?",
-  "Как ты думаешь, через сколько времени после начала общения можно называть отношения серьёзными?",
-  "Что бы ты сделала, если бы парень перестал писать на пару дней без причины?",
-  "Как ты относишься к тому, чтобы парень говорил тебе комплименты каждый день?",
-  "Как ты хочешь, чтобы парень вёл себя при твоих подругах или родителях?"
+  { q: "Как ты относишься к тому, что твой будущий парень будет относиться к тебе как к маленькой девочке?",
+    a: ["Обожаю, это очень мило", "Иногда приятно", "Нейтрально", "Не люблю, я взрослая"] },
+
+  { q: "Сколько времени твой будущий парень должен тебе уделять?",
+    a: ["Столько, сколько нужно", "Каждый день хотя бы немного", "Когда есть время", "Главное — качество, не количество"] },
+
+  { q: "Каким ты вообще представляешь своего будущего парня?",
+    a: ["Заботливым и нежным", "Сильным и надёжным", "Весёлым и лёгким", "Умным и интересным"] },
+
+  { q: "Как ты относишься к навязчивости в общении?",
+    a: ["Не люблю, когда много", "Нормально, если по любви", "Люблю, когда пишут много", "Зависит от настроения"] },
+
+  { q: "Должен ли твой парень заботиться о тебе как о принцессе?",
+    a: ["Да, обязательно", "Хотелось бы", "Немного заботы достаточно", "Я сама о себе позабочусь"] },
+
+  { q: "Если твой парень погрузится в себя — что будешь делать?",
+    a: ["Дам пространство", "Буду рядом молча", "Спрошу, что случилось", "Постараюсь развеселить"] },
+
+  { q: "Чего ты боишься в отношениях с парнем?",
+    a: ["Измены", "Потери чувств", "Одиночества вдвоём", "Предательства"] },
+
+  { q: "Сделаешь ли ты первый шаг, если увидишь, что партнёр стесняется или чего-то боится?",
+    a: ["Да, обязательно", "Намекну", "Подожду его", "Зависит от ситуации"] },
+
+  { q: "Что для тебя значит «идеальные отношения»?",
+    a: ["Гармония и любовь", "Доверие и поддержка", "Страсть и нежность", "Свобода и уважение"] },
+
+  { q: "Если твой будущий парень будет очень ревнивый — что будешь делать?",
+    a: ["Поговорю с ним", "Успокою", "Разорву отношения", "Буду терпеть"] },
+
+  { q: "Что тебя может обидеть в словах или поведении парня?",
+    a: ["Грубость", "Равнодушие", "Обидные шутки", "Игнор"] },
+
+  { q: "Каким должен быть твой поцелуй — чисто гипотетически со мной?",
+    a: ["Нежным и долгим", "Страстным", "Неожиданным", "Застенчивым"] },
+
+  { q: "Как ты хочешь, чтобы он вёл себя, когда тебе плохо?",
+    a: ["Обнял и молчал", "Выслушал", "Говорил тёплые слова", "Отвлёк чем-то приятным"] },
+
+  { q: "Насколько быстро бы ты влюбилась, если бы твой парень был идеальным для тебя, но вы бы общались всего 2 недели?",
+    a: ["Очень быстро", "Уже бы влюбилась", "Только начала бы", "Зависит от человека"] },
+
+  { q: "Если бы он напрашивался и просил хоть шанс — что бы делала?",
+    a: ["Дала бы шанс", "Подумала", "Отказала", "Зависит от чувств"] },
+
+  { q: "Что бы ты почувствовала, если бы парень признался тебе в любви через 2 недели общения?",
+    a: ["Радость", "Смущение", "Испуг", "Ответила бы взаимностью"] },
+
+  { q: "Что для тебя важнее — чтобы парень был рядом физически или чтобы всегда был на связи?",
+    a: ["Рядом физически", "На связи", "И то и другое", "Не важно"] },
+
+  { q: "Как ты хочешь, чтобы парень вёл себя, когда ты злишься?",
+    a: ["Обнял и успокоил", "Дал время", "Попытался рассмешить", "Выслушал"] },
+
+  { q: "Что бы ты сделала, если бы парень сказал, что боится тебя потерять?",
+    a: ["Успокоила", "Сказала бы то же самое", "Обрадовалась", "Смутилась"] },
+
+  { q: "Как ты думаешь, через сколько времени после начала общения можно называть отношения серьёзными?",
+    a: ["Через месяц", "Через 2-3 месяца", "Через полгода", "Когда оба готовы"] },
+
+  { q: "Что бы ты сделала, если бы парень перестал писать на пару дней без причины?",
+    a: ["Написала бы сама", "Подождала бы", "Расстроилась", "Спросила бы напрямую"] },
+
+  { q: "Как ты относишься к тому, чтобы парень говорил тебе комплименты каждый день?",
+    a: ["Обожаю", "Приятно", "Иногда лучше", "Не главное"] },
+
+  { q: "Как ты хочешь, чтобы парень вёл себя при твоих подругах или родителях?",
+    a: ["Был собой", "Был вежливым", "Был внимательным ко мне", "Впечатлил их"] }
 ];
 
+/* ================= ЛОГИКА ================= */
 let current = 0;
-const answers = new Array(questions.length).fill("");
+const answers = new Array(questions.length).fill(null);
+const customs = new Array(questions.length).fill("");
 let userName = "";
 
 const nameInput = document.getElementById('nameInput');
 const intro = document.getElementById('intro');
 const quizWrapper = document.getElementById('quizWrapper');
+const commentBlock = document.getElementById('commentBlock');
 const form = document.getElementById('quiz');
 const progress = document.getElementById('progress');
 
@@ -154,36 +228,59 @@ function render() {
 
   const qt = document.createElement('div');
   qt.className = 'q-text';
-  qt.textContent = q;
+  qt.textContent = q.q;
   div.appendChild(qt);
 
-  const area = document.createElement('textarea');
-  area.className = 'answer-area';
-  area.placeholder = 'Напиши свой ответ...';
-  area.value = answers[current] || '';
-  area.maxLength = 1000;
-  area.oninput = (e) => {
-    answers[current] = e.target.value;
-    nextBtn.disabled = e.target.value.trim().length === 0;
+  q.a.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'option' + (answers[current] === i ? ' selected' : '');
+    btn.textContent = opt;
+    btn.onclick = () => { answers[current] = i; render(); };
+    div.appendChild(btn);
+  });
+
+  const isCustom = answers[current] === 'custom';
+  const customBtn = document.createElement('button');
+  customBtn.type = 'button';
+  customBtn.className = 'option custom-toggle' + (isCustom ? ' selected' : '');
+  customBtn.textContent = CUSTOM_LABEL;
+  customBtn.onclick = () => {
+    answers[current] = 'custom';
+    render();
+    setTimeout(() => {
+      const inp = form.querySelector('.custom-input');
+      if (inp) inp.focus();
+    }, 50);
   };
-  div.appendChild(area);
+  div.appendChild(customBtn);
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'custom-input' + (isCustom ? ' visible' : '');
+  input.placeholder = 'Напиши свой вариант...';
+  input.value = customs[current] || '';
+  input.maxLength = 300;
+  input.oninput = (e) => {
+    customs[current] = e.target.value;
+    nextBtn.disabled = !isReady();
+  };
+  div.appendChild(input);
 
   const nextBtn = document.createElement('button');
   nextBtn.type = 'button';
   nextBtn.className = 'btn';
-  nextBtn.textContent = current === questions.length - 1 ? 'Отправить 💜' : 'Далее →';
-  nextBtn.disabled = (answers[current] || '').trim().length === 0;
+  nextBtn.textContent = 'Далее →';
+  nextBtn.disabled = !isReady();
   nextBtn.onclick = () => {
     if (current < questions.length - 1) {
       current++;
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(() => {
-        const a = form.querySelector('.answer-area');
-        if (a) a.focus();
-      }, 100);
     } else {
-      submit();
+      quizWrapper.style.display = 'none';
+      commentBlock.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
   div.appendChild(nextBtn);
@@ -195,32 +292,50 @@ function render() {
 
   form.appendChild(div);
   progress.style.width = ((current + 1) / questions.length * 100) + '%';
-
-  setTimeout(() => {
-    const a = form.querySelector('.answer-area');
-    if (a) a.focus();
-  }, 100);
 }
 
-async function submit() {
-  quizWrapper.style.display = 'none';
+function isReady() {
+  if (answers[current] === 'custom') return (customs[current] || '').trim().length > 0;
+  return answers[current] !== null;
+}
+
+document.getElementById('sendBtn').onclick = () => {
+  submit(document.getElementById('commentArea').value.trim());
+};
+
+async function submit(comment) {
+  commentBlock.style.display = 'none';
   document.getElementById('final').classList.add('active');
 
   const now = new Date();
-  const dateStr = now.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-  let text = `💜 Ответы\n👤 ${userName}  |  🕐 ${dateStr}\n──────────────\n`;
-  questions.forEach((q, i) => {
-    text += `${i + 1}. ${q}\n➡️ ${answers[i].trim()}\n\n`;
+  const dateStr = now.toLocaleString('ru-RU', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
   });
 
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+  let text = `💜 Ответы на тест\n`;
+  text += `👤 ${userName}  |  🕐 ${dateStr}\n`;
+  text += `──────────────\n`;
+
+  questions.forEach((q, i) => {
+    const ans = answers[i] === 'custom'
+      ? `✍️ ${customs[i].trim()}`
+      : q.a[answers[i]];
+    text += `${i + 1}. ${ans}\n`;
+  });
+
+  if (comment) {
+    text += `──────────────\n💌 ${comment}\n`;
+  }
 
   try {
-    const res = await fetch(url, {
+    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: text })
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: text
+      })
     });
     const data = await res.json();
 
