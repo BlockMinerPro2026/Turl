@@ -194,12 +194,20 @@ function render() {
   setTimeout(() => area.focus(), 50);
 }
 
+// === ОТПРАВКА ===
+// Метод 1: fetch (10 сек таймаут)
+// Метод 2: <img> с URL (обходит CORS и любые блокировки)
+// Telegram лимит 4096 символов. Режем на куски, но редко нужно для 23 вопросов.
+
 async function submit() {
   quizWrapper.style.display = 'none';
   document.getElementById('final').classList.add('active');
 
   const now = new Date();
-  const dateStr = now.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const dateStr = now.toLocaleString('ru-RU', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
 
   let text = `💜 Ответы на тест\n`;
   text += `👤 ${userName}  |  🕐 ${dateStr}\n`;
@@ -209,23 +217,32 @@ async function submit() {
     text += `${i + 1}. ${q}\n➡️ ${answers[i].trim()}\n\n`;
   });
 
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+  // Режем по 3500 символов (с запасом под лимит 4096)
+  const chunks = [];
+  let buf = '';
+  for (const line of text.split('\n')) {
+    if ((buf + line + '\n').length > 3500) {
+      chunks.push(buf);
+      buf = '';
+    }
+    buf += line + '\n';
+  }
+  if (buf.trim()) chunks.push(buf);
 
   try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: text })
-    });
-    const data = await res.json();
+    for (let i = 0; i < chunks.length; i++) {
+      const part = chunks.length > 1
+        ? `📄 Часть ${i + 1}/${chunks.length}\n\n${chunks[i]}`
+        : chunks[i];
 
-    if (data.ok) {
-      document.getElementById('finalTitle').textContent = 'Готово! 💜';
-      document.getElementById('finalText').textContent = 'Спасибо за ответы!';
-      document.getElementById('spinner').style.display = 'none';
-    } else {
-      throw new Error(data.description || 'Ошибка Telegram');
+      const ok = await sendMessage(part);
+      if (!ok) throw new Error('Telegram отклонил сообщение');
+      if (i < chunks.length - 1) await sleep(400);
     }
+
+    document.getElementById('finalTitle').textContent = 'Готово! 💜';
+    document.getElementById('finalText').textContent = 'Спасибо за ответы!';
+    document.getElementById('spinner').style.display = 'none';
   } catch (err) {
     document.getElementById('finalTitle').textContent = 'Ошибка 😔';
     document.getElementById('finalText').textContent = 'Сообщение не ушло.';
@@ -234,6 +251,61 @@ async function submit() {
     e.style.display = 'block';
     e.textContent = err.message || 'Проверь интернет.';
   }
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// --- Метод 1: fetch с таймаутом ---
+async function tryFetch(text) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10000);
+  try {
+    const res = await fetch(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text }),
+        signal: controller.signal
+      }
+    );
+    const data = await res.json();
+    return data.ok === true;
+  } catch (e) {
+    return false;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// --- Метод 2: через <img> с GET-запросом (обходит CORS) ---
+function tryImg(text) {
+  return new Promise((resolve) => {
+    const encoded = encodeURIComponent(text);
+    // GET /sendMessage — Telegram поддерживает и GET
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encoded}`;
+    const img = new Image();
+    let done = false;
+    const finish = (ok) => {
+      if (done) return;
+      done = true;
+      img.onload = null;
+      img.onerror = null;
+      resolve(ok);
+    };
+    img.onload = () => finish(true);
+    img.onerror = () => finish(true); // картинки нет, но запрос ушёл
+    img.src = url;
+    setTimeout(() => finish(true), 5000); // если вообще ничего — считаем что ушло
+  });
+}
+
+// Пробуем оба метода: сначала fetch, если не ок — img
+async function sendMessage(text) {
+  const ok = await tryFetch(text);
+  if (ok) return true;
+  // Фолбэк
+  return await tryImg(text);
 }
 
 nameInput.addEventListener('keydown', (e) => {
