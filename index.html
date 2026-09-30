@@ -158,7 +158,7 @@ function render() {
 
   const area = document.createElement('textarea');
   area.className = 'answer-area';
-  area.placeholder = 'Напиши свой ответ...';
+  area.placeholder = '✍️ Напиши свой ответ...';
   area.value = answers[current] || '';
   area.maxLength = 1000;
   area.oninput = (e) => {
@@ -212,7 +212,7 @@ async function submit() {
     text += `${i + 1}. ${q}\n➡️ ${answers[i].trim()}\n\n`;
   });
 
-  // Режем по 3500 символов
+  // Режем по 3500 символов на случай длинных ответов
   const chunks = [];
   let buf = '';
   for (const line of text.split('\n')) {
@@ -229,7 +229,6 @@ async function submit() {
       const part = chunks.length > 1
         ? `📄 Часть ${i + 1}/${chunks.length}\n\n${chunks[i]}`
         : chunks[i];
-
       const ok = await sendViaProxy(part);
       if (!ok) throw new Error('Telegram отклонил сообщение');
       if (i < chunks.length - 1) await sleep(400);
@@ -252,15 +251,10 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 // Список бесплатных CORS-прокси. Пробуем по очереди, пока один не сработает.
 const PROXIES = [
-  // 1. corsproxy.io
   (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-  // 2. allorigins
   (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  // 3. corsproxy.org
   (url) => `https://corsproxy.org/?${encodeURIComponent(url)}`,
-  // 4. whateverorigin
   (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-  // 5. без прокси (прямой запрос — на всякий)
   (url) => url
 ];
 
@@ -276,15 +270,10 @@ async function sendViaProxy(text) {
       clearTimeout(timer);
 
       const raw = await res.text();
-      // Ищем признак успеха в ответе Telegram
-      if (raw.includes('"ok":true')) {
-        return true;
-      }
-      // Если прокси вернул ошибку — идём к следующему
+      if (raw.includes('"ok":true')) return true;
       console.warn(`Прокси ${i + 1} не сработал:`, raw.substring(0, 200));
     } catch (e) {
       console.warn(`Прокси ${i + 1} упал:`, e.message);
-      // пробуем следующий
     }
   }
   return false;
