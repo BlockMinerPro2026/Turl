@@ -28,7 +28,9 @@ html, body {
     overflow: hidden;
 }
 
-/* RETRO PANEL */
+/* =========================
+   RETRO PANEL
+========================= */
 
 .panel {
     position: absolute;
@@ -74,7 +76,9 @@ html, body {
     border: 1px solid #aaa;
 }
 
-/* QUESTION */
+/* =========================
+   QUESTION
+========================= */
 
 .question {
     position: absolute;
@@ -103,7 +107,9 @@ html, body {
     z-index: 12;
 }
 
-/* CURSOR */
+/* =========================
+   CURSOR
+========================= */
 
 .cursor {
     display: inline-block;
@@ -126,7 +132,9 @@ html, body {
     }
 }
 
-/* BUTTONS */
+/* =========================
+   BUTTONS
+========================= */
 
 .buttons {
     position: absolute;
@@ -170,12 +178,10 @@ button {
         border-color .15s,
         transform .15s;
 
-    /*
-       Убираем синюю подсветку
-       при нажатии на телефонах
-    */
+    /* Убираем синюю подсветку на телефонах */
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
+
     user-select: none;
     -webkit-user-select: none;
 
@@ -187,12 +193,11 @@ button:hover {
     border-color: #fff;
 }
 
-/* Убираем синий focus/active */
-
 button:focus,
 button:focus-visible,
 button:active {
     outline: none;
+    box-shadow: none;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -200,7 +205,9 @@ button:active {
     transform: scale(.94);
 }
 
-/* FINAL MESSAGE */
+/* =========================
+   FINAL MESSAGE
+========================= */
 
 .love {
     position: absolute;
@@ -253,7 +260,9 @@ button:active {
         0 0 45px rgba(255,0,130,.8);
 }
 
-/* HEART */
+/* =========================
+   HEART
+========================= */
 
 .heart {
     position: relative;
@@ -312,7 +321,9 @@ button:active {
     }
 }
 
-/* MATRIX */
+/* =========================
+   MATRIX
+========================= */
 
 .matrix {
     position: absolute;
@@ -335,7 +346,9 @@ canvas {
     height: 100%;
 }
 
-/* CRT */
+/* =========================
+   CRT
+========================= */
 
 .crt {
     position: fixed;
@@ -382,7 +395,9 @@ canvas {
         );
 }
 
-/* NOISE */
+/* =========================
+   NOISE
+========================= */
 
 .noise {
     position: absolute;
@@ -419,7 +434,9 @@ canvas {
     }
 }
 
-/* SCAN */
+/* =========================
+   SCAN
+========================= */
 
 .scan {
     position: absolute;
@@ -451,7 +468,9 @@ canvas {
     }
 }
 
-/* HIDE */
+/* =========================
+   HIDE
+========================= */
 
 .question.hide,
 .buttons.hide {
@@ -460,7 +479,9 @@ canvas {
     transition: opacity .5s;
 }
 
-/* MOBILE */
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 500px) {
 
@@ -497,11 +518,15 @@ canvas {
      MUSIC
 ========================= -->
 
-<audio id="bgMusic" loop preload="auto">
+<audio
+    id="bgMusic"
+    loop
+    preload="auto">
+
     <source
         src="Panic_At_The_Disco_-_The_End_of_All_Things_64372489.mp3"
-        type="audio/mpeg"
-    >
+        type="audio/mpeg">
+
 </audio>
 
 
@@ -509,7 +534,9 @@ canvas {
 
     <!-- MATRIX -->
 
-    <div class="matrix" id="matrix">
+    <div
+        class="matrix"
+        id="matrix">
 
         <canvas id="matrixCanvas"></canvas>
 
@@ -518,7 +545,9 @@ canvas {
 
     <!-- RETRO WINDOW -->
 
-    <div class="panel" id="panel">
+    <div
+        class="panel"
+        id="panel">
 
         <div class="panel-header">
 
@@ -531,7 +560,9 @@ canvas {
 
         <!-- QUESTION -->
 
-        <div class="question" id="question">
+        <div
+            class="question"
+            id="question">
 
             <span id="typedText"></span>
 
@@ -597,63 +628,39 @@ canvas {
 <script>
 
 /* =========================
-   MUSIC
+   ELEMENTS
 ========================= */
 
 const bgMusic =
     document.getElementById("bgMusic");
 
+const typedText =
+    document.getElementById("typedText");
+
+const buttons =
+    document.getElementById("buttons");
+
+const question =
+    document.getElementById("question");
+
+const yes =
+    document.getElementById("yes");
+
+const no =
+    document.getElementById("no");
+
+const love =
+    document.getElementById("love");
+
+const matrix =
+    document.getElementById("matrix");
+
+
+/* =========================
+   MUSIC
+========================= */
+
 bgMusic.volume = 0.45;
-
-
-/*
-    Пытаемся запустить музыку
-    сразу после загрузки.
-*/
-
-function startMusic() {
-
-    bgMusic.play().catch(() => {
-
-        /*
-            Если браузер запретил
-            autoplay, музыка запустится
-            после первого касания/клика.
-        */
-
-    });
-
-}
-
-
-window.addEventListener(
-    "load",
-    () => {
-
-        startMusic();
-
-    }
-);
-
-
-/*
-    Запуск музыки после первого
-    взаимодействия пользователя.
-*/
-
-document.addEventListener(
-    "pointerdown",
-    () => {
-
-        if (bgMusic.paused) {
-
-            startMusic();
-
-        }
-
-    },
-    { once: true }
-);
 
 
 /* =========================
@@ -667,51 +674,10 @@ const typingSpeed = 80;
 
 
 /* =========================
-   ELEMENTS
-========================= */
-
-const typedText =
-    document.getElementById(
-        "typedText"
-    );
-
-const buttons =
-    document.getElementById(
-        "buttons"
-    );
-
-const question =
-    document.getElementById(
-        "question"
-    );
-
-const yes =
-    document.getElementById(
-        "yes"
-    );
-
-const no =
-    document.getElementById(
-        "no"
-    );
-
-const love =
-    document.getElementById(
-        "love"
-    );
-
-const matrix =
-    document.getElementById(
-        "matrix"
-    );
-
-
-/* =========================
    TYPING
 ========================= */
 
 let index = 0;
-
 
 function typeText() {
 
@@ -727,9 +693,7 @@ function typeText() {
             typingSpeed
         );
 
-    }
-
-    else {
+    } else {
 
         setTimeout(
             () => {
@@ -743,7 +707,6 @@ function typeText() {
         );
 
     }
-
 }
 
 
@@ -763,18 +726,51 @@ yes.addEventListener(
     "click",
     () => {
 
+        /*
+         * Музыка запускается
+         * именно после Yes.
+         *
+         * Поскольку play()
+         * вызывается внутри click,
+         * браузер разрешает звук.
+         */
+
+        bgMusic.currentTime = 0;
+
+        bgMusic.volume = 0.45;
+
+        bgMusic.play().catch(
+            error => {
+                console.log(
+                    "Не удалось запустить музыку:",
+                    error
+                );
+            }
+        );
+
+
+        /* Убираем вопрос */
+
         question.classList.add(
             "hide"
         );
+
+
+        /* Убираем кнопки */
 
         buttons.classList.add(
             "hide"
         );
 
+
+        /* Запускаем Matrix */
+
         matrix.classList.add(
             "show"
         );
 
+
+        /* Показываем финал */
 
         setTimeout(
             () => {
@@ -799,8 +795,7 @@ no.addEventListener(
     "click",
     function() {
 
-        this.style.opacity =
-            "0";
+        this.style.opacity = "0";
 
         this.style.pointerEvents =
             "none";
@@ -838,7 +833,6 @@ let height;
 
 
 const fontSize = 14;
-
 
 let columns;
 let drops;
@@ -977,9 +971,10 @@ matrixRain();
 </body>
 </html>
 
-Файл музыки должен лежать рядом с HTML:
+Структура папки:
 
-index.html
-Panic_At_The_Disco_-_The_End_of_All_Things_64372489.mp3
+📁 сайт
+├── index.html
+└── Panic_At_The_Disco_-_The_End_of_All_Things_64372489.mp3
 
-На телефоне синей вспышки при нажатии "Yes"/"No" больше не будет.
+После "Yes" одновременно запускаются музыка + Matrix, затем появляется «Прости за тот раз» и сердце.
