@@ -2,96 +2,115 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Осколки надежды</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
         body {
             background: #0a0a0f;
             font-family: 'Courier New', monospace;
-            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
         }
         .game {
-            max-width: 1000px;
             width: 100%;
+            height: 100%;
+            max-width: 100%;
             background: #07070c;
-            border: 2px solid #2a2a35;
-            border-radius: 28px;
-            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            padding-top: max(10px, env(safe-area-inset-top));
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+            padding-left: max(10px, env(safe-area-inset-left));
+            padding-right: max(10px, env(safe-area-inset-right));
         }
         .game-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 4px;
+            flex-shrink: 0;
         }
-        .title { color: #8a7aaa; font-size: 14px; letter-spacing: 2px; }
-        .stats { color: #6a6a8a; font-size: 12px; }
+        .title { color: #8a7aaa; font-size: 11px; letter-spacing: 1px; }
+        .stats { color: #6a6a8a; font-size: 10px; }
         .scene {
             background: #0c0c12;
             border: 2px solid #2c2c3a;
-            border-radius: 20px;
-            padding: 28px;
-            min-height: 280px;
+            border-radius: 16px;
+            padding: 16px;
+            min-height: 0;
             color: #e0e0ec;
-            font-size: 18px;
-            line-height: 1.65;
+            font-size: 15px;
+            line-height: 1.5;
             white-space: pre-wrap;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             overflow-y: auto;
-            max-height: 380px;
+            flex: 1 1 auto;
+            -webkit-overflow-scrolling: touch;
         }
         .inventory-panel {
             background: #0a0a12;
             border: 2px solid #2a2a35;
-            border-radius: 40px;
-            padding: 10px 20px;
-            margin-bottom: 20px;
+            border-radius: 24px;
+            padding: 6px 12px;
+            margin-bottom: 10px;
             display: flex;
             flex-wrap: wrap;
-            gap: 8px 15px;
+            gap: 4px 8px;
             align-items: center;
+            flex-shrink: 0;
+            max-height: 80px;
+            overflow-y: auto;
         }
-        .inventory-title { color: #9a8aba; font-weight: bold; font-size: 14px; }
-        .inventory-items { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+        .inventory-title { color: #9a8aba; font-weight: bold; font-size: 11px; }
+        .inventory-items { display: flex; flex-wrap: wrap; gap: 4px 6px; }
         .inventory-item {
             background: #1a1a26;
             border: 1px solid #4a4a66;
-            border-radius: 20px;
-            padding: 4px 12px;
+            border-radius: 14px;
+            padding: 2px 8px;
             color: #c0c0e0;
-            font-size: 13px;
+            font-size: 11px;
         }
-        .no-items { color: #6a6a8a; font-style: italic; font-size: 13px; }
+        .no-items { color: #6a6a8a; font-style: italic; font-size: 11px; }
         .choices {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 25px;
-            max-height: 400px;
+            gap: 8px;
+            margin-bottom: 10px;
             overflow-y: auto;
+            flex: 0 1 auto;
+            max-height: 40vh;
+            -webkit-overflow-scrolling: touch;
         }
         .choice {
             background: #111117;
             border: 2px solid #33333f;
             color: #d0d0da;
-            padding: 12px 18px;
-            font-size: 15px;
-            border-radius: 16px;
+            padding: 12px 14px;
+            font-size: 14px;
+            border-radius: 14px;
             text-align: left;
             cursor: pointer;
             transition: 0.1s;
             font-family: inherit;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            word-break: break-word;
         }
-        .choice:hover:not(.choice-disabled) {
+        .choice:active:not(.choice-disabled) {
             background: #1e1e2a;
             border-color: #7a7a9a;
-            transform: translateX(3px);
         }
         .choice-disabled {
             background: #0a0a12;
@@ -103,49 +122,74 @@
         .bottom-panel {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 6px;
             background: #0c0c12;
             border: 2px solid #2a2a35;
-            border-radius: 20px;
-            padding: 12px 20px;
-            flex-wrap: wrap;
+            border-radius: 16px;
+            padding: 6px 10px;
+            flex-wrap: nowrap;
+            flex-shrink: 0;
         }
         .arrow {
             background: #111117;
             border: 2px solid #33333f;
             color: #d0d0da;
-            width: 44px;
-            height: 44px;
-            border-radius: 22px;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
+            flex-shrink: 0;
+            user-select: none;
         }
+        .arrow:active:not(.disabled) { background: #2a2a36; }
         .arrow.disabled { opacity: 0.3; cursor: not-allowed; }
         .save-code {
             background: #0f0f17;
             border: 2px solid #333340;
             border-radius: 40px;
-            padding: 8px 16px;
-            flex: 1;
+            padding: 8px 10px;
+            flex: 1 1 auto;
+            min-width: 0;
             color: #b0b0d0;
             font-family: monospace;
-            font-size: 12px;
+            font-size: 11px;
         }
         .reset-btn {
             background: #1a1a26;
             border: 2px solid #4a4a66;
             color: #d0d0e0;
-            padding: 8px 18px;
-            border-radius: 30px;
+            padding: 8px 12px;
+            border-radius: 20px;
             cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            flex-shrink: 0;
+            min-height: 40px;
+            white-space: nowrap;
         }
-        .reset-btn:hover { background: #2a2a36; }
-        ::-webkit-scrollbar { width: 6px; }
+        .reset-btn:active { background: #2a2a36; }
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #0a0a12; }
         ::-webkit-scrollbar-thumb { background: #4a4a66; border-radius: 10px; }
+        
+        @media (max-height: 600px) {
+            .scene { font-size: 13px; padding: 12px; }
+            .choice { padding: 10px 12px; font-size: 13px; min-height: 40px; }
+            .inventory-panel { max-height: 60px; }
+            .choices { max-height: 35vh; }
+        }
+        @media (max-width: 360px) {
+            .title { font-size: 10px; }
+            .stats { font-size: 9px; }
+            .scene { font-size: 13px; padding: 12px; }
+            .choice { font-size: 12px; padding: 10px 12px; }
+            .arrow { width: 36px; height: 36px; font-size: 18px; }
+            .reset-btn { padding: 6px 10px; font-size: 11px; }
+        }
     </style>
 </head>
 <body>
@@ -161,9 +205,12 @@
     </div>
     <div id="choicesContainer" class="choices"></div>
     <div class="bottom-panel">
-        <div style="display:flex; gap:8px"><div id="arrowLeft" class="arrow">←</div><div id="arrowRight" class="arrow">→</div></div>
+        <div style="display:flex; gap:6px; flex-shrink:0;">
+            <div id="arrowLeft" class="arrow">←</div>
+            <div id="arrowRight" class="arrow">→</div>
+        </div>
         <input id="saveCode" class="save-code" readonly value="---">
-        <button class="reset-btn" id="resetBtn">🔄 СБРОС</button>
+        <button class="reset-btn" id="resetBtn">🔄</button>
     </div>
 </div>
 
@@ -174,7 +221,7 @@
         emptyInv: "пусто",
         statsReplic: "реплик:",
         statsItems: "предметов:",
-        resetBtn: "🔄 СБРОС",
+        resetBtn: "🔄",
         titleGame: "❄️ ОСКОЛКИ НАДЕЖДЫ ❄️",
         continueBtn: "→ продолжить",
         nextBtn: "→ дальше",
@@ -418,9 +465,11 @@
             addNext("street_start","Улица"); 
             text=texts.defaultNext; 
         }
-        let locationTag = `<span style="background:#1e1e2a; padding:3px 12px; border-radius:20px; font-size:12px;">📍 ${currentLocation}</span><br><br>`;
+        let locationTag = `<span style="background:#1e1e2a; padding:2px 10px; border-radius:20px; font-size:11px;">📍 ${currentLocation}</span><br><br>`;
         sceneEl.innerHTML = locationTag + text.replace(/\n/g,'<br>');
         addToHistory(text); updateArrows(); updateInvDisplay();
+        // Прокрутка сцены наверх при новом тексте
+        sceneEl.scrollTop = 0;
     }
      
     const arrowLeft=document.getElementById('arrowLeft'), arrowRight=document.getElementById('arrowRight');
