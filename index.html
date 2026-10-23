@@ -1,753 +1,469 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Mini Shooter Online</title>
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; user-select:none; -webkit-tap-highlight-color:transparent; }
-  body { overflow:hidden; background:#000; font-family:Arial,sans-serif; }
-  canvas { display:block; }
-
-  #crosshair { position:fixed; top:50%; left:50%; width:22px; height:22px;
-    transform:translate(-50%,-50%); pointer-events:none; z-index:10; }
-  #crosshair::before, #crosshair::after { content:''; position:absolute; background:#0f0; box-shadow:0 0 4px #0f0; }
-  #crosshair::before { width:2px; height:100%; left:50%; transform:translateX(-50%); }
-  #crosshair::after { width:100%; height:2px; top:50%; transform:translateY(-50%); }
-
-  #hud { position:fixed; top:15px; left:15px; color:#0f0; font-size:16px; z-index:10;
-    text-shadow:0 0 5px #0f0; font-weight:bold; }
-  #hud div { margin-bottom:4px; }
-
-  #scoreboard { position:fixed; top:15px; right:15px; background:rgba(0,0,0,0.6);
-    padding:10px 14px; border-radius:8px; color:#fff; font-size:13px; z-index:10;
-    min-width:160px; border:1px solid rgba(0,255,0,0.3); }
-  #scoreboard h3 { color:#0f0; margin-bottom:6px; font-size:14px; }
-  #scoreboard .row { display:flex; justify-content:space-between; padding:2px 0; }
-  #scoreboard .me { color:#0f0; font-weight:bold; }
-
-  #killfeed { position:fixed; top:120px; right:15px; z-index:10; }
-  .killmsg { background:rgba(0,0,0,0.7); color:#fff; padding:6px 10px;
-    border-radius:5px; margin-bottom:5px; font-size:13px; border-left:3px solid #f00;
-    animation:slideIn 0.3s ease; }
-  @keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
-
-  #hitmarker { position:fixed; top:50%; left:50%; width:30px; height:30px;
-    transform:translate(-50%,-50%); pointer-events:none; z-index:11; opacity:0;
-    transition:opacity 0.1s; }
-  #hitmarker::before, #hitmarker::after { content:''; position:absolute; background:#f00;
-    width:3px; height:100%; left:50%; top:0; }
-  #hitmarker::before { transform:translateX(-50%) rotate(45deg); }
-  #hitmarker::after { transform:translateX(-50%) rotate(-45deg); }
-  #hitmarker.show { opacity:1; }
-
-  /* Мобильное управление */
-  #joystick { position:fixed; bottom:30px; left:30px; width:130px; height:130px;
-    border-radius:50%; background:rgba(255,255,255,0.15);
-    border:2px solid rgba(255,255,255,0.3); z-index:20; touch-action:none; display:none; }
-  #stick { position:absolute; top:50%; left:50%; width:55px; height:55px; border-radius:50%;
-    background:rgba(0,255,0,0.6); transform:translate(-50%,-50%); }
-
-  #shootBtn { position:fixed; bottom:60px; right:40px; width:90px; height:90px;
-    border-radius:50%; background:rgba(255,0,0,0.5); border:3px solid rgba(255,0,0,0.8);
-    color:#fff; font-size:14px; font-weight:bold; z-index:20;
-    touch-action:none; display:none; align-items:center; justify-content:center; }
-
-  #jumpBtn { position:fixed; bottom:170px; right:55px; width:60px; height:60px;
-    border-radius:50%; background:rgba(0,150,255,0.5); border:3px solid rgba(0,150,255,0.8);
-    color:#fff; font-size:12px; font-weight:bold; z-index:20;
-    touch-action:none; display:none; align-items:center; justify-content:center; }
-
-  #start { position:fixed; inset:0; background:rgba(0,0,0,0.95); color:#fff; z-index:100;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding:20px; }
-  #start h1 { font-size:38px; margin-bottom:15px; color:#0f0; text-shadow:0 0 20px #0f0; }
-  #start input { padding:10px 15px; font-size:16px; border-radius:8px; border:2px solid #0f0;
-    background:#111; color:#0f0; margin:15px 0; outline:none; text-align:center; }
-  #start button { padding:14px 40px; font-size:18px; background:#0f0; color:#000;
-    border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
-  #start button:hover { background:#0c0; }
-  #start p { color:#aaa; margin:6px 0; font-size:14px; }
-
-  #deadScreen { position:fixed; inset:0; background:rgba(120,0,0,0.5); z-index:50;
-    display:none; align-items:center; justify-content:center; color:#fff;
-    font-size:48px; font-weight:bold; text-shadow:0 0 20px #f00; pointer-events:none; }
-</style>
+    <meta charset="UTF-8">
+    <title>Осколки надежды</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .game {
+            max-width: 1000px;
+            width: 100%;
+            background: #07070c;
+            border: 2px solid #2a2a35;
+            border-radius: 28px;
+            padding: 25px;
+        }
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .title { color: #8a7aaa; font-size: 14px; letter-spacing: 2px; }
+        .stats { color: #6a6a8a; font-size: 12px; }
+        .scene {
+            background: #0c0c12;
+            border: 2px solid #2c2c3a;
+            border-radius: 20px;
+            padding: 28px;
+            min-height: 280px;
+            color: #e0e0ec;
+            font-size: 18px;
+            line-height: 1.65;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            max-height: 380px;
+        }
+        .inventory-panel {
+            background: #0a0a12;
+            border: 2px solid #2a2a35;
+            border-radius: 40px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 15px;
+            align-items: center;
+        }
+        .inventory-title { color: #9a8aba; font-weight: bold; font-size: 14px; }
+        .inventory-items { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+        .inventory-item {
+            background: #1a1a26;
+            border: 1px solid #4a4a66;
+            border-radius: 20px;
+            padding: 4px 12px;
+            color: #c0c0e0;
+            font-size: 13px;
+        }
+        .no-items { color: #6a6a8a; font-style: italic; font-size: 13px; }
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .choice {
+            background: #111117;
+            border: 2px solid #33333f;
+            color: #d0d0da;
+            padding: 12px 18px;
+            font-size: 15px;
+            border-radius: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.1s;
+            font-family: inherit;
+        }
+        .choice:hover:not(.choice-disabled) {
+            background: #1e1e2a;
+            border-color: #7a7a9a;
+            transform: translateX(3px);
+        }
+        .choice-disabled {
+            background: #0a0a12;
+            border-color: #2a2a35;
+            color: #6a6a8a;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .bottom-panel {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #0c0c12;
+            border: 2px solid #2a2a35;
+            border-radius: 20px;
+            padding: 12px 20px;
+            flex-wrap: wrap;
+        }
+        .arrow {
+            background: #111117;
+            border: 2px solid #33333f;
+            color: #d0d0da;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .arrow.disabled { opacity: 0.3; cursor: not-allowed; }
+        .save-code {
+            background: #0f0f17;
+            border: 2px solid #333340;
+            border-radius: 40px;
+            padding: 8px 16px;
+            flex: 1;
+            color: #b0b0d0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .reset-btn {
+            background: #1a1a26;
+            border: 2px solid #4a4a66;
+            color: #d0d0e0;
+            padding: 8px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .reset-btn:hover { background: #2a2a36; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a12; }
+        ::-webkit-scrollbar-thumb { background: #4a4a66; border-radius: 10px; }
+    </style>
 </head>
 <body>
-
-<div id="crosshair"></div>
-<div id="hitmarker"></div>
-
-<div id="hud">
-  <div>❤️ HP: <span id="hp">100</span></div>
-  <div>🎯 Kills: <span id="kills">0</span></div>
-</div>
-
-<div id="scoreboard"><h3>🏆 Игроки</h3><div id="scores"></div></div>
-<div id="killfeed"></div>
-
-<div id="joystick"><div id="stick"></div></div>
-<div id="shootBtn">FIRE</div>
-<div id="jumpBtn">JUMP</div>
-<div id="deadScreen">💀 ВЫ УБИТЫ</div>
-
-<div id="start">
-  <h1>🎯 MINI SHOOTER ONLINE</h1>
-  <p>ПК: WASD + мышь + ЛКМ</p>
-  <p>Телефон: джойстик + свайп + FIRE</p>
-  <input id="nameInput" placeholder="Твоё имя" maxlength="16" value="">
-  <button id="playBtn">ИГРАТЬ</button>
-</div>
-
-<script src="/socket.io/socket.io.js"></script>
-<script type="importmap">
-{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
-</script>
-
-<script type="module">
-import * as THREE from 'three';
-
-// ==================== СЦЕНА ====================
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1a1a2e);
-scene.fog = new THREE.Fog(0x1a1a2e, 40, 150);
-
-const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 500);
-const renderer = new THREE.WebGLRenderer({ antialias:true });
-renderer.setSize(innerWidth, innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-document.body.appendChild(renderer.domElement);
-
-// ==================== СВЕТ ====================
-scene.add(new THREE.HemisphereLight(0xffffff, 0x333366, 0.8));
-const sun = new THREE.DirectionalLight(0xffffff, 1);
-sun.position.set(30, 60, 20);
-sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
-sun.shadow.camera.left = -60;
-sun.shadow.camera.right = 60;
-sun.shadow.camera.top = 60;
-sun.shadow.camera.bottom = -60;
-scene.add(sun);
-
-// ==================== ЗЕМЛЯ ====================
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(200, 200),
-  new THREE.MeshStandardMaterial({ color:0x2a4d2a, roughness:0.9 })
-);
-ground.rotation.x = -Math.PI/2;
-ground.receiveShadow = true;
-scene.add(ground);
-
-// Сетка для ориентира
-const grid = new THREE.GridHelper(200, 50, 0x444444, 0x333333);
-grid.position.y = 0.01;
-scene.add(grid);
-
-// ==================== КАРТА ====================
-const walls = [];
-function addBox(x, y, z, w, h, d, color=0x666688) {
-  const box = new THREE.Mesh(
-    new THREE.BoxGeometry(w, h, d),
-    new THREE.MeshStandardMaterial({ color, roughness:0.8 })
-  );
-  box.position.set(x, y, z);
-  box.castShadow = true;
-  box.receiveShadow = true;
-  scene.add(box);
-  walls.push(box);
-}
-
-// Периметр
-addBox(0, 3, -50, 100, 6, 1, 0x555577);
-addBox(0, 3,  50, 100, 6, 1, 0x555577);
-addBox(-50, 3, 0, 1, 6, 100, 0x555577);
-addBox( 50, 3, 0, 1, 6, 100, 0x555577);
-
-// Укрытия
-addBox(-10, 1.5, -10, 4, 3, 4, 0x886644);
-addBox( 15, 1.5,  -5, 6, 3, 2, 0x886644);
-addBox(-20, 1.5,  10, 3, 3, 3, 0x886644);
-addBox(  8, 1.5,  20, 5, 3, 5, 0x886644);
-addBox( 25, 1.5,  15, 2, 3, 8, 0x886644);
-addBox(-30, 1.5, -25, 8, 3, 2, 0x886644);
-addBox(  0, 4,    30, 10, 8, 1, 0x886644);
-addBox(-35, 1.5,  35, 4, 3, 4, 0x886644);
-addBox( 40, 1.5, -35, 6, 3, 6, 0x886644);
-addBox(-15, 1.5, -40, 3, 3, 8, 0x886644);
-addBox( 30, 1.5,  40, 8, 3, 3, 0x886644);
-
-// ==================== ОРУЖИЕ ИГРОКА ====================
-const gun = new THREE.Mesh(
-  new THREE.BoxGeometry(0.12, 0.12, 0.55),
-  new THREE.MeshStandardMaterial({ color:0x1a1a1a, metalness:0.7, roughness:0.3 })
-);
-gun.position.set(0.28, -0.22, -0.55);
-camera.add(gun);
-scene.add(camera);
-
-const muzzle = new THREE.PointLight(0xffaa00, 0, 8, 2);
-muzzle.position.set(0.28, -0.2, -1);
-camera.add(muzzle);
-
-// ==================== СЕТЬ ====================
-const socket = io();
-let myId = null;
-let myName = '';
-let myHp = 100;
-let myKills = 0;
-let connected = false;
-
-const remotePlayers = {}; // id -> { mesh, nameTag, data }
-
-// ==================== СОЗДАНИЕ МОДЕЛИ ИГРОКА ====================
-function createPlayerMesh(color = 0x00aaff, name = '') {
-  const group = new THREE.Group();
-
-  // Тело
-  const body = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.4, 1.0, 4, 8),
-    new THREE.MeshStandardMaterial({ color })
-  );
-  body.position.y = 0.9;
-  body.castShadow = true;
-  group.add(body);
-
-  // Голова
-  const head = new THREE.Mesh(
-    new THREE.SphereGeometry(0.3, 16, 16),
-    new THREE.MeshStandardMaterial({ color: 0xffddaa })
-  );
-  head.position.y = 1.75;
-  head.castShadow = true;
-  group.add(head);
-
-  // Пушка в руках
-  const gunMesh = new THREE.Mesh(
-    new THREE.BoxGeometry(0.1, 0.1, 0.5),
-    new THREE.MeshStandardMaterial({ color:0x111111 })
-  );
-  gunMesh.position.set(0.35, 1.1, -0.4);
-  group.add(gunMesh);
-
-  // Ник над головой
-  if (name) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 256; canvas.height = 64;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    ctx.fillRect(0, 0, 256, 64);
-    ctx.fillStyle = '#00ff88';
-    ctx.font = 'bold 36px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(name, 128, 32);
-    const tex = new THREE.CanvasTexture(canvas);
-    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex }));
-    sprite.scale.set(2, 0.5, 1);
-    sprite.position.y = 2.4;
-    group.add(sprite);
-    group.userData.nameTag = sprite;
-  }
-
-  group.userData.body = body;
-  return group;
-}
-
-function updateNameTag(group, name) {
-  if (group.userData.nameTag) group.remove(group.userData.nameTag);
-  const canvas = document.createElement('canvas');
-  canvas.width = 256; canvas.height = 64;
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'rgba(0,0,0,0.6)';
-  ctx.fillRect(0, 0, 256, 64);
-  ctx.fillStyle = '#00ff88';
-  ctx.font = 'bold 36px Arial';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(name, 128, 32);
-  const tex = new THREE.CanvasTexture(canvas);
-  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex }));
-  sprite.scale.set(2, 0.5, 1);
-  sprite.position.y = 2.4;
-  group.add(sprite);
-  group.userData.nameTag = sprite;
-}
-
-// ==================== ИНИЦИАЛИЗАЦИЯ ====================
-socket.on('init', (data) => {
-  myId = data.id;
-  connected = true;
-
-  for (const id in data.players) {
-    if (id === myId) continue;
-    addRemotePlayer(data.players[id]);
-  }
-  updateScoreboard(data.players);
-});
-
-socket.on('playerJoined', (p) => {
-  addRemotePlayer(p);
-  showKillFeed(`👋 ${p.name} зашёл`, '#0af');
-});
-
-socket.on('playerLeft', (id) => {
-  if (remotePlayers[id]) {
-    scene.remove(remotePlayers[id]);
-    delete remotePlayers[id];
-  }
-  socket.emit('requestScores');
-});
-
-socket.on('playerRenamed', ({ id, name }) => {
-  if (remotePlayers[id]) {
-    remotePlayers[id].userData.playerName = name;
-    updateNameTag(remotePlayers[id], name);
-  }
-});
-
-function addRemotePlayer(p) {
-  const mesh = createPlayerMesh(0xff3355, p.name);
-  mesh.position.set(p.x, 0, p.z);
-  mesh.userData.playerName = p.name;
-  scene.add(mesh);
-  remotePlayers[p.id] = mesh;
-}
-
-// ==================== ДВИЖЕНИЕ ИГРОКОВ ====================
-socket.on('playerMoved', (data) => {
-  const p = remotePlayers[data.id];
-  if (!p) return;
-  // Плавная интерполяция
-  p.userData.targetPos = new THREE.Vector3(data.x, 0, data.z);
-  p.userData.targetYaw = data.yaw;
-  p.userData.targetPitch = data.pitch;
-});
-
-// ==================== СТРЕЛЬБА ====================
-const bullets = []; // визуальные трассеры
-
-socket.on('bulletFired', (data) => {
-  if (data.from === myId) return;
-
-  const from = new THREE.Vector3(data.fromPos.x, data.fromPos.y - 0.3, data.fromPos.z);
-  const to = data.toPos
-    ? new THREE.Vector3(data.toPos.x, data.toPos.y, data.toPos.z)
-    : from.clone().add(new THREE.Vector3(0, 0, -50));
-
-  createTracer(from, to, data.hitPlayer ? 0xff0000 : 0xffff00);
-});
-
-function createTracer(from, to, color) {
-  const geo = new THREE.BufferGeometry().setFromPoints([from, to]);
-  const mat = new THREE.LineBasicMaterial({ color, transparent:true, opacity:0.9 });
-  const line = new THREE.Line(geo, mat);
-  scene.add(line);
-
-  setTimeout(() => {
-    line.material.opacity -= 0.15;
-    if (line.material.opacity <= 0) {
-      scene.remove(line);
-      geo.dispose();
-      mat.dispose();
-    } else {
-      setTimeout(() => {
-        scene.remove(line);
-        geo.dispose();
-        mat.dispose();
-      }, 100);
-    }
-  }, 80);
-}
-
-// ==================== HP / УБИЙСТВА ====================
-socket.on('hpUpdate', ({ hp }) => {
-  myHp = hp;
-  document.getElementById('hp').textContent = hp;
-  showHitmarker();
-});
-
-socket.on('youRespawned', ({ hp, x, y, z }) => {
-  myHp = hp;
-  player.position.set(x, 1.7, z);
-  document.getElementById('hp').textContent = hp;
-  document.getElementById('deadScreen').style.display = 'none';
-});
-
-socket.on('playerKilled', ({ killer, victim, killerName, victimName }) => {
-  if (killer === myId) {
-    myKills++;
-    document.getElementById('kills').textContent = myKills;
-    showKillFeed(`🎯 Ты убил ${victimName}`, '#0f0');
-    showHitmarker();
-  } else if (victim === myId) {
-    document.getElementById('deadScreen').style.display = 'flex';
-    showKillFeed(`💀 ${killerName} убил тебя`, '#f00');
-    setTimeout(() => {
-      document.getElementById('deadScreen').style.display = 'none';
-    }, 2000);
-  } else {
-    showKillFeed(`💥 ${killerName} → ${victimName}`, '#ffaa00');
-  }
-});
-
-socket.on('scoreUpdate', ({ id, kills }) => {
-  const row = document.querySelector(`[data-pid="${id}"]`);
-  if (row) row.querySelector('.kills').textContent = kills;
-});
-
-// ==================== SCOREBOARD ====================
-function updateScoreboard(playersList) {
-  const container = document.getElementById('scores');
-  const arr = Object.values(playersList).sort((a, b) => b.kills - a.kills);
-
-  container.innerHTML = arr.map(p => `
-    <div class="row ${p.id === myId ? 'me' : ''}" data-pid="${p.id}">
-      <span>${p.name}</span>
-      <span class="kills">${p.kills}</span>
+<div class="game" id="gameContainer">
+    <div class="game-header">
+        <div class="title" id="gameTitle">❄️ ОСКОЛКИ НАДЕЖДЫ ❄️</div>
+        <div class="stats" id="statsArea">реплик: 0 | предметов: 0</div>
     </div>
-  `).join('');
-}
+    <div id="sceneText" class="scene">Загрузка...</div>
+    <div class="inventory-panel">
+        <span class="inventory-title" id="invTitle">📦 ИНВЕНТАРЬ</span>
+        <div id="inventoryList" class="inventory-items"><span class="no-items">пусто</span></div>
+    </div>
+    <div id="choicesContainer" class="choices"></div>
+    <div class="bottom-panel">
+        <div style="display:flex; gap:8px"><div id="arrowLeft" class="arrow">←</div><div id="arrowRight" class="arrow">→</div></div>
+        <input id="saveCode" class="save-code" readonly value="---">
+        <button class="reset-btn" id="resetBtn">🔄 СБРОС</button>
+    </div>
+</div>
 
-// Обновляем scoreboard каждые 2 сек через запрос (упрощённо)
-setInterval(() => {
-  if (!connected) return;
-  // Локальное обновление килов уже приходит через scoreUpdate
-}, 2000);
+<script>
+    // Тексты на русском
+    const texts = {
+        invTitle: "📦 ИНВЕНТАРЬ",
+        emptyInv: "пусто",
+        statsReplic: "реплик:",
+        statsItems: "предметов:",
+        resetBtn: "🔄 СБРОС",
+        titleGame: "❄️ ОСКОЛКИ НАДЕЖДЫ ❄️",
+        continueBtn: "→ продолжить",
+        nextBtn: "→ дальше",
+        restartChoice: "→ начать заново",
+        
+        startScene: "📍 ПОДЪЕЗД\n\nТы приходишь в себя на холодном бетонном полу. Голова гудит. Рядом лежит девушка — её лицо бледное. В руке зажата фотография и записка: «Школа №7. Там правда». Нужно выбираться.",
+        choiceGirl: "осмотреть девушку",
+        choiceExit: "выйти на улицу",
+        choiceSearchPorch: "обыскать подъезд",
+        girlCheck: "Кожа холодная. Она не дышит. На шее странная отметина. На обороте фото: «Помни. Ты был здесь». Мурашки по спине.",
+        searchPorchRes: "В почтовом ящике находишь нож и спички. Под ним газета: «Эпидемия. Город на карантине». Дата — три недели назад.",
+        streetStart: "📍 УЛИЦА\n\nСерый туман над разбитым асфальтом. Перевёрнутые машины. Вдалеке школа №7. Справа тёмный парк. Холод пробирает до костей.",
+        choiceSchool: "идти к школе",
+        choicePark: "зайти в парк",
+        choiceMap: "посмотреть карту",
+        mapCheck: "На карте: школа, парк, лес, лагерь выживших, военный бункер. Красным обведена школа: «Начало всего».",
+        parkEntrance: "📍 ПАРК\n\nСтарые деревья. На скамейке девочка в школьной форме. Рядом рюкзак.",
+        choiceApproach: "подойти к девочке",
+        choiceBackpack: "осмотреть рюкзак",
+        girlParkTalk: "Девочка: «Иди в школу. Там ответы». Она даёт отмычку и исчезает.",
+        parkBackpackRes: "В рюкзаке: еда, вода, карта. Дневник: «Они пришли ночью».",
+        schoolHall: "📍 ШКОЛА\n\nДвери распахнуты. Пахнет плесенью. Стены в граффити: «ОНИ ЗНАЮТ», «НЕ ХОДИ В ПОДВАЛ».",
+        choiceClass: "пойти в класс",
+        choiceBasement: "спуститься в подвал",
+        schoolClass: "Класс разгромлен. На доске: «КЛЮЧ В КНИГЕ».",
+        searchBooks: "искать в книгах",
+        searchCloset: "осмотреть шкаф",
+        booksRes: "В книге находишь отмычки и фото класса. На обороте: «Я знаю, ты вернёшься».",
+        closetRes: "В шкафу фонарик. Дневник: «Они из лаборатории».",
+        basementDoor: "Дверь в подвал заперта. Надпись: «ОНИ ТАМ». Слышна капель.",
+        choicePick: "вскрыть отмычкой",
+        basementInside: "В углу сидит человек в плаще. «Я Сергей, учитель. Вирус из лаборатории. Выжившие ушли в лес».",
+        choiceTrust: "довериться",
+        choiceAsk: "спросить подробности",
+        trustRes: "Сергей: «Пойдём в лагерь». Он даёт аптечку и бинты.",
+        askRes: "«Эпидемия три недели назад. Люди меняются. Бункер на востоке». Он даёт рацию.",
+        campArrival: "📍 ЛАГЕРЬ\n\nПалатки, костёр. Старейшина: «Новичок? Проходи». Рядом охотник Дмитрий и врач Анна.",
+        choiceElder: "поговорить со старейшиной",
+        choiceAskFood: "попросить еды",
+        choiceExplore: "осмотреть лагерь",
+        elderTalk: "«На востоке военный бункер. Там припасы. Поможешь найти — примешь нас в семью». Он даёт карту.",
+        askFoodRes: "Тебе дают еду и воду. «Держи, мы все братья».",
+        exploreCamp: "Старая рация. Нужны батарейки.",
+        fixRadio: "починить рацию",
+        fixRadioRes: "Рация ожила. Слышен голос: «...помощь... бункер 7... координаты...». Люди плачут от радости.",
+        campStayEnd: "🏆 КОНЦОВКА: Ты остаёшься в лагере. Живёшь в мире, помогаешь другим. Но чувствуешь — правда осталась где-то в школе. Однажды ночью ты смотришь на звёзды и понимаешь — твой путь ещё не закончен. 🏆",
+        forestPath: "📍 ЛЕС\n\nВысокие сосны, снег. Дмитрий идёт впереди. «Бункер должен быть где-то здесь». Тропа раздваивается.",
+        choiceHut: "пойти к избушке",
+        choiceDeep: "идти дальше по тропе",
+        hutKnock: "постучать",
+        hutAround: "обойти вокруг",
+        hutKnockRes: "Старушка: «Заходите, погрейтесь». Она даёт еду и спички. «Бункер? Идите дальше по тропе, за оврагом».",
+        hutAroundRes: "За избушкой находишь старый топор.",
+        forestDeep: "Глубже в лесу. Слышны звуки. Впереди железная дверь, вросшая в землю. Военный бункер!",
+        bunkerDoor: "Тяжёлая железная дверь. Кодовая панель. Нужен код доступа.",
+        bunkerOpenRes: "Дверь открывается. Внутри — склад: ящики с едой, водой, медикаментами, оружием. Анна плачет. Старейшина жмёт руку: «Ты спас нас всех!»",
+        bunkerInside: "Внутри бункера тепло и безопасно. На стенах карты, радиостанция. Выжившие обустраиваются. Ты смотришь на фотографию девочки из подъезда — она улыбается. Кажется, она знала, что всё закончится хорошо.",
+        goodEnding: "✨✨✨ ХОРОШАЯ КОНЦОВКА ✨✨✨\n\nВы нашли бункер и спасли лагерь. Теперь у вас есть убежище, припасы и будущее. Вы вместе — а значит, выживете. Город остался позади, но впереди новая жизнь. Фотография девочки всегда с тобой — напоминание о том, что надежда умирает последней. ✨✨✨",
+        defaultNext: "Ты продолжаешь путь по пустошам..."
+    };
 
-// ==================== KILL FEED ====================
-function showKillFeed(text, color = '#fff') {
-  const feed = document.getElementById('killfeed');
-  const div = document.createElement('div');
-  div.className = 'killmsg';
-  div.style.borderLeftColor = color;
-  div.textContent = text;
-  feed.appendChild(div);
-  setTimeout(() => div.remove(), 4000);
-}
-
-function showHitmarker() {
-  const hm = document.getElementById('hitmarker');
-  hm.classList.add('show');
-  setTimeout(() => hm.classList.remove('show'), 120);
-}
-
-// ==================== ИГРОК ====================
-const player = {
-  position: new THREE.Vector3(0, 1.7, 0),
-  velocity: new THREE.Vector3(),
-  onGround: true
-};
-camera.position.copy(player.position);
-
-// ==================== УПРАВЛЕНИЕ ====================
-const keys = {};
-let yaw = 0, pitch = 0;
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-let gameStarted = false;
-
-document.addEventListener('keydown', e => keys[e.code] = true);
-document.addEventListener('keyup',   e => keys[e.code] = false);
-
-document.addEventListener('mousemove', e => {
-  if (!document.pointerLockElement) return;
-  yaw -= e.movementX * 0.002;
-  pitch -= e.movementY * 0.002;
-  pitch = Math.max(-Math.PI/2 + 0.1, Math.min(Math.PI/2 - 0.1, pitch));
-});
-
-let isShooting = false;
-let autoFire = false;
-
-document.addEventListener('mousedown', e => {
-  if (e.button === 0) { isShooting = true; autoFire = true; }
-});
-document.addEventListener('mouseup', e => {
-  if (e.button === 0) { isShooting = false; autoFire = false; }
-});
-
-document.body.addEventListener('click', () => {
-  if (!isMobile && !document.pointerLockElement && gameStarted) {
-    document.body.requestPointerLock();
-  }
-});
-
-// ==================== МОБИЛЬНОЕ УПРАВЛЕНИЕ ====================
-let moveVec = { x:0, y:0 };
-let touchLookId = null;
-let lastTouch = { x:0, y:0 };
-
-if (isMobile) {
-  document.getElementById('joystick').style.display = 'block';
-  document.getElementById('shootBtn').style.display = 'flex';
-  document.getElementById('jumpBtn').style.display = 'flex';
-
-  const joy = document.getElementById('joystick');
-  const stick = document.getElementById('stick');
-  let joyId = null;
-
-  joy.addEventListener('touchstart', e => {
-    e.preventDefault();
-    const t = e.changedTouches[0];
-    joyId = t.identifier;
-    handleJoy(t);
-  });
-  joy.addEventListener('touchmove', e => {
-    e.preventDefault();
-    for (const t of e.changedTouches) if (t.identifier === joyId) handleJoy(t);
-  });
-  joy.addEventListener('touchend', e => {
-    for (const t of e.changedTouches) {
-      if (t.identifier === joyId) {
-        joyId = null; moveVec = { x:0, y:0 };
-        stick.style.transform = 'translate(-50%, -50%)';
-      }
+    // Инвентарь
+    let inventory = {
+        'еда':0,'вода':0,'бинты':0,'аптечка':0,'батарейки':0,'спички':0,
+        'верёвка':0,'отмычка':0,'нож':0,'фонарик':0,'рация':0,'карта':0
+    };
+    const itemNames = {
+        'еда':'🍞 Еда','вода':'💧 Вода','бинты':'🩹 Бинты',
+        'аптечка':'💊 Аптечка','батарейки':'🔋 Батарейки',
+        'спички':'🔥 Спички','верёвка':' Верёвка',
+        'отмычка':'🔓 Отмычка','нож':'🔪 Нож','фонарик':'🔦 Фонарик',
+        'рация':'📻 Рация','карта':'🗺️ Карта'
+    };
+    
+    function addItem(id,q=1){ if(inventory[id]!==undefined){ inventory[id]+=q; updateInvDisplay(); } }
+    function removeItem(id,q=1){ if(inventory[id]>=q){ inventory[id]-=q; updateInvDisplay(); return true; } return false; }
+    function hasItem(id,q=1){ return inventory[id]>=q; }
+     
+    function updateInvDisplay(){
+        let items=[];
+        for(let [id,qty] of Object.entries(inventory)) if(qty>0) items.push(`<span class="inventory-item">${itemNames[id]} x${qty}</span>`);
+        document.getElementById('inventoryList').innerHTML = items.length ? items.join('') : `<span class="no-items">${texts.emptyInv}</span>`;
+        let total=Object.values(inventory).reduce((a,b)=>a+b,0);
+        document.getElementById('statsArea').innerHTML = `${texts.statsReplic} ${replicaCount} | ${texts.statsItems} ${total}`;
+        document.getElementById('invTitle').innerText = texts.invTitle;
+        document.getElementById('resetBtn').innerText = texts.resetBtn;
+        document.getElementById('gameTitle').innerText = texts.titleGame;
     }
-  });
-
-  function handleJoy(t) {
-    const r = joy.getBoundingClientRect();
-    const cx = r.left + r.width/2, cy = r.top + r.height/2;
-    let dx = t.clientX - cx, dy = t.clientY - cy;
-    const max = r.width / 2;
-    const dist = Math.hypot(dx, dy);
-    if (dist > max) { dx = dx/dist*max; dy = dy/dist*max; }
-    stick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-    moveVec.x = dx / max;
-    moveVec.y = -dy / max;
-  }
-
-  renderer.domElement.addEventListener('touchstart', e => {
-    for (const t of e.changedTouches) {
-      if (t.clientX > innerWidth/2 && touchLookId === null) {
-        touchLookId = t.identifier;
-        lastTouch = { x:t.clientX, y:t.clientY };
-      }
+     
+    let currentLocation="Подъезд", sceneId="start", ending=null, replicaCount=0;
+    let metGirl=false,injured=false,park=false,metStranger=false,metSurvivors=false,helpedOldWoman=false,radioFixed=false,hasKeyCard=false,bunkerFound=false;
+    let history=[],historyIndex=-1,isViewingHistory=false;
+    const sceneEl=document.getElementById('sceneText'), choicesEl=document.getElementById('choicesContainer');
+     
+    function addReplica(){ replicaCount++; updateInvDisplay(); }
+    function addToHistory(text){ history.push(text); historyIndex=history.length-1; isViewingHistory=false; }
+    function updateArrows(){ arrowLeft.classList.toggle('disabled',historyIndex<=0); arrowRight.classList.toggle('disabled',historyIndex>=history.length-1||!isViewingHistory); }
+     
+    function addChoice(text, nextScene, nextLoc=null, needItem=null, needQty=1, useItem=null){
+        let btn=document.createElement('button'); btn.className='choice';
+        let canDo=!needItem||hasItem(needItem,needQty);
+        if(!canDo){ btn.classList.add('choice-disabled'); btn.disabled=true; btn.innerText=`${text} ❌ (нужно: ${itemNames[needItem]||needItem})`; }
+        else{ btn.innerText=text; btn.onclick=()=>{ if(useItem&&needItem) removeItem(useItem,needQty); if(nextLoc) currentLocation=nextLoc; sceneId=nextScene; ending=null; render(); }; }
+        choicesEl.appendChild(btn);
     }
-  }, { passive:false });
-
-  renderer.domElement.addEventListener('touchmove', e => {
-    for (const t of e.changedTouches) {
-      if (t.identifier === touchLookId) {
-        yaw -= (t.clientX - lastTouch.x) * 0.005;
-        pitch -= (t.clientY - lastTouch.y) * 0.005;
-        pitch = Math.max(-Math.PI/2 + 0.1, Math.min(Math.PI/2 - 0.1, pitch));
-        lastTouch = { x:t.clientX, y:t.clientY };
-      }
+    function addNext(nextScene,nextLoc=null){
+        let btn=document.createElement('button'); btn.className='choice'; btn.innerText=texts.nextBtn;
+        btn.onclick=()=>{ if(nextLoc) currentLocation=nextLoc; sceneId=nextScene; render(); };
+        choicesEl.appendChild(btn);
     }
-    e.preventDefault();
-  }, { passive:false });
-
-  renderer.domElement.addEventListener('touchend', e => {
-    for (const t of e.changedTouches) {
-      if (t.identifier === touchLookId) touchLookId = null;
+     
+    function render(){
+        if(isViewingHistory) return;
+        choicesEl.innerHTML='';
+        if(ending){ sceneEl.innerText=ending; addChoice(texts.restartChoice,'start','Подъезд'); addToHistory(ending); return; }
+        let text=""; addReplica();
+        // Логика сцен
+        if(currentLocation==="Подъезд" && sceneId==="start"){
+            text=texts.startScene;
+            addChoice(texts.choiceGirl,"girl_check","Подъезд"); 
+            addChoice(texts.choiceExit,"street_start","Улица"); 
+            addChoice(texts.choiceSearchPorch,"search_porch","Подъезд");
+        } else if(currentLocation==="Подъезд" && sceneId==="girl_check"){ 
+            text=texts.girlCheck; metGirl=true; 
+            addChoice(texts.choiceExit,"street_start","Улица"); 
+            addChoice(texts.choiceSearchPorch,"search_porch","Подъезд");
+        } else if(currentLocation==="Подъезд" && sceneId==="search_porch"){ 
+            text=texts.searchPorchRes; addItem('нож',1); addItem('спички',3); 
+            addChoice(texts.choiceExit,"street_start","Улица");
+        } else if(currentLocation==="Улица" && sceneId==="street_start"){ 
+            text=texts.streetStart; 
+            addChoice(texts.choiceSchool,"school_hall","Школа"); 
+            addChoice(texts.choicePark,"park_entrance","Парк"); 
+            if(hasItem('карта')) addChoice(texts.choiceMap,"map_check","Улица");
+        } else if(currentLocation==="Улица" && sceneId==="map_check"){ 
+            text=texts.mapCheck; 
+            addChoice(texts.choiceSchool,"school_hall","Школа"); 
+            addChoice("→ Лагерь","camp_arrival","Лагерь выживших");
+        } else if(currentLocation==="Парк" && sceneId==="park_entrance"){ 
+            text=texts.parkEntrance; 
+            addChoice(texts.choiceApproach,"girl_park_talk","Парк"); 
+            addChoice(texts.choiceBackpack,"park_backpack","Парк"); 
+            addChoice(texts.choiceExit,"street_start","Улица");
+        } else if(currentLocation==="Парк" && sceneId==="girl_park_talk"){ 
+            text=texts.girlParkTalk; addItem('отмычка',1); 
+            addChoice(texts.choiceBackpack,"park_backpack","Парк"); 
+            addChoice(texts.choiceExit,"street_start","Улица");
+        } else if(currentLocation==="Парк" && sceneId==="park_backpack"){ 
+            text=texts.parkBackpackRes; addItem('еда',2); addItem('вода',2); addItem('карта',1); 
+            addChoice("← назад","park_entrance","Парк");
+        } else if(currentLocation==="Школа" && sceneId==="school_hall"){ 
+            text=texts.schoolHall; 
+            addChoice(texts.choiceClass,"school_class","Школа"); 
+            addChoice(texts.choiceBasement,"basement_door","Школа"); 
+            addChoice(texts.choiceExit,"street_start","Улица");
+        } else if(currentLocation==="Школа" && sceneId==="school_class"){ 
+            text=texts.schoolClass; 
+            addChoice(texts.searchBooks,"search_books","Школа"); 
+            addChoice(texts.searchCloset,"search_closet","Школа"); 
+            addChoice("← назад","school_hall","Школа");
+        } else if(currentLocation==="Школа" && sceneId==="search_books"){ 
+            text=texts.booksRes; addItem('отмычка',2); 
+            addChoice(texts.searchCloset,"search_closet","Школа"); 
+            addChoice("← назад","school_hall","Школа");
+        } else if(currentLocation==="Школа" && sceneId==="search_closet"){ 
+            text=texts.closetRes; addItem('фонарик',1); 
+            addChoice("← назад","school_hall","Школа");
+        } else if(currentLocation==="Школа" && sceneId==="basement_door"){ 
+            text=texts.basementDoor; 
+            if(hasItem('отмычка')) addChoice(texts.choicePick,"basement_inside","Школа",'отмычка',1,'отмычка'); 
+            else addChoice("отмычка","basement_inside","Школа",'отмычка'); 
+            addChoice("← назад","school_hall","Школа");
+        } else if(currentLocation==="Школа" && sceneId==="basement_inside"){ 
+            text=texts.basementInside; metStranger=true; 
+            addChoice(texts.choiceTrust,"basement_trust","Школа"); 
+            addChoice(texts.choiceAsk,"basement_ask","Школа");
+        } else if(currentLocation==="Школа" && sceneId==="basement_trust"){ 
+            text=texts.trustRes; addItem('аптечка',1); addItem('бинты',2); 
+            addChoice("→ Лагерь","camp_arrival","Лагерь выживших"); 
+            addChoice("← остаться","school_hall","Школа");
+        } else if(currentLocation==="Школа" && sceneId==="basement_ask"){ 
+            text=texts.askRes; addItem('рация',1); 
+            addChoice("→ Лагерь","camp_arrival","Лагерь выживших"); 
+            addChoice("← остаться","school_hall","Школа");
+        } else if(currentLocation==="Лагерь выживших" && sceneId==="camp_arrival"){ 
+            text=texts.campArrival; metSurvivors=true; 
+            addChoice(texts.choiceElder,"elder_talk","Лагерь выживших"); 
+            addChoice(texts.choiceAskFood,"ask_food_camp","Лагерь выживших"); 
+            addChoice(texts.choiceExplore,"explore_camp","Лагерь выживших");
+        } else if(currentLocation==="Лагерь выживших" && sceneId==="elder_talk"){ 
+            text=texts.elderTalk; addItem('карта',1); 
+            addChoice("→ в лес","forest_path","Лес"); 
+            addChoice("отказаться","camp_stay","Лагерь выживших");
+        } else if(currentLocation==="Лагерь выживших" && sceneId==="ask_food_camp"){ 
+            text=texts.askFoodRes; addItem('еда',2); addItem('вода',2); 
+            addChoice(texts.choiceElder,"elder_talk","Лагерь выживших"); 
+            addChoice(texts.choiceExplore,"explore_camp","Лагерь выживших");
+        } else if(currentLocation==="Лагерь выживших" && sceneId==="explore_camp"){ 
+            text=texts.exploreCamp; 
+            if(hasItem('батарейки')) addChoice(texts.fixRadio,"fix_radio","Лагерь выживших",'батарейки',2,'батарейки'); 
+            addChoice("← назад","camp_arrival","Лагерь выживших");
+        } else if(currentLocation==="Лагерь выживших" && sceneId==="fix_radio"){ 
+            text=texts.fixRadioRes; radioFixed=true; 
+            addChoice("← назад","camp_arrival","Лагерь выживших");
+        } else if(currentLocation==="Лагерь выживших" && sceneId==="camp_stay"){ 
+            ending=texts.campStayEnd; render(); return;
+        } else if(currentLocation==="Лес" && sceneId==="forest_path"){ 
+            text=texts.forestPath; 
+            addChoice(texts.choiceHut,"forest_hut","Лес"); 
+            addChoice(texts.choiceDeep,"forest_deep","Лес"); 
+            addChoice("← назад","camp_arrival","Лагерь выживших");
+        } else if(currentLocation==="Лес" && sceneId==="forest_hut"){ 
+            text="Охотничья избушка. Из трубы идёт дым."; 
+            addChoice(texts.hutKnock,"hut_knock","Лес"); 
+            addChoice(texts.hutAround,"hut_around","Лес");
+        } else if(currentLocation==="Лес" && sceneId==="hut_knock"){ 
+            text=texts.hutKnockRes; addItem('еда',2);addItem('вода',2);addItem('спички',3); helpedOldWoman=true; 
+            addChoice(texts.choiceDeep,"forest_deep","Лес"); 
+            addChoice("← назад","forest_path","Лес");
+        } else if(currentLocation==="Лес" && sceneId==="hut_around"){ 
+            text=texts.hutAroundRes; addItem('нож',1); 
+            addChoice(texts.hutKnock,"hut_knock","Лес");
+        } else if(currentLocation==="Лес" && sceneId==="forest_deep"){ 
+            text=texts.forestDeep; 
+            addChoice("осмотреть дверь","bunker_door","Бункер"); 
+            addChoice("← назад","forest_path","Лес");
+        } else if(currentLocation==="Бункер" && sceneId==="bunker_door"){ 
+            text=texts.bunkerDoor; 
+            if(hasItem('карта')) addChoice("использовать карту","bunker_open","Бункер",'карта',1,'карта'); 
+            else addChoice("взломать","bunker_open","Бункер",'отмычка'); 
+            addChoice("← назад","forest_path","Лес");
+        } else if(currentLocation==="Бункер" && sceneId==="bunker_open"){ 
+            text=texts.bunkerOpenRes; addItem('еда',20);addItem('вода',20);addItem('аптечка',5);addItem('бинты',10); bunkerFound=true; 
+            addChoice("войти","bunker_inside","Бункер");
+        } else if(currentLocation==="Бункер" && sceneId==="bunker_inside"){ 
+            text=texts.bunkerInside; 
+            addChoice("остаться","final_good","Бункер");
+        } else if(currentLocation==="Бункер" && sceneId==="final_good"){ 
+            ending=texts.goodEnding; render(); return;
+        } else { 
+            addNext("street_start","Улица"); 
+            text=texts.defaultNext; 
+        }
+        let locationTag = `<span style="background:#1e1e2a; padding:3px 12px; border-radius:20px; font-size:12px;">📍 ${currentLocation}</span><br><br>`;
+        sceneEl.innerHTML = locationTag + text.replace(/\n/g,'<br>');
+        addToHistory(text); updateArrows(); updateInvDisplay();
     }
-  });
-
-  const shootBtn = document.getElementById('shootBtn');
-  shootBtn.addEventListener('touchstart', e => { e.preventDefault(); isShooting = true; autoFire = true; });
-  shootBtn.addEventListener('touchend',   e => { e.preventDefault(); isShooting = false; autoFire = false; });
-
-  const jumpBtn = document.getElementById('jumpBtn');
-  jumpBtn.addEventListener('touchstart', e => {
-    e.preventDefault();
-    if (player.onGround) player.velocity.y = 7;
-  });
-}
-
-// ==================== СТРЕЛЬБА (клиент → сервер) ====================
-let lastShot = 0;
-const SHOT_COOLDOWN = 0.11;
-
-function shoot() {
-  const now = performance.now() / 1000;
-  if (now - lastShot < SHOT_COOLDOWN) return;
-  lastShot = now;
-
-  muzzle.intensity = 3;
-  setTimeout(() => muzzle.intensity = 0, 50);
-  pitch += 0.015; // отдача
-
-  // Рейкаст по локальным врагам + стенам
-  const raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
-  raycaster.far = 100;
-
-  const targets = [...Object.values(remotePlayers), ...walls];
-  const hits = raycaster.intersectObjects(targets, true);
-
-  let hitPoint = null;
-  let targetId = null;
-  let headshot = false;
-
-  if (hits.length > 0) {
-    const hit = hits[0];
-    hitPoint = { x: hit.point.x, y: hit.point.y, z: hit.point.z };
-
-    // Проверяем, попали ли в игрока
-    let obj = hit.object;
-    while (obj && !remotePlayers[obj.uuid]) {
-      if (obj.userData && obj.userData.playerId) { targetId = obj.userData.playerId; break; }
-      // Идём вверх до группы
-      const pid = Object.keys(remotePlayers).find(id => {
-        let o = hit.object;
-        while (o) { if (o === remotePlayers[id]) return true; o = o.parent; }
-        return false;
-      });
-      if (pid) { targetId = pid; break; }
-      break;
+     
+    const arrowLeft=document.getElementById('arrowLeft'), arrowRight=document.getElementById('arrowRight');
+    arrowLeft.onclick=()=>{ 
+        if(historyIndex>0) { 
+            historyIndex--; 
+            sceneEl.innerText=history[historyIndex]; 
+            choicesEl.innerHTML=''; 
+            let btn=document.createElement('button'); 
+            btn.className='choice'; 
+            btn.innerText=texts.continueBtn; 
+            btn.onclick=()=>{ isViewingHistory=false; render(); }; 
+            choicesEl.appendChild(btn); 
+            isViewingHistory=true; 
+            updateArrows(); 
+        } 
+    };
+    arrowRight.onclick=()=>{ 
+        if(isViewingHistory && historyIndex<history.length-1){ 
+            historyIndex++; 
+            sceneEl.innerText=history[historyIndex]; 
+            choicesEl.innerHTML=''; 
+            let btn=document.createElement('button'); 
+            btn.className='choice'; 
+            btn.innerText=texts.continueBtn; 
+            btn.onclick=()=>{ isViewingHistory=false; render(); }; 
+            choicesEl.appendChild(btn); 
+            isViewingHistory=true; 
+            updateArrows(); 
+        } 
+    };
+     
+    function resetGame(){
+        inventory={'еда':0,'вода':0,'бинты':0,'аптечка':0,'батарейки':0,'спички':0,'верёвка':0,'отмычка':0,'нож':0,'фонарик':0,'рация':0,'карта':0};
+        currentLocation="Подъезд"; sceneId="start"; ending=null; replicaCount=0;
+        metGirl=false; injured=false; park=false; metStranger=false; metSurvivors=false; helpedOldWoman=false; radioFixed=false; hasKeyCard=false; bunkerFound=false;
+        history=[]; historyIndex=-1; isViewingHistory=false; updateInvDisplay(); render();
     }
-
-    // Простая проверка: если объект является потомком игрока
-    if (!targetId) {
-      for (const pid in remotePlayers) {
-        let o = hit.object;
-        while (o) { if (o === remotePlayers[pid]) { targetId = pid; break; } o = o.parent; }
-        if (targetId) break;
-      }
-    }
-
-    // Хедшот: попали в сферу головы выше 1.55
-    if (targetId && hit.point.y > 1.55) headshot = true;
-
-    // Локальный трассер
-    const from = camera.position.clone();
-    createTracer(from, hit.point, targetId ? 0xff0000 : 0xffff00);
-  } else {
-    const from = camera.position.clone();
-    const dir = new THREE.Vector3();
-    camera.getWorldDirection(dir);
-    createTracer(from, from.clone().add(dir.multiplyScalar(100)), 0xffff00);
-  }
-
-  // Отправляем на сервер
-  if (targetId) {
-    socket.emit('shoot', { targetId, hitPoint, headshot });
-  }
-}
-
-// ==================== ФИЗИКА СТОЛКНОВЕНИЙ ====================
-function collides(pos) {
-  const radius = 0.4;
-  for (const wall of walls) {
-    const box = new THREE.Box3().setFromObject(wall);
-    const closest = new THREE.Vector3(
-      Math.max(box.min.x, Math.min(pos.x, box.max.x)),
-      Math.max(box.min.y, Math.min(pos.y, box.max.y)),
-      Math.max(box.min.z, Math.min(pos.z, box.max.z))
-    );
-    if (closest.distanceTo(pos) < radius) return true;
-  }
-  return false;
-}
-
-// ==================== ИГРОВОЙ ЦИКЛ ====================
-const clock = new THREE.Clock();
-let lastNetSend = 0;
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  if (!gameStarted || !connected) {
-    renderer.render(scene, camera);
-    return;
-  }
-
-  const dt = Math.min(clock.getDelta(), 0.05);
-  const now = performance.now() / 1000;
-
-  // Движение
-  let fwd = 0, right = 0;
-  if (isMobile) { fwd = moveVec.y; right = moveVec.x; }
-  else {
-    if (keys['KeyW']) fwd += 1;
-    if (keys['KeyS']) fwd -= 1;
-    if (keys['KeyD']) right += 1;
-    if (keys['KeyA']) right -= 1;
-  }
-
-  const speed = keys['ShiftLeft'] ? 8 : 5;
-  const dir = new THREE.Vector3(right, 0, -fwd).normalize();
-  const moveX = (dir.x * Math.cos(yaw) - dir.z * Math.sin(yaw)) * speed * dt;
-  const moveZ = (dir.x * Math.sin(yaw) + dir.z * Math.cos(yaw)) * speed * dt;
-
-  const testX = player.position.clone(); testX.x += moveX;
-  if (!collides(testX)) player.position.x += moveX;
-
-  const testZ = player.position.clone(); testZ.z += moveZ;
-  if (!collides(testZ)) player.position.z += moveZ;
-
-  if (!isMobile && keys['Space'] && player.onGround) {
-    player.velocity.y = 7; player.onGround = false;
-  }
-  player.velocity.y -= 20 * dt;
-  player.position.y += player.velocity.y * dt;
-  if (player.position.y <= 1.7) {
-    player.position.y = 1.7; player.velocity.y = 0; player.onGround = true;
-  }
-
-  camera.position.copy(player.position);
-  camera.rotation.order = 'YXZ';
-  camera.rotation.y = yaw;
-  camera.rotation.x = pitch;
-
-  // Стрельба
-  if (isShooting) shoot();
-
-  // Отправка позиции на сервер (20 раз/сек)
-  if (now - lastNetSend > 0.05) {
-    lastNetSend = now;
-    socket.emit('move', {
-      x: player.position.x,
-      y: player.position.y,
-      z: player.position.z,
-      yaw, pitch
-    });
-  }
-
-  // Интерполяция удалённых игроков
-  for (const id in remotePlayers) {
-    const p = remotePlayers[id];
-    if (p.userData.targetPos) {
-      p.position.lerp(p.userData.targetPos, 12 * dt);
-      if (p.userData.targetYaw !== undefined) {
-        const targetRot = p.userData.targetYaw + Math.PI; // корректировка
-        let diff = targetRot - p.rotation.y;
-        while (diff > Math.PI) diff -= Math.PI*2;
-        while (diff < -Math.PI) diff += Math.PI*2;
-        p.rotation.y += diff * 10 * dt;
-      }
-    }
-  }
-
-  renderer.render(scene, camera);
-}
-
-animate();
-
-// ==================== СТАРТ ====================
-document.getElementById('playBtn').addEventListener('click', () => {
-  const name = document.getElementById('nameInput').value.trim() || 'Player';
-  myName = name;
-  socket.emit('setName', name);
-
-  document.getElementById('start').style.display = 'none';
-  gameStarted = true;
-
-  if (!isMobile) document.body.requestPointerLock();
-});
-
-// Ввод ника при загрузке
-document.getElementById('nameInput').value = 'Player' + Math.floor(Math.random()*1000);
-
-// ==================== РЕСАЙЗ ====================
-addEventListener('resize', () => {
-  camera.aspect = innerWidth / innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-});
+    document.getElementById('resetBtn').onclick=resetGame;
+    
+    // Запуск игры
+    updateInvDisplay();
+    resetGame();
 </script>
 </body>
 </html>
