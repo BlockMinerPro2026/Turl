@@ -1,518 +1,279 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Осколки надежды</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
-        body {
-            background: #0a0a0f;
-            font-family: 'Courier New', monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .game {
-            width: 100%;
-            height: 100%;
-            max-width: 100%;
-            background: #07070c;
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            padding-top: max(10px, env(safe-area-inset-top));
-            padding-bottom: max(10px, env(safe-area-inset-bottom));
-            padding-left: max(10px, env(safe-area-inset-left));
-            padding-right: max(10px, env(safe-area-inset-right));
-        }
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-            gap: 4px;
-            flex-shrink: 0;
-        }
-        .title { color: #8a7aaa; font-size: 11px; letter-spacing: 1px; }
-        .stats { color: #6a6a8a; font-size: 10px; }
-        .scene {
-            background: #0c0c12;
-            border: 2px solid #2c2c3a;
-            border-radius: 16px;
-            padding: 16px;
-            min-height: 0;
-            color: #e0e0ec;
-            font-size: 15px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            margin-bottom: 10px;
-            overflow-y: auto;
-            flex: 1 1 auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .inventory-panel {
-            background: #0a0a12;
-            border: 2px solid #2a2a35;
-            border-radius: 24px;
-            padding: 6px 12px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px 8px;
-            align-items: center;
-            flex-shrink: 0;
-            max-height: 80px;
-            overflow-y: auto;
-        }
-        .inventory-title { color: #9a8aba; font-weight: bold; font-size: 11px; }
-        .inventory-items { display: flex; flex-wrap: wrap; gap: 4px 6px; }
-        .inventory-item {
-            background: #1a1a26;
-            border: 1px solid #4a4a66;
-            border-radius: 14px;
-            padding: 2px 8px;
-            color: #c0c0e0;
-            font-size: 11px;
-        }
-        .no-items { color: #6a6a8a; font-style: italic; font-size: 11px; }
-        .choices {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 10px;
-            overflow-y: auto;
-            flex: 0 1 auto;
-            max-height: 40vh;
-            -webkit-overflow-scrolling: touch;
-        }
-        .choice {
-            background: #111117;
-            border: 2px solid #33333f;
-            color: #d0d0da;
-            padding: 12px 14px;
-            font-size: 14px;
-            border-radius: 14px;
-            text-align: left;
-            cursor: pointer;
-            transition: 0.1s;
-            font-family: inherit;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            word-break: break-word;
-        }
-        .choice:active:not(.choice-disabled) {
-            background: #1e1e2a;
-            border-color: #7a7a9a;
-        }
-        .choice-disabled {
-            background: #0a0a12;
-            border-color: #2a2a35;
-            color: #6a6a8a;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        .bottom-panel {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: #0c0c12;
-            border: 2px solid #2a2a35;
-            border-radius: 16px;
-            padding: 6px 10px;
-            flex-wrap: nowrap;
-            flex-shrink: 0;
-        }
-        .arrow {
-            background: #111117;
-            border: 2px solid #33333f;
-            color: #d0d0da;
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            flex-shrink: 0;
-            user-select: none;
-        }
-        .arrow:active:not(.disabled) { background: #2a2a36; }
-        .arrow.disabled { opacity: 0.3; cursor: not-allowed; }
-        .save-code {
-            background: #0f0f17;
-            border: 2px solid #333340;
-            border-radius: 40px;
-            padding: 8px 10px;
-            flex: 1 1 auto;
-            min-width: 0;
-            color: #b0b0d0;
-            font-family: monospace;
-            font-size: 11px;
-        }
-        .reset-btn {
-            background: #1a1a26;
-            border: 2px solid #4a4a66;
-            color: #d0d0e0;
-            padding: 8px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            font-family: inherit;
-            flex-shrink: 0;
-            min-height: 40px;
-            white-space: nowrap;
-        }
-        .reset-btn:active { background: #2a2a36; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #0a0a12; }
-        ::-webkit-scrollbar-thumb { background: #4a4a66; border-radius: 10px; }
-        
-        @media (max-height: 600px) {
-            .scene { font-size: 13px; padding: 12px; }
-            .choice { padding: 10px 12px; font-size: 13px; min-height: 40px; }
-            .inventory-panel { max-height: 60px; }
-            .choices { max-height: 35vh; }
-        }
-        @media (max-width: 360px) {
-            .title { font-size: 10px; }
-            .stats { font-size: 9px; }
-            .scene { font-size: 13px; padding: 12px; }
-            .choice { font-size: 12px; padding: 10px 12px; }
-            .arrow { width: 36px; height: 36px; font-size: 18px; }
-            .reset-btn { padding: 6px 10px; font-size: 11px; }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://commons.wikimedia.org">
+  <link rel="dns-prefetch" href="//commons.wikimedia.org">
+  <title>Таро — 72 карты · расклад</title>
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:#020203;color:#d9d0d9;font-family:Georgia,"Times New Roman",serif}
+    body{background:
+      radial-gradient(circle at 50% 10%,rgba(54,35,55,.28),transparent 34%),
+      linear-gradient(#030304,#010101 70%);padding:28px 18px 70px}
+    .wrap{max-width:1250px;margin:auto}
+    h1{text-align:center;font-weight:normal;letter-spacing:8px;font-size:34px;margin:10px 0 24px;color:#cdbbca}
+    .controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+    button.action{appearance:none;border:1px solid #594654;background:#0d0a0f;color:#d7c4d2;padding:12px 18px;border-radius:7px;cursor:pointer;font:inherit;transition:.2s;-webkit-tap-highlight-color:transparent}
+    button.action:hover{background:#18111a;border-color:#9a7b91;box-shadow:0 0 18px rgba(150,110,145,.2)}
+    #shuffleBtn{border-color:#8a6b82;background:#151018;color:#e3cda2;font-weight:bold;box-shadow:0 0 16px rgba(138,107,130,.15)}
+    .status{text-align:center;min-height:24px;color:#8f8190;margin-bottom:8px}
+    .count{text-align:center;color:#6d626d;font-size:13px;margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px}
+    .card{position:relative;aspect-ratio:2/3;border:0;padding:0;background:none;cursor:pointer;perspective:900px;min-width:0;-webkit-tap-highlight-color:transparent;outline:none;-webkit-user-select:none;user-select:none}
+    .card:focus{outline:none}
+    .card:active{outline:none}
+    .card>span{position:absolute;inset:0;border-radius:9px;backface-visibility:hidden;transition:transform .65s ease,box-shadow .25s,border-color .25s}
+    .back{display:flex;align-items:center;justify-content:center;border:1px solid #4a3949;background:radial-gradient(circle at 50% 45%,#17121d 0,#09080b 62%,#030304 100%);box-shadow:0 0 14px rgba(111,76,111,.13),inset 0 0 22px rgba(0,0,0,.8)}
+    .sigil{font-size:31px;color:#80634d;text-shadow:0 0 14px rgba(180,135,80,.22)}
+    .num{position:absolute;bottom:9px;right:11px;color:#6e5967;font-size:11px}
+    .front{transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;border:1px solid #765d72;background:#0b090c;color:#d6c6d5}
+    .front img{width:100%;height:100%;display:block;object-fit:cover;border-radius:8px}
+    .card.selected .back{border-color:#b18d62;box-shadow:0 0 20px rgba(170,130,82,.25)}
+    .card.revealed .back{transform:rotateY(-180deg)}
+    .card.revealed .front{transform:rotateY(0)}
+    .result{display:none;margin:30px auto 0;border-top:1px solid #302630;padding-top:25px;max-width:900px}
+    .result.show{display:block}
+    .result h2{text-align:center;font-weight:normal;letter-spacing:4px;color:#bda9bb}
+    .reading{display:grid;gap:16px}
+    .part{border-left:2px solid #614d5e;background:rgba(16,11,17,.6);padding:15px 18px;border-radius:0 7px 7px 0}
+    .part h3{margin:0 0 8px;color:#b99665;font-size:16px}
+    .part p{margin:0;color:#bcb2bd;line-height:1.65}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}}
+    @media(max-width:560px){body{padding:18px 8px}.grid{gap:5px}.sigil{font-size:21px}.num{font-size:8px;right:6px;bottom:5px}.front{padding:5px}h1{font-size:24px;letter-spacing:4px}}
+  </style>
 </head>
 <body>
-<div class="game" id="gameContainer">
-    <div class="game-header">
-        <div class="title" id="gameTitle">❄️ ОСКОЛКИ НАДЕЖДЫ ❄️</div>
-        <div class="stats" id="statsArea">реплик: 0 | предметов: 0</div>
+<div class="wrap">
+  <h1>Т А Р О</h1>
+
+  <div class="controls">
+    <button class="action" id="shuffleBtn" type="button" onclick="shuffleCards()">ПЕРЕМЕШАТЬ КАРТЫ</button>
+    <button class="action" type="button" onclick="autoPick()">Случайный выбор</button>
+    <button class="action" type="button" onclick="reset()">Начать заново</button>
+  </div>
+
+  <div class="status" id="status">Выберите любые три карты.</div>
+  <div class="count" id="count">Выбрано: 0 / 3</div>
+  <div class="grid" id="grid"></div>
+
+  <section class="result" id="result">
+    <h2>ВАШ РАСКЛАД</h2>
+    <div class="reading">
+      <div class="part"><h3 id="c1"></h3><p id="p1"></p></div>
+      <div class="part"><h3 id="c2"></h3><p id="p2"></p></div>
+      <div class="part"><h3 id="c3"></h3><p id="p3"></p></div>
     </div>
-    <div id="sceneText" class="scene">Загрузка...</div>
-    <div class="inventory-panel">
-        <span class="inventory-title" id="invTitle">📦 ИНВЕНТАРЬ</span>
-        <div id="inventoryList" class="inventory-items"><span class="no-items">пусто</span></div>
-    </div>
-    <div id="choicesContainer" class="choices"></div>
-    <div class="bottom-panel">
-        <div style="display:flex; gap:6px; flex-shrink:0;">
-            <div id="arrowLeft" class="arrow">←</div>
-            <div id="arrowRight" class="arrow">→</div>
-        </div>
-        <input id="saveCode" class="save-code" readonly value="---">
-        <button class="reset-btn" id="resetBtn">🔄</button>
-    </div>
+  </section>
 </div>
 
 <script>
-    // Тексты на русском
-    const texts = {
-        invTitle: "📦 ИНВЕНТАРЬ",
-        emptyInv: "пусто",
-        statsReplic: "реплик:",
-        statsItems: "предметов:",
-        resetBtn: "🔄",
-        titleGame: "❄️ ОСКОЛКИ НАДЕЖДЫ ❄️",
-        continueBtn: "→ продолжить",
-        nextBtn: "→ дальше",
-        restartChoice: "→ начать заново",
-        
-        startScene: "📍 ПОДЪЕЗД\n\nТы приходишь в себя на холодном бетонном полу. Голова гудит. Рядом лежит девушка — её лицо бледное. В руке зажата фотография и записка: «Школа №7. Там правда». Нужно выбираться.",
-        choiceGirl: "осмотреть девушку",
-        choiceExit: "выйти на улицу",
-        choiceSearchPorch: "обыскать подъезд",
-        girlCheck: "Кожа холодная. Она не дышит. На шее странная отметина. На обороте фото: «Помни. Ты был здесь». Мурашки по спине.",
-        searchPorchRes: "В почтовом ящике находишь нож и спички. Под ним газета: «Эпидемия. Город на карантине». Дата — три недели назад.",
-        streetStart: "📍 УЛИЦА\n\nСерый туман над разбитым асфальтом. Перевёрнутые машины. Вдалеке школа №7. Справа тёмный парк. Холод пробирает до костей.",
-        choiceSchool: "идти к школе",
-        choicePark: "зайти в парк",
-        choiceMap: "посмотреть карту",
-        mapCheck: "На карте: школа, парк, лес, лагерь выживших, военный бункер. Красным обведена школа: «Начало всего».",
-        parkEntrance: "📍 ПАРК\n\nСтарые деревья. На скамейке девочка в школьной форме. Рядом рюкзак.",
-        choiceApproach: "подойти к девочке",
-        choiceBackpack: "осмотреть рюкзак",
-        girlParkTalk: "Девочка: «Иди в школу. Там ответы». Она даёт отмычку и исчезает.",
-        parkBackpackRes: "В рюкзаке: еда, вода, карта. Дневник: «Они пришли ночью».",
-        schoolHall: "📍 ШКОЛА\n\nДвери распахнуты. Пахнет плесенью. Стены в граффити: «ОНИ ЗНАЮТ», «НЕ ХОДИ В ПОДВАЛ».",
-        choiceClass: "пойти в класс",
-        choiceBasement: "спуститься в подвал",
-        schoolClass: "Класс разгромлен. На доске: «КЛЮЧ В КНИГЕ».",
-        searchBooks: "искать в книгах",
-        searchCloset: "осмотреть шкаф",
-        booksRes: "В книге находишь отмычки и фото класса. На обороте: «Я знаю, ты вернёшься».",
-        closetRes: "В шкафу фонарик. Дневник: «Они из лаборатории».",
-        basementDoor: "Дверь в подвал заперта. Надпись: «ОНИ ТАМ». Слышна капель.",
-        choicePick: "вскрыть отмычкой",
-        basementInside: "В углу сидит человек в плаще. «Я Сергей, учитель. Вирус из лаборатории. Выжившие ушли в лес».",
-        choiceTrust: "довериться",
-        choiceAsk: "спросить подробности",
-        trustRes: "Сергей: «Пойдём в лагерь». Он даёт аптечку и бинты.",
-        askRes: "«Эпидемия три недели назад. Люди меняются. Бункер на востоке». Он даёт рацию.",
-        campArrival: "📍 ЛАГЕРЬ\n\nПалатки, костёр. Старейшина: «Новичок? Проходи». Рядом охотник Дмитрий и врач Анна.",
-        choiceElder: "поговорить со старейшиной",
-        choiceAskFood: "попросить еды",
-        choiceExplore: "осмотреть лагерь",
-        elderTalk: "«На востоке военный бункер. Там припасы. Поможешь найти — примешь нас в семью». Он даёт карту.",
-        askFoodRes: "Тебе дают еду и воду. «Держи, мы все братья».",
-        exploreCamp: "Старая рация. Нужны батарейки.",
-        fixRadio: "починить рацию",
-        fixRadioRes: "Рация ожила. Слышен голос: «...помощь... бункер 7... координаты...». Люди плачут от радости.",
-        campStayEnd: "🏆 КОНЦОВКА: Ты остаёшься в лагере. Живёшь в мире, помогаешь другим. Но чувствуешь — правда осталась где-то в школе. Однажды ночью ты смотришь на звёзды и понимаешь — твой путь ещё не закончен. 🏆",
-        forestPath: "📍 ЛЕС\n\nВысокие сосны, снег. Дмитрий идёт впереди. «Бункер должен быть где-то здесь». Тропа раздваивается.",
-        choiceHut: "пойти к избушке",
-        choiceDeep: "идти дальше по тропе",
-        hutKnock: "постучать",
-        hutAround: "обойти вокруг",
-        hutKnockRes: "Старушка: «Заходите, погрейтесь». Она даёт еду и спички. «Бункер? Идите дальше по тропе, за оврагом».",
-        hutAroundRes: "За избушкой находишь старый топор.",
-        forestDeep: "Глубже в лесу. Слышны звуки. Впереди железная дверь, вросшая в землю. Военный бункер!",
-        bunkerDoor: "Тяжёлая железная дверь. Кодовая панель. Нужен код доступа.",
-        bunkerOpenRes: "Дверь открывается. Внутри — склад: ящики с едой, водой, медикаментами, оружием. Анна плачет. Старейшина жмёт руку: «Ты спас нас всех!»",
-        bunkerInside: "Внутри бункера тепло и безопасно. На стенах карты, радиостанция. Выжившие обустраиваются. Ты смотришь на фотографию девочки из подъезда — она улыбается. Кажется, она знала, что всё закончится хорошо.",
-        goodEnding: "✨✨✨ ХОРОШАЯ КОНЦОВКА ✨✨✨\n\nВы нашли бункер и спасли лагерь. Теперь у вас есть убежище, припасы и будущее. Вы вместе — а значит, выживете. Город остался позади, но впереди новая жизнь. Фотография девочки всегда с тобой — напоминание о том, что надежда умирает последней. ✨✨✨",
-        defaultNext: "Ты продолжаешь путь по пустошам..."
-    };
+  const deck = [
+    ["0", "Шут", "Начало пути, риск, свобода и шаг в неизвестность.", "RWS_Tarot_00_Fool.jpg"],
+    ["I", "Маг", "Инициатива, действие и способность менять обстоятельства.", "RWS_Tarot_01_Magician.jpg"],
+    ["II", "Верховная Жрица", "Интуиция, тайна и знание, которое приходит не сразу.", "RWS_Tarot_02_High_Priestess.jpg"],
+    ["III", "Императрица", "Рост, забота, созидание и плодотворный период.", "RWS_Tarot_03_Empress.jpg"],
+    ["IV", "Император", "Порядок, ответственность, границы и контроль.", "RWS_Tarot_04_Emperor.jpg"],
+    ["V", "Иерофант", "Традиции, обучение, совет и проверенные правила.", "RWS_Tarot_05_Hierophant.jpg"],
+    ["VI", "Влюблённые", "Выбор, притяжение и решение, которое требует честности.", "RWS_Tarot_06_Lovers.jpg"],
+    ["VII", "Колесница", "Движение, воля и победа через собранность.", "RWS_Tarot_07_Chariot.jpg"],
+    ["VIII", "Сила", "Спокойная уверенность, выдержка и внутренний контроль.", "RWS_Tarot_08_Strength.jpg"],
+    ["IX", "Отшельник", "Пауза, поиск ответа внутри себя и переоценка пути.", "RWS_Tarot_09_Hermit.jpg"],
+    ["X", "Колесо Фортуны", "Поворот обстоятельств и неожиданная смена цикла.", "RWS_Tarot_10_Wheel_of_Fortune.jpg"],
+    ["XI", "Правосудие", "Последствия решений, баланс и необходимость назвать вещи своими именами.", "RWS_Tarot_11_Justice.jpg"],
+    ["XII", "Повешенный", "Задержка, другой взгляд и отказ от привычного способа действовать.", "RWS_Tarot_12_Hanged_Man.jpg"],
+    ["XIII", "Смерть", "Завершение старого этапа и неизбежное изменение.", "RWS_Tarot_13_Death.jpg"],
+    ["XIV", "Умеренность", "Постепенное выравнивание, терпение и поиск меры.", "RWS_Tarot_14_Temperance.jpg"],
+    ["XV", "Дьявол", "Сильная привязанность, искушение и то, что трудно отпустить.", "RWS_Tarot_15_Devil.jpg"],
+    ["XVI", "Башня", "Резкая перемена, разрушение старой конструкции и освобождение места.", "RWS_Tarot_16_Tower.jpg"],
+    ["XVII", "Звезда", "Надежда, восстановление и ориентир после сложного периода.", "RWS_Tarot_17_Star.jpg"],
+    ["XVIII", "Луна", "Неясность, тревоги, скрытые мотивы и сильная интуиция.", "RWS_Tarot_18_Moon.jpg"],
+    ["XIX", "Солнце", "Ясность, энергия, открытость и хороший результат.", "RWS_Tarot_19_Sun.jpg"],
+    ["XX", "Суд", "Возвращение важной темы, переосмысление и окончательное решение.", "RWS_Tarot_20_Judgement.jpg"],
+    ["XXI", "Мир", "Завершение цикла, целостность и переход на новый уровень.", "RWS_Tarot_21_World.jpg"],
+    ["Ж", "Искра Жезлов", "Импульс, желание начать и первая энергия действия.", "Wands01.jpg"],
+    ["2Ж", "Двойка Жезлов", "Планирование, выбор направления и взгляд вперёд.", "Wands02.jpg"],
+    ["3Ж", "Тройка Жезлов", "Расширение возможностей и ожидание результата.", "Wands03.jpg"],
+    ["4Ж", "Четвёрка Жезлов", "Стабильность, встреча, дом и повод отметить успех.", "Wands04.jpg"],
+    ["5Ж", "Пятёрка Жезлов", "Конкуренция, спор интересов и необходимость отстоять своё.", "Wands05.jpg"],
+    ["6Ж", "Шестёрка Жезлов", "Признание, победа и заметный результат.", "Wands06.jpg"],
+    ["7Ж", "Семёрка Жезлов", "Защита позиции и необходимость не отступать слишком рано.", "Wands07.jpg"],
+    ["8Ж", "Восьмёрка Жезлов", "Быстрое развитие, новости и ускорение событий.", "Wands08.jpg"],
+    ["9Ж", "Девятка Жезлов", "Осторожность, опыт и готовность выдержать последний рывок.", "Wands09.jpg"],
+    ["10Ж", "Десятка Жезлов", "Большая нагрузка и ответственность, которую пора распределить.", "Wands10.jpg"],
+    ["КЖ", "Королева Жезлов", "Уверенность, привлекательность и самостоятельная позиция.", "Wands13.jpg"],
+    ["КорЖ", "Король Жезлов", "Лидерство, решительность и способность вести за собой.", "Wands14.jpg"],
+    ["Т", "Туз Кубков", "Новое чувство, эмоциональное обновление и открытость.", "Cups01.jpg"],
+    ["2К", "Двойка Кубков", "Взаимность, союз и разговор по душам.", "Cups02.jpg"],
+    ["3К", "Тройка Кубков", "Встреча, поддержка, дружба и совместная радость.", "Cups03.jpg"],
+    ["4К", "Четвёрка Кубков", "Скука, сомнение и шанс, который легко не заметить.", "Cups04.jpg"],
+    ["5К", "Пятёрка Кубков", "Разочарование, сожаление и необходимость увидеть оставшееся.", "Cups05.jpg"],
+    ["6К", "Шестёрка Кубков", "Прошлое, воспоминания и возвращение знакомой темы.", "Cups06.jpg"],
+    ["7К", "Семёрка Кубков", "Много вариантов, фантазии и риск ошибиться в ожиданиях.", "Cups07.jpg"],
+    ["8К", "Восьмёрка Кубков", "Уход от того, что больше не даёт прежнего смысла.", "Cups08.jpg"],
+    ["9К", "Девятка Кубков", "Желание, удовлетворение и получение желаемого.", "Cups09.jpg"],
+    ["10К", "Десятка Кубков", "Гармония, близость и ощущение эмоционального дома.", "Cups10.jpg"],
+    ["КК", "Королева Кубков", "Чуткость, эмпатия и глубокое понимание людей.", "Cups13.jpg"],
+    ["КорК", "Король Кубков", "Зрелые чувства, спокойствие и эмоциональная выдержка.", "Cups14.jpg"],
+    ["ТМ", "Туз Мечей", "Ясная мысль, правда и решение, которое многое проясняет.", "Swords01.jpg"],
+    ["2М", "Двойка Мечей", "Нерешительность и необходимость сделать выбор.", "Swords02.jpg"],
+    ["3М", "Тройка Мечей", "Болезненная правда, разочарование или честный разговор.", "Swords03.jpg"],
+    ["4М", "Четвёрка Мечей", "Отдых, пауза и восстановление перед следующим шагом.", "Swords04.jpg"],
+    ["5М", "Пятёрка Мечей", "Конфликт, борьба за правоту и сомнительная победа.", "Swords05.jpg"],
+    ["6М", "Шестёрка Мечей", "Переход из тяжёлой ситуации к более спокойному этапу.", "Swords06.jpg"],
+    ["7М", "Семёрка Мечей", "Осторожность, скрытые намерения и необходимость проверить факты.", "Swords07.jpg"],
+    ["8М", "Восьмёрка Мечей", "Ощущение ограничений, часть которых создаёт собственный страх.", "Swords08.jpg"],
+    ["9М", "Девятка Мечей", "Тревога, бессонные мысли и преувеличение худшего сценария.", "Swords09.jpg"],
+    ["10М", "Десятка Мечей", "Конец болезненного этапа и точка, после которой начинается новое.", "Swords10.jpg"],
+    ["КМ", "Королева Мечей", "Чёткие границы, независимость и честный взгляд на ситуацию.", "Swords13.jpg"],
+    ["КорМ", "Король Мечей", "Логика, стратегия, решение и контроль над эмоциями.", "Swords14.jpg"],
+    ["ТП", "Туз Пентаклей", "Практический шанс, деньги, работа или полезное начало.", "Pentacles01.jpg"],
+    ["2П", "Двойка Пентаклей", "Баланс нескольких дел и необходимость правильно распределить силы.", "Pentacles02.jpg"],
+    ["3П", "Тройка Пентаклей", "Работа в команде, обучение и результат через мастерство.", "Pentacles03.jpg"],
+    ["4П", "Четвёрка Пентаклей", "Стабильность, контроль ресурсов и страх что-то потерять.", "Pentacles04.jpg"],
+    ["5П", "Пятёрка Пентаклей", "Временная нехватка поддержки, денег или уверенности.", "Pentacles05.jpg"],
+    ["6П", "Шестёрка Пентаклей", "Помощь, обмен ресурсами и восстановление равновесия.", "Pentacles06.jpg"],
+    ["7П", "Семёрка Пентаклей", "Терпение, ожидание результата и оценка вложенных усилий.", "Pentacles07.jpg"],
+    ["8П", "Восьмёрка Пентаклей", "Навык, труд и постепенное улучшение положения.", "Pentacles08.jpg"],
+    ["9П", "Девятка Пентаклей", "Самостоятельность, комфорт и результат собственных усилий.", "Pentacles09.jpg"],
+    ["10П", "Десятка Пентаклей", "Долгосрочная стабильность, семья, имущество и наследие.", "Pentacles10.jpg"],
+    ["КП", "Королева Пентаклей", "Практичность, забота и умение создавать устойчивость.", "Pentacles13.jpg"],
+    ["КорП", "Король Пентаклей", "Финансовая зрелость, влияние и прочная основа.", "Pentacles14.jpg"],
+    ["З", "Зеркало", "Ситуация возвращает вам то, что вы сами в неё вкладываете.", "RWS_Tarot_18_Moon.jpg"],
+    ["Н", "Нить", "Скрытая связь между событиями, людьми или решениями.", "RWS_Tarot_17_Star.jpg"]
+  ];
 
-    // Инвентарь
-    let inventory = {
-        'еда':0,'вода':0,'бинты':0,'аптечка':0,'батарейки':0,'спички':0,
-        'верёвка':0,'отмычка':0,'нож':0,'фонарик':0,'рация':0,'карта':0
-    };
-    const itemNames = {
-        'еда':'🍞 Еда','вода':'💧 Вода','бинты':'🩹 Бинты',
-        'аптечка':'💊 Аптечка','батарейки':'🔋 Батарейки',
-        'спички':'🔥 Спички','верёвка':' Верёвка',
-        'отмычка':'🔓 Отмычка','нож':'🔪 Нож','фонарик':'🔦 Фонарик',
-        'рация':'📻 Рация','карта':'🗺️ Карта'
-    };
-    
-    function addItem(id,q=1){ if(inventory[id]!==undefined){ inventory[id]+=q; updateInvDisplay(); } }
-    function removeItem(id,q=1){ if(inventory[id]>=q){ inventory[id]-=q; updateInvDisplay(); return true; } return false; }
-    function hasItem(id,q=1){ return inventory[id]>=q; }
-     
-    function updateInvDisplay(){
-        let items=[];
-        for(let [id,qty] of Object.entries(inventory)) if(qty>0) items.push(`<span class="inventory-item">${itemNames[id]} x${qty}</span>`);
-        document.getElementById('inventoryList').innerHTML = items.length ? items.join('') : `<span class="no-items">${texts.emptyInv}</span>`;
-        let total=Object.values(inventory).reduce((a,b)=>a+b,0);
-        document.getElementById('statsArea').innerHTML = `${texts.statsReplic} ${replicaCount} | ${texts.statsItems} ${total}`;
-        document.getElementById('invTitle').innerText = texts.invTitle;
-        document.getElementById('resetBtn').innerText = texts.resetBtn;
-        document.getElementById('gameTitle').innerText = texts.titleGame;
+  const BASE_URL = 'https://commons.wikimedia.org/wiki/Special:FilePath/';
+  const imgCache = new Map();
+
+  function preloadImages() {
+    let index = 0;
+    const CONCURRENCY = 6;
+
+    function loadNext() {
+      if (index >= deck.length) return;
+      const card = deck[index++];
+      if (!imgCache.has(card[3])) {
+        const img = new Image();
+        img.onload = () => imgCache.set(card[3], img.src);
+        img.onerror = () => imgCache.set(card[3], null);
+        img.src = BASE_URL + encodeURIComponent(card[3]);
+      }
+      if (index < deck.length) setTimeout(loadNext, 30);
     }
-     
-    let currentLocation="Подъезд", sceneId="start", ending=null, replicaCount=0;
-    let metGirl=false,injured=false,park=false,metStranger=false,metSurvivors=false,helpedOldWoman=false,radioFixed=false,hasKeyCard=false,bunkerFound=false;
-    let history=[],historyIndex=-1,isViewingHistory=false;
-    const sceneEl=document.getElementById('sceneText'), choicesEl=document.getElementById('choicesContainer');
-     
-    function addReplica(){ replicaCount++; updateInvDisplay(); }
-    function addToHistory(text){ history.push(text); historyIndex=history.length-1; isViewingHistory=false; }
-    function updateArrows(){ arrowLeft.classList.toggle('disabled',historyIndex<=0); arrowRight.classList.toggle('disabled',historyIndex>=history.length-1||!isViewingHistory); }
-     
-    function addChoice(text, nextScene, nextLoc=null, needItem=null, needQty=1, useItem=null){
-        let btn=document.createElement('button'); btn.className='choice';
-        let canDo=!needItem||hasItem(needItem,needQty);
-        if(!canDo){ btn.classList.add('choice-disabled'); btn.disabled=true; btn.innerText=`${text} ❌ (нужно: ${itemNames[needItem]||needItem})`; }
-        else{ btn.innerText=text; btn.onclick=()=>{ if(useItem&&needItem) removeItem(useItem,needQty); if(nextLoc) currentLocation=nextLoc; sceneId=nextScene; ending=null; render(); }; }
-        choicesEl.appendChild(btn);
+
+    for (let i = 0; i < CONCURRENCY; i++) loadNext();
+  }
+
+  let picks = [];
+  let locked = false;
+
+  function build() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    deck.forEach((card, i) => {
+      const el = document.createElement('button');
+      el.className = 'card';
+      el.type = 'button';
+      el.innerHTML = `
+        <span class="back">
+          <span class="sigil">✦</span>
+          <span class="num">${String(i + 1).padStart(2, '0')}</span>
+        </span>
+        <span class="front">
+          <img data-src="${BASE_URL + encodeURIComponent(card[3])}" alt="${card[1]}" decoding="async">
+        </span>`;
+      el.onclick = () => choose(i, el);
+      grid.appendChild(el);
+    });
+    document.getElementById('count').textContent = `Выбрано: ${picks.length} / 3`;
+  }
+
+  function choose(i, el) {
+    if (locked || picks.includes(i)) return;
+    picks.push(i);
+    el.classList.add('selected');
+    document.getElementById('count').textContent = `Выбрано: ${picks.length} / 3`;
+    if (picks.length === 3) {
+      locked = true;
+      document.getElementById('status').textContent = 'Три карты выбраны. Открываем расклад…';
+      setTimeout(reveal, 400);
     }
-    function addNext(nextScene,nextLoc=null){
-        let btn=document.createElement('button'); btn.className='choice'; btn.innerText=texts.nextBtn;
-        btn.onclick=()=>{ if(nextLoc) currentLocation=nextLoc; sceneId=nextScene; render(); };
-        choicesEl.appendChild(btn);
-    }
-     
-    function render(){
-        if(isViewingHistory) return;
-        choicesEl.innerHTML='';
-        if(ending){ sceneEl.innerText=ending; addChoice(texts.restartChoice,'start','Подъезд'); addToHistory(ending); return; }
-        let text=""; addReplica();
-        // Логика сцен
-        if(currentLocation==="Подъезд" && sceneId==="start"){
-            text=texts.startScene;
-            addChoice(texts.choiceGirl,"girl_check","Подъезд"); 
-            addChoice(texts.choiceExit,"street_start","Улица"); 
-            addChoice(texts.choiceSearchPorch,"search_porch","Подъезд");
-        } else if(currentLocation==="Подъезд" && sceneId==="girl_check"){ 
-            text=texts.girlCheck; metGirl=true; 
-            addChoice(texts.choiceExit,"street_start","Улица"); 
-            addChoice(texts.choiceSearchPorch,"search_porch","Подъезд");
-        } else if(currentLocation==="Подъезд" && sceneId==="search_porch"){ 
-            text=texts.searchPorchRes; addItem('нож',1); addItem('спички',3); 
-            addChoice(texts.choiceExit,"street_start","Улица");
-        } else if(currentLocation==="Улица" && sceneId==="street_start"){ 
-            text=texts.streetStart; 
-            addChoice(texts.choiceSchool,"school_hall","Школа"); 
-            addChoice(texts.choicePark,"park_entrance","Парк"); 
-            if(hasItem('карта')) addChoice(texts.choiceMap,"map_check","Улица");
-        } else if(currentLocation==="Улица" && sceneId==="map_check"){ 
-            text=texts.mapCheck; 
-            addChoice(texts.choiceSchool,"school_hall","Школа"); 
-            addChoice("→ Лагерь","camp_arrival","Лагерь выживших");
-        } else if(currentLocation==="Парк" && sceneId==="park_entrance"){ 
-            text=texts.parkEntrance; 
-            addChoice(texts.choiceApproach,"girl_park_talk","Парк"); 
-            addChoice(texts.choiceBackpack,"park_backpack","Парк"); 
-            addChoice(texts.choiceExit,"street_start","Улица");
-        } else if(currentLocation==="Парк" && sceneId==="girl_park_talk"){ 
-            text=texts.girlParkTalk; addItem('отмычка',1); 
-            addChoice(texts.choiceBackpack,"park_backpack","Парк"); 
-            addChoice(texts.choiceExit,"street_start","Улица");
-        } else if(currentLocation==="Парк" && sceneId==="park_backpack"){ 
-            text=texts.parkBackpackRes; addItem('еда',2); addItem('вода',2); addItem('карта',1); 
-            addChoice("← назад","park_entrance","Парк");
-        } else if(currentLocation==="Школа" && sceneId==="school_hall"){ 
-            text=texts.schoolHall; 
-            addChoice(texts.choiceClass,"school_class","Школа"); 
-            addChoice(texts.choiceBasement,"basement_door","Школа"); 
-            addChoice(texts.choiceExit,"street_start","Улица");
-        } else if(currentLocation==="Школа" && sceneId==="school_class"){ 
-            text=texts.schoolClass; 
-            addChoice(texts.searchBooks,"search_books","Школа"); 
-            addChoice(texts.searchCloset,"search_closet","Школа"); 
-            addChoice("← назад","school_hall","Школа");
-        } else if(currentLocation==="Школа" && sceneId==="search_books"){ 
-            text=texts.booksRes; addItem('отмычка',2); 
-            addChoice(texts.searchCloset,"search_closet","Школа"); 
-            addChoice("← назад","school_hall","Школа");
-        } else if(currentLocation==="Школа" && sceneId==="search_closet"){ 
-            text=texts.closetRes; addItem('фонарик',1); 
-            addChoice("← назад","school_hall","Школа");
-        } else if(currentLocation==="Школа" && sceneId==="basement_door"){ 
-            text=texts.basementDoor; 
-            if(hasItem('отмычка')) addChoice(texts.choicePick,"basement_inside","Школа",'отмычка',1,'отмычка'); 
-            else addChoice("отмычка","basement_inside","Школа",'отмычка'); 
-            addChoice("← назад","school_hall","Школа");
-        } else if(currentLocation==="Школа" && sceneId==="basement_inside"){ 
-            text=texts.basementInside; metStranger=true; 
-            addChoice(texts.choiceTrust,"basement_trust","Школа"); 
-            addChoice(texts.choiceAsk,"basement_ask","Школа");
-        } else if(currentLocation==="Школа" && sceneId==="basement_trust"){ 
-            text=texts.trustRes; addItem('аптечка',1); addItem('бинты',2); 
-            addChoice("→ Лагерь","camp_arrival","Лагерь выживших"); 
-            addChoice("← остаться","school_hall","Школа");
-        } else if(currentLocation==="Школа" && sceneId==="basement_ask"){ 
-            text=texts.askRes; addItem('рация',1); 
-            addChoice("→ Лагерь","camp_arrival","Лагерь выживших"); 
-            addChoice("← остаться","school_hall","Школа");
-        } else if(currentLocation==="Лагерь выживших" && sceneId==="camp_arrival"){ 
-            text=texts.campArrival; metSurvivors=true; 
-            addChoice(texts.choiceElder,"elder_talk","Лагерь выживших"); 
-            addChoice(texts.choiceAskFood,"ask_food_camp","Лагерь выживших"); 
-            addChoice(texts.choiceExplore,"explore_camp","Лагерь выживших");
-        } else if(currentLocation==="Лагерь выживших" && sceneId==="elder_talk"){ 
-            text=texts.elderTalk; addItem('карта',1); 
-            addChoice("→ в лес","forest_path","Лес"); 
-            addChoice("отказаться","camp_stay","Лагерь выживших");
-        } else if(currentLocation==="Лагерь выживших" && sceneId==="ask_food_camp"){ 
-            text=texts.askFoodRes; addItem('еда',2); addItem('вода',2); 
-            addChoice(texts.choiceElder,"elder_talk","Лагерь выживших"); 
-            addChoice(texts.choiceExplore,"explore_camp","Лагерь выживших");
-        } else if(currentLocation==="Лагерь выживших" && sceneId==="explore_camp"){ 
-            text=texts.exploreCamp; 
-            if(hasItem('батарейки')) addChoice(texts.fixRadio,"fix_radio","Лагерь выживших",'батарейки',2,'батарейки'); 
-            addChoice("← назад","camp_arrival","Лагерь выживших");
-        } else if(currentLocation==="Лагерь выживших" && sceneId==="fix_radio"){ 
-            text=texts.fixRadioRes; radioFixed=true; 
-            addChoice("← назад","camp_arrival","Лагерь выживших");
-        } else if(currentLocation==="Лагерь выживших" && sceneId==="camp_stay"){ 
-            ending=texts.campStayEnd; render(); return;
-        } else if(currentLocation==="Лес" && sceneId==="forest_path"){ 
-            text=texts.forestPath; 
-            addChoice(texts.choiceHut,"forest_hut","Лес"); 
-            addChoice(texts.choiceDeep,"forest_deep","Лес"); 
-            addChoice("← назад","camp_arrival","Лагерь выживших");
-        } else if(currentLocation==="Лес" && sceneId==="forest_hut"){ 
-            text="Охотничья избушка. Из трубы идёт дым."; 
-            addChoice(texts.hutKnock,"hut_knock","Лес"); 
-            addChoice(texts.hutAround,"hut_around","Лес");
-        } else if(currentLocation==="Лес" && sceneId==="hut_knock"){ 
-            text=texts.hutKnockRes; addItem('еда',2);addItem('вода',2);addItem('спички',3); helpedOldWoman=true; 
-            addChoice(texts.choiceDeep,"forest_deep","Лес"); 
-            addChoice("← назад","forest_path","Лес");
-        } else if(currentLocation==="Лес" && sceneId==="hut_around"){ 
-            text=texts.hutAroundRes; addItem('нож',1); 
-            addChoice(texts.hutKnock,"hut_knock","Лес");
-        } else if(currentLocation==="Лес" && sceneId==="forest_deep"){ 
-            text=texts.forestDeep; 
-            addChoice("осмотреть дверь","bunker_door","Бункер"); 
-            addChoice("← назад","forest_path","Лес");
-        } else if(currentLocation==="Бункер" && sceneId==="bunker_door"){ 
-            text=texts.bunkerDoor; 
-            if(hasItem('карта')) addChoice("использовать карту","bunker_open","Бункер",'карта',1,'карта'); 
-            else addChoice("взломать","bunker_open","Бункер",'отмычка'); 
-            addChoice("← назад","forest_path","Лес");
-        } else if(currentLocation==="Бункер" && sceneId==="bunker_open"){ 
-            text=texts.bunkerOpenRes; addItem('еда',20);addItem('вода',20);addItem('аптечка',5);addItem('бинты',10); bunkerFound=true; 
-            addChoice("войти","bunker_inside","Бункер");
-        } else if(currentLocation==="Бункер" && sceneId==="bunker_inside"){ 
-            text=texts.bunkerInside; 
-            addChoice("остаться","final_good","Бункер");
-        } else if(currentLocation==="Бункер" && sceneId==="final_good"){ 
-            ending=texts.goodEnding; render(); return;
-        } else { 
-            addNext("street_start","Улица"); 
-            text=texts.defaultNext; 
+  }
+
+  function reveal() {
+    picks.forEach((idx, n) => {
+      setTimeout(() => {
+        const card = document.querySelectorAll('.card')[idx];
+        if (card) {
+          const img = card.querySelector('img');
+          if (img) {
+            const filename = deck[idx][3];
+            const cached = imgCache.get(filename);
+            img.src = cached || img.dataset.src;
+          }
+          card.classList.add('revealed');
         }
-        let locationTag = `<span style="background:#1e1e2a; padding:2px 10px; border-radius:20px; font-size:11px;">📍 ${currentLocation}</span><br><br>`;
-        sceneEl.innerHTML = locationTag + text.replace(/\n/g,'<br>');
-        addToHistory(text); updateArrows(); updateInvDisplay();
-        // Прокрутка сцены наверх при новом тексте
-        sceneEl.scrollTop = 0;
+      }, n * 350);
+    });
+    setTimeout(showResult, 3 * 350 + 400);
+  }
+
+  function showResult() {
+    const [a, b, c] = picks.map(i => deck[i]);
+    document.getElementById('c1').textContent = a[1];
+    document.getElementById('c2').textContent = b[1];
+    document.getElementById('c3').textContent = c[1];
+
+    document.getElementById('p1').textContent =
+      `Карта «${a[1]}» задаёт тон всему раскладу. ${a[2]} Это то, с чем вы уже столкнулись или что вскоре станет главной темой. Она показывает исходную точку, из которой развивается ситуация.`;
+
+    document.getElementById('p2').textContent =
+      `«${b[1]}» раскрывает скрытую сторону вопроса. ${b[2]} Это может быть внутреннее сопротивление, неожиданный поворот или ресурс, который вы пока не используете. Именно здесь находится точка роста или главное препятствие.`;
+
+    document.getElementById('p3').textContent =
+      `«${c[1]}» указывает, куда движется ситуация. ${c[2]} Это не окончательный приговор, а вектор: если события пойдут своим чередом, они приведут именно к этой энергии. Однако многое зависит от вашей реакции на первые две карты.`;
+
+    document.getElementById('result').classList.add('show');
+    document.getElementById('status').textContent = 'Расклад открыт.';
+  }
+
+  function shuffleCards() {
+    if (locked) return;
+    for (let i = deck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
     }
-     
-    const arrowLeft=document.getElementById('arrowLeft'), arrowRight=document.getElementById('arrowRight');
-    arrowLeft.onclick=()=>{ 
-        if(historyIndex>0) { 
-            historyIndex--; 
-            sceneEl.innerText=history[historyIndex]; 
-            choicesEl.innerHTML=''; 
-            let btn=document.createElement('button'); 
-            btn.className='choice'; 
-            btn.innerText=texts.continueBtn; 
-            btn.onclick=()=>{ isViewingHistory=false; render(); }; 
-            choicesEl.appendChild(btn); 
-            isViewingHistory=true; 
-            updateArrows(); 
-        } 
-    };
-    arrowRight.onclick=()=>{ 
-        if(isViewingHistory && historyIndex<history.length-1){ 
-            historyIndex++; 
-            sceneEl.innerText=history[historyIndex]; 
-            choicesEl.innerHTML=''; 
-            let btn=document.createElement('button'); 
-            btn.className='choice'; 
-            btn.innerText=texts.continueBtn; 
-            btn.onclick=()=>{ isViewingHistory=false; render(); }; 
-            choicesEl.appendChild(btn); 
-            isViewingHistory=true; 
-            updateArrows(); 
-        } 
-    };
-     
-    function resetGame(){
-        inventory={'еда':0,'вода':0,'бинты':0,'аптечка':0,'батарейки':0,'спички':0,'верёвка':0,'отмычка':0,'нож':0,'фонарик':0,'рация':0,'карта':0};
-        currentLocation="Подъезд"; sceneId="start"; ending=null; replicaCount=0;
-        metGirl=false; injured=false; park=false; metStranger=false; metSurvivors=false; helpedOldWoman=false; radioFixed=false; hasKeyCard=false; bunkerFound=false;
-        history=[]; historyIndex=-1; isViewingHistory=false; updateInvDisplay(); render();
-    }
-    document.getElementById('resetBtn').onclick=resetGame;
-    
-    // Запуск игры
-    updateInvDisplay();
-    resetGame();
+    picks = [];
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('status').textContent = 'Карты перемешаны. Выберите три.';
+    build();
+  }
+
+  function autoPick() {
+    if (locked) return;
+    picks = [];
+    build();
+    const order = [...Array(deck.length).keys()].sort(() => Math.random() - 0.5).slice(0, 3);
+    order.forEach((idx, n) => {
+      setTimeout(() => {
+        const card = document.querySelectorAll('.card')[idx];
+        choose(idx, card);
+      }, n * 250);
+    });
+  }
+
+  function reset() {
+    picks = [];
+    locked = false;
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('status').textContent = 'Выберите любые три карты.';
+    build();
+  }
+
+  build();
+  preloadImages();
 </script>
 </body>
 </html>
